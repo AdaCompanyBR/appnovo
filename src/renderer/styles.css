@@ -580,6 +580,7 @@ kbd {
 .empty .example b { color: var(--accent-strong); font-weight: 600; }
 .empty-shortcut { margin-top: 16px !important; }
 .more { margin: -10px 0 0; }
+.empty + .more { margin-top: 20px; text-align: center; }
 
 /* ---------- painel de detalhes ---------- */
 
