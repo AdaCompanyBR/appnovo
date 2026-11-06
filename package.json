@@ -1,8 +1,8 @@
 {
   "name": "demandas",
-  "productName": "Demandas",
+  "productName": "Lumo",
   "version": "1.0.0",
-  "description": "Registro rápido e local das suas demandas do dia a dia.",
+  "description": "Lumo: anote suas demandas do dia a dia em segundos.",
   "main": "src/main/main.js",
   "author": "Guilherme Evaristo",
   "license": "UNLICENSED",
@@ -15,7 +15,7 @@
   },
   "build": {
     "appId": "br.com.adacompany.demandas",
-    "productName": "Demandas",
+    "productName": "Lumo",
     "files": [
       "src/**/*",
       "package.json"
@@ -30,12 +30,12 @@
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
-      "shortcutName": "Demandas",
-      "artifactName": "Demandas-instalador-${version}.exe"
+      "shortcutName": "Lumo",
+      "artifactName": "Lumo-instalador-${version}.exe"
     },
     "publish": null,
     "portable": {
-      "artifactName": "Demandas-portatil-${version}.exe"
+      "artifactName": "Lumo-portatil-${version}.exe"
     }
   },
   "devDependencies": {

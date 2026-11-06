@@ -40,7 +40,7 @@ body = body.replace('Tudo fica neste computador, cifrado com a sua senha.', 'Sua
 const scripts = ['src/renderer/icons.js', 'src/renderer/parse.js', 'web/api-web.js', 'src/renderer/app.js']
   .map((p) => `<script>\n${R(p).replace(/<\/script/gi, '<\\/script')}\n</script>`).join('\n');
 
-const out = `<title>Demandas</title>
+const out = `<title>Lumo</title>
 <meta name="description" content="Anote as demandas do dia em segundos, com login e dados cifrados.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

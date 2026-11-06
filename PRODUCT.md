@@ -37,7 +37,7 @@ Used all day in a window next to an IDE, terminal, chat and email. Interruptions
 
 ## Brand Commitments
 
-Working name: "Demandas". No logo or brand assets exist.
+Name: "Lumo" (renamed from the working name "Demandas"; the desktop data folder keeps the old name). Logo: rounded teal square with a white rounded "L" and an amber light dot; wordmark "lumo" in lowercase Figtree. Files: build/icon.svg, build/lumo-logo.png, build/lumo-logo-escuro.png. Note: Proton launched an AI assistant named Lumo in 2025; check trademark before any public distribution.
 
 ## Evidence on Hand
 

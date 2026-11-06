@@ -1,4 +1,4 @@
-/* Demandas — interface. Sem frameworks: estado simples + renderização por região. */
+/* Lumo — interface. Sem frameworks: estado simples + renderização por região. */
 (function () {
   'use strict';
 
@@ -170,7 +170,7 @@
     workspaceEl.hidden = true;
     authEl.hidden = false;
     $('.auth-ticket').className = 'auth-ticket paper';
-    $('.auth-head').innerHTML = `<span class="brand-mark" aria-hidden="true"></span><span class="brand-name">Demandas</span><span class="stamp">${stamp()}</span>`;
+    $('.auth-head').innerHTML = `<span class="brand-mark" aria-hidden="true"></span><span class="brand-name">lumo</span><span class="stamp">${stamp()}</span>`;
     authBody.innerHTML = html;
     const f = focusSel && $(focusSel, authBody);
     if (f) f.focus();
@@ -1026,7 +1026,7 @@
       <hr>
       <button type="button" role="menuitem" data-m="lock">${icon('lock')}Bloquear${IS_WEB ? '' : ' <kbd class="menu-kbd">Ctrl L</kbd>'}</button>
       <button type="button" role="menuitem" data-m="logout">${icon('log-out')}Sair da conta</button>
-      <div class="menu-meta num">Demandas ${esc(info.version || '')}${info.shortcutActive === false ? ' · atalho global indisponível' : ''}</div>`;
+      <div class="menu-meta num">Lumo ${esc(info.version || '')}${info.shortcutActive === false ? ' · atalho global indisponível' : ''}</div>`;
     accountMenu.hidden = false;
     accountBtn.setAttribute('aria-expanded', 'true');
     accountMenu.querySelector('button').focus();

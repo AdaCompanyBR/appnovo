@@ -1,4 +1,6 @@
-# Demandas
+# Lumo
+
+![Lumo](build/lumo-logo.png)
 
 App de desktop para anotar as demandas do dia a dia em segundos. É local, funciona offline e fica protegido por usuário e senha.
 
@@ -6,7 +8,7 @@ Cada demanda vira uma comanda numerada. As que você está fazendo ficam presas 
 
 ## Versão para navegador (sem instalar nada)
 
-O Demandas também roda como uma página privada no claude.ai: https://claude.ai/artifact/F2Az8VEAKX5ogjomP3q2B5
+O Lumo também roda como uma página privada no claude.ai: https://claude.ai/artifact/F2Az8VEAKX5ogjomP3q2B5
 
 - Abre em qualquer computador com o seu login do claude.ai, sem instalar nada.
 - As demandas são cifradas **no navegador** com a sua senha (PBKDF2-SHA256 + AES-256-GCM) antes de serem salvas na sua área privada do claude.ai, que nem o dono da página consegue ler.
@@ -40,7 +42,7 @@ No primeiro uso o app pede para criar a conta (usuário e senha) e mostra um **c
 npm run dist
 ```
 
-O instalador (`Demandas-instalador-<versão>.exe`) e a versão portátil (`Demandas-portatil-<versão>.exe`) saem na pasta `dist/`. Como não são assinados digitalmente, o Windows mostra o aviso "O Windows protegeu o computador": clique em **Mais informações → Executar assim mesmo**. Depois de instalado, o app aparece no menu Iniciar como **Demandas**.
+O instalador (`Lumo-instalador-<versão>.exe`) e a versão portátil (`Lumo-portatil-<versão>.exe`) saem na pasta `dist/`. Como não são assinados digitalmente, o Windows mostra o aviso "O Windows protegeu o computador": clique em **Mais informações → Executar assim mesmo**. Depois de instalado, o app aparece no menu Iniciar como **Lumo**.
 
 ## Anotar rápido
 
@@ -84,7 +86,7 @@ Fechar a janela só a esconde: o app continua no ícone da bandeja para o atalho
 - Trocar a senha não recifra os dados, só troca a proteção da chave.
 - Depois de 5 senhas erradas, o acesso pausa por 30 s, e a pausa dobra a cada novo erro (até 15 min).
 - O app se bloqueia sozinho quando o Windows é bloqueado (Win + L) ou entra em suspensão.
-- Os dados ficam em `%APPDATA%\Demandas\cofre\`. Antes de cada gravação o app guarda uma cópia do último estado (`.bak`).
+- Os dados ficam em `%APPDATA%\Demandas\cofre\` (a pasta mantém o nome antigo do app, para não perder nada). Antes de cada gravação o app guarda uma cópia do último estado (`.bak`).
 - **Exportar demandas (JSON)**, no menu da conta, gera um arquivo **não cifrado** para backup ou migração.
 
 ## Estrutura

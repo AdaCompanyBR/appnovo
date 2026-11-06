@@ -17,6 +17,8 @@ let vault = null;
 let quitting = false;
 
 app.commandLine.appendSwitch('lang', 'pt-BR');
+// O app se chamava Demandas: mantém a mesma pasta de dados para não perder nada.
+app.setPath('userData', path.join(app.getPath('appData'), 'Demandas'));
 
 if (!app.requestSingleInstanceLock()) {
   app.quit();
@@ -43,7 +45,7 @@ function createWindow() {
     minWidth: 760,
     minHeight: 520,
     show: false,
-    title: 'Demandas',
+    title: 'Lumo',
     icon: ICON,
     backgroundColor: nativeTheme.shouldUseDarkColors ? '#0f0f11' : '#f4f4f5',
     titleBarStyle: 'hidden',
@@ -82,10 +84,10 @@ function createTray() {
   try {
     const img = nativeImage.createFromPath(ICON).resize({ width: 16, height: 16 });
     tray = new Tray(img);
-    tray.setToolTip('Demandas — Ctrl+Shift+Espaço para anotar');
+    tray.setToolTip('Lumo — Ctrl+Shift+Espaço para anotar');
     tray.setContextMenu(Menu.buildFromTemplate([
       { label: 'Nova demanda', accelerator: QUICK_SHORTCUT, click: () => showWindow({ focusCapture: true }) },
-      { label: 'Abrir Demandas', click: () => showWindow() },
+      { label: 'Abrir Lumo', click: () => showWindow() },
       { type: 'separator' },
       { label: 'Bloquear', click: () => lock() },
       { label: 'Sair', click: () => { quitting = true; app.quit(); } },

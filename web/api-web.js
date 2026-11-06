@@ -1,5 +1,5 @@
 /*
- * Demandas — camada de dados da versão web (claude.ai).
+ * Lumo — camada de dados da versão web (claude.ai).
  *
  * Expõe o mesmo `window.api` da versão desktop, mas:
  * - guarda tudo na área privada do usuário no claude.ai (data/users/<id>/…),
@@ -116,7 +116,7 @@
     if (!ready) {
       ready = (async () => {
         const host = window.claude;
-        if (!host || typeof host.use !== 'function') throw new VaultError('unavailable', 'Abra o Demandas pelo claude.ai, com sua conta conectada.');
+        if (!host || typeof host.use !== 'function') throw new VaultError('unavailable', 'Abra o Lumo pelo claude.ai, com sua conta conectada.');
         const [db, user, downloads] = await Promise.all([host.use('db'), host.use('user'), host.use('downloads')]);
         const uid = user ? await user.id() : null;
         if (!db || !uid) throw new VaultError('unavailable', 'Não foi possível acessar o armazenamento. Entre na sua conta do claude.ai e abra a página de novo.');
@@ -261,7 +261,7 @@
       const name = String(username || '').trim();
       if (!USERNAME_RE.test(name)) throw new VaultError('bad_username', 'Use de 3 a 32 caracteres: letras, números, ponto, hífen ou sublinhado.');
       validatePassword(password);
-      if (await readAccount()) throw new VaultError('username_taken', 'Esta conta do claude.ai já tem um acesso ao Demandas. Entre com ele ou recupere a senha.');
+      if (await readAccount()) throw new VaultError('username_taken', 'Esta conta do claude.ai já tem um acesso ao Lumo. Entre com ele ou recupere a senha.');
       const dekRaw = crypto.getRandomValues(new Uint8Array(32));
       const recoveryCode = generateRecoveryCode();
       const account = {
@@ -386,7 +386,7 @@
       requireSession();
       const { downloads } = await backend();
       if (!downloads) throw new VaultError('unavailable', 'Este navegador não permite baixar arquivos pela página.');
-      const payload = { app: 'Demandas', exportedAt: new Date().toISOString(), username: session.username, demands: [...session.cache.values()] };
+      const payload = { app: 'Lumo', exportedAt: new Date().toISOString(), username: session.username, demands: [...session.cache.values()] };
       try {
         await downloads.save({ filename: `demandas-${payload.exportedAt.slice(0, 10)}.json`, data: JSON.stringify(payload, null, 2) });
         return { saved: true };

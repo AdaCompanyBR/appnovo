@@ -393,7 +393,7 @@ class Vault {
   exportData() {
     this._requireSession();
     return {
-      app: 'Demandas',
+      app: 'Lumo',
       exportedAt: new Date().toISOString(),
       username: this.session.username,
       demands: this.session.data.demands,
