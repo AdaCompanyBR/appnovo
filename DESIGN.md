@@ -1,439 +1,534 @@
 ---
-name: Demandas
-description: A kitchen ticket rail for one person's work demands. Steel shell, thermal-paper tickets, and fire for whatever is burning.
+name: Lumo
+description: A personal, local-first, keyboard-first demand log. Clean, quiet surfaces where content and state carry the screen.
 colors:
-  steel-ground: "#e4e7ea"
-  steel-side: "#d3d8dd"
-  steel-raised: "#dce0e4"
-  steel-line: "#bcc3ca"
-  steel-ink: "#24282d"
-  steel-ink-2: "#50575f"
-  rail-hi: "#f6f8fa"
-  rail-mid: "#aab2ba"
-  paper: "#fbfbf8"
-  paper-sunk: "#f1f2ee"
-  paper-edge: "#d6d9d4"
-  ink: "#17191c"
-  ink-2: "#474d55"
-  ink-3: "#646b73"
-  fire: "#c42119"
-  fire-soft: "#fbe2df"
-  fire-ink: "#9b140d"
-  heat: "#8a4f00"
-  heat-soft: "#ffe7bf"
-  wait: "#2c5a92"
-  wait-soft: "#e0eaf6"
-  done: "#2b7246"
-  done-soft: "#ddefe3"
-  select-bg: "#ffd27a"
-  steel-ground-dark: "#1a1d20"
-  steel-side-dark: "#111315"
-  steel-raised-dark: "#212529"
-  steel-line-dark: "#30363c"
-  steel-ink-dark: "#e2e5e9"
-  steel-ink-2-dark: "#9ea6af"
-  rail-hi-dark: "#6e7780"
-  rail-mid-dark: "#3c434a"
-  paper-dark: "#2c2b29"
-  paper-sunk-dark: "#252422"
-  paper-edge-dark: "#3d3c39"
-  ink-dark: "#eef0f2"
-  ink-2-dark: "#b7bec6"
-  ink-3-dark: "#939ba4"
-  fire-dark: "#ff6b5e"
-  fire-soft-dark: "#4a201c"
-  fire-ink-dark: "#ff8a7f"
-  heat-dark: "#f2b14e"
-  heat-soft-dark: "#3f2f19"
-  wait-dark: "#8fb6ec"
-  wait-soft-dark: "#1e2b3c"
-  done-dark: "#72cf95"
-  done-soft-dark: "#1c3325"
-  select-bg-dark: "#7a5a1c"
+  accent: "#17806f"
+  accent-strong: "#106456"
+  accent-soft: "#e0f1ed"
+  on-accent: "#ffffff"
+  bg: "#eef2f0"
+  panel: "#f7f9f8"
+  surface: "#ffffff"
+  surface-2: "#edf1ef"
+  line: "#e1e7e4"
+  line-strong: "#cfd8d4"
+  text: "#13201c"
+  text-2: "#475651"
+  text-3: "#66756f"
+  danger: "#d4483f"
+  danger-text: "#b0322a"
+  danger-soft: "#fbebe9"
+  warn: "#df9a33"
+  warn-text: "#8f560c"
+  warn-soft: "#fbf1e0"
+  info: "#4b6ac4"
+  info-text: "#3a54a2"
+  info-soft: "#ecf0fb"
+  success: "#2f9862"
+  success-text: "#1e7247"
+  success-soft: "#e4f3ea"
+  dark-accent: "#35b39e"
+  dark-accent-strong: "#67d2bf"
+  dark-accent-soft: "#10302a"
+  dark-on-accent: "#052019"
+  dark-bg: "#0d1211"
+  dark-panel: "#121817"
+  dark-surface: "#18201e"
+  dark-surface-2: "#1f2826"
+  dark-line: "#25302d"
+  dark-line-strong: "#33413d"
+  dark-text: "#e6eeeb"
+  dark-text-2: "#aab8b3"
+  dark-text-3: "#86948f"
+  dark-danger: "#f2655c"
+  dark-danger-text: "#ff8a82"
+  dark-danger-soft: "#3a1714"
+  dark-warn: "#eeb04f"
+  dark-warn-text: "#f1b75c"
+  dark-warn-soft: "#35270f"
+  dark-info: "#85a0f0"
+  dark-info-text: "#a2b7f6"
+  dark-info-soft: "#19223d"
+  dark-success: "#4cc187"
+  dark-success-text: "#63d29b"
+  dark-success-soft: "#12301f"
+  brand-amber: "#ffd36e"
+  brand-teal-light: "#1f9a86"
 typography:
-  display:
-    fontFamily: "Archivo, Segoe UI Variable Text, Segoe UI, system-ui, sans-serif"
-    fontSize: "22px"
-    fontWeight: 680
+  headline:
+    fontFamily: "Figtree, Segoe UI Variable Text, Segoe UI, system-ui, sans-serif"
+    fontSize: "24px"
+    fontWeight: 700
     lineHeight: 1.2
     letterSpacing: "-0.025em"
-  headline:
-    fontFamily: "Archivo, Segoe UI Variable Text, Segoe UI, system-ui, sans-serif"
-    fontSize: "21px"
-    fontWeight: 650
+    fontFeature: "tnum"
+  headline-sm:
+    fontFamily: "Figtree, Segoe UI Variable Text, Segoe UI, system-ui, sans-serif"
+    fontSize: "22px"
+    fontWeight: 700
     lineHeight: 1.25
     letterSpacing: "-0.02em"
+    fontFeature: "tnum"
   title:
-    fontFamily: "Archivo, Segoe UI Variable Text, Segoe UI, system-ui, sans-serif"
-    fontSize: "17px"
-    fontWeight: 640
+    fontFamily: "Figtree, Segoe UI Variable Text, Segoe UI, system-ui, sans-serif"
+    fontSize: "18px"
+    fontWeight: 700
     lineHeight: 1.35
-    letterSpacing: "-0.012em"
-  ticket-title:
-    fontFamily: "Archivo, Segoe UI Variable Text, Segoe UI, system-ui, sans-serif"
-    fontSize: "14px"
-    fontWeight: 600
-    lineHeight: 1.35
+    letterSpacing: "-0.015em"
+    fontFeature: "tnum"
+  wordmark:
+    fontFamily: "Figtree, Segoe UI Variable Text, Segoe UI, system-ui, sans-serif"
+    fontSize: "18px"
+    fontWeight: 720
+    lineHeight: 1
+    letterSpacing: "-0.035em"
+  item:
+    fontFamily: "Figtree, Segoe UI Variable Text, Segoe UI, system-ui, sans-serif"
+    fontSize: "14.5px"
+    fontWeight: 550
+    lineHeight: 1.4
+    fontFeature: "tnum"
   body:
-    fontFamily: "Archivo, Segoe UI Variable Text, Segoe UI, system-ui, sans-serif"
+    fontFamily: "Figtree, Segoe UI Variable Text, Segoe UI, system-ui, sans-serif"
     fontSize: "14px"
     fontWeight: 400
-    lineHeight: 1.45
-    fontFeature: "\"kern\""
-  group-label:
-    fontFamily: "Archivo, Segoe UI Variable Text, Segoe UI, system-ui, sans-serif"
-    fontSize: "13px"
-    fontWeight: 620
+    lineHeight: 1.5
+    fontFeature: "tnum"
+  control:
+    fontFamily: "Figtree, Segoe UI Variable Text, Segoe UI, system-ui, sans-serif"
+    fontSize: "13.5px"
+    fontWeight: 600
+    lineHeight: 1.5
+    fontFeature: "tnum"
   label:
-    fontFamily: "Archivo, Segoe UI Variable Text, Segoe UI, system-ui, sans-serif"
+    fontFamily: "Figtree, Segoe UI Variable Text, Segoe UI, system-ui, sans-serif"
     fontSize: "12.5px"
-    fontWeight: 560
-  number:
-    fontFamily: "JetBrains Mono, Cascadia Mono, Consolas, monospace"
-    fontSize: "12px"
-    fontWeight: 500
-    lineHeight: 1
-    letterSpacing: "-0.01em"
-    fontFeature: "\"tnum\""
-  number-strong:
-    fontFamily: "JetBrains Mono, Cascadia Mono, Consolas, monospace"
+    fontWeight: 600
+    lineHeight: 1.5
+    fontFeature: "tnum"
+  meta:
+    fontFamily: "Figtree, Segoe UI Variable Text, Segoe UI, system-ui, sans-serif"
     fontSize: "12px"
     fontWeight: 600
-    lineHeight: 1
-    letterSpacing: "-0.01em"
-    fontFeature: "\"tnum\""
-  keycap:
-    fontFamily: "JetBrains Mono, Cascadia Mono, Consolas, monospace"
-    fontSize: "11px"
-    fontWeight: 500
-    lineHeight: 1
+    lineHeight: 1.5
+    fontFeature: "tnum"
 rounded:
-  ticket: "3px"
-  control: "6px"
-  inset: "4px"
-  pill: "13px"
-  round: "50%"
-spacing:
-  hair: "2px"
-  xs: "4px"
-  sm: "6px"
+  sm: "8px"
   md: "10px"
   lg: "14px"
   xl: "18px"
-  2xl: "22px"
-  3xl: "26px"
+  pill: "999px"
+spacing:
+  xs: "4px"
+  sm: "8px"
+  md: "12px"
+  lg: "16px"
+  xl: "20px"
+  group: "22px"
+  board-x: "28px"
 components:
   button-primary:
-    backgroundColor: "{colors.ink}"
-    textColor: "{colors.paper}"
-    rounded: "{rounded.control}"
+    backgroundColor: "{colors.accent}"
+    textColor: "{colors.on-accent}"
+    typography: "{typography.control}"
+    rounded: "{rounded.md}"
     padding: "0 14px"
     height: "36px"
   button-primary-hover:
-    backgroundColor: "color-mix(in srgb, #17191c 86%, #c42119)"
+    backgroundColor: "{colors.accent-strong}"
   button-ghost:
-    backgroundColor: "transparent"
-    textColor: "{colors.ink-2}"
-    rounded: "{rounded.control}"
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.text-2}"
+    typography: "{typography.control}"
+    rounded: "{rounded.md}"
     padding: "0 14px"
     height: "36px"
   button-ghost-hover:
-    backgroundColor: "{colors.paper-sunk}"
-    textColor: "{colors.ink}"
+    backgroundColor: "{colors.surface-2}"
+    textColor: "{colors.text}"
   button-danger:
     backgroundColor: "transparent"
-    textColor: "{colors.fire-ink}"
-    rounded: "{rounded.control}"
-    padding: "0 14px"
-    height: "36px"
+    textColor: "{colors.danger-text}"
+    rounded: "{rounded.md}"
   button-danger-hover:
-    backgroundColor: "{colors.fire-soft}"
+    backgroundColor: "{colors.danger-soft}"
   input:
-    backgroundColor: "{colors.paper}"
-    textColor: "{colors.ink}"
-    rounded: "{rounded.control}"
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.text}"
+    typography: "{typography.body}"
+    rounded: "{rounded.md}"
     padding: "0 12px"
     height: "40px"
-  capture-bar:
-    backgroundColor: "{colors.paper}"
-    textColor: "{colors.ink}"
-    typography: "{typography.body}"
-    rounded: "{rounded.control}"
-    height: "40px"
+  capture-field:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.text}"
+    rounded: "{rounded.lg}"
+    height: "42px"
   search-field:
-    backgroundColor: "color-mix(in srgb, #24282d 6%, transparent)"
-    textColor: "{colors.steel-ink}"
-    rounded: "{rounded.control}"
-    height: "36px"
+    backgroundColor: "{colors.surface-2}"
+    rounded: "{rounded.md}"
+    height: "38px"
     width: "220px"
-  ticket-row:
-    backgroundColor: "{colors.paper}"
-    textColor: "{colors.ink}"
-    rounded: "{rounded.ticket}"
-    padding: "6px 14px 6px 8px"
-    height: "48px"
-  ticket-row-done:
-    backgroundColor: "{colors.paper-sunk}"
-    textColor: "{colors.ink-3}"
-  rail-ticket:
-    backgroundColor: "{colors.paper}"
-    textColor: "{colors.ink}"
-    typography: "{typography.ticket-title}"
-    rounded: "{rounded.ticket}"
-    padding: "20px 14px 18px"
-    width: "228px"
-  tag:
-    backgroundColor: "{colors.paper-sunk}"
-    textColor: "{colors.ink-2}"
-    rounded: "{rounded.inset}"
-    padding: "0 7px"
-    height: "22px"
-  tag-fire:
-    backgroundColor: "{colors.fire-soft}"
-    textColor: "{colors.fire-ink}"
-  tag-heat:
-    backgroundColor: "{colors.heat-soft}"
-    textColor: "{colors.heat}"
-  tag-wait:
-    backgroundColor: "{colors.wait-soft}"
-    textColor: "{colors.wait}"
-  tag-done:
-    backgroundColor: "{colors.done-soft}"
-    textColor: "{colors.done}"
-  chip-filter:
-    backgroundColor: "{colors.steel-raised}"
-    textColor: "{colors.steel-ink}"
-    rounded: "{rounded.pill}"
-    padding: "0 6px 0 10px"
-    height: "26px"
-  nav-view:
+  theme-toggle:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.text-2}"
+    rounded: "{rounded.md}"
+    size: "38px"
+  view-item:
     backgroundColor: "transparent"
-    textColor: "{colors.steel-ink-2}"
-    rounded: "{rounded.control}"
-    padding: "0 10px"
-    height: "36px"
-  nav-view-active:
-    backgroundColor: "{colors.paper}"
-    textColor: "{colors.ink}"
-  segmented:
-    backgroundColor: "{colors.paper-sunk}"
-    textColor: "{colors.ink-2}"
-    rounded: "{rounded.control}"
-    padding: "2px"
-    height: "30px"
-  segmented-selected:
-    backgroundColor: "{colors.paper}"
-    textColor: "{colors.ink}"
-    rounded: "{rounded.inset}"
+    textColor: "{colors.text-2}"
+    rounded: "{rounded.md}"
+    padding: "0 12px"
+    height: "38px"
+  view-item-active:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.text}"
+  count-badge:
+    textColor: "{colors.text-3}"
+    typography: "{typography.meta}"
+    rounded: "10px"
+    height: "20px"
+  count-badge-hot:
+    backgroundColor: "{colors.danger-soft}"
+    textColor: "{colors.danger-text}"
+  tag:
+    backgroundColor: "{colors.surface-2}"
+    textColor: "{colors.text-2}"
+    typography: "{typography.label}"
+    rounded: "12px"
+    padding: "0 9px"
+    height: "24px"
+  tag-fire:
+    backgroundColor: "{colors.danger-soft}"
+    textColor: "{colors.danger-text}"
+  tag-heat:
+    backgroundColor: "{colors.warn-soft}"
+    textColor: "{colors.warn-text}"
+  tag-wait:
+    backgroundColor: "{colors.info-soft}"
+    textColor: "{colors.info-text}"
+  tag-done:
+    backgroundColor: "{colors.success-soft}"
+    textColor: "{colors.success-text}"
+  filter-chip:
+    backgroundColor: "{colors.accent-soft}"
+    textColor: "{colors.accent-strong}"
+    rounded: "14px"
+    height: "28px"
+  progress-card:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.text}"
+    rounded: "{rounded.lg}"
+    padding: "13px 14px 14px"
+  rows-container:
+    backgroundColor: "{colors.surface}"
+    rounded: "{rounded.lg}"
+  row:
+    backgroundColor: "transparent"
+    typography: "{typography.item}"
+    padding: "5px 16px 5px 12px"
+    height: "44px"
+  row-selected:
+    backgroundColor: "{colors.accent-soft}"
+  checkbox:
+    backgroundColor: "{colors.surface}"
+    rounded: "{rounded.pill}"
+    size: "18px"
+  checkbox-checked:
+    backgroundColor: "{colors.accent}"
+    textColor: "{colors.on-accent}"
+  board-panel:
+    backgroundColor: "{colors.panel}"
+    rounded: "{rounded.xl}"
+    padding: "8px 28px 64px"
   detail-panel:
-    backgroundColor: "{colors.paper}"
-    textColor: "{colors.ink}"
-    rounded: "{rounded.ticket}"
-    width: "380px"
-  auth-ticket:
-    backgroundColor: "{colors.paper}"
-    textColor: "{colors.ink}"
-    rounded: "{rounded.ticket}"
-    padding: "34px 32px 28px"
-    width: "400px"
+    backgroundColor: "{colors.surface}"
+    rounded: "{rounded.lg}"
+    width: "384px"
+  segmented:
+    backgroundColor: "{colors.surface-2}"
+    textColor: "{colors.text-2}"
+    rounded: "{rounded.md}"
+    padding: "3px"
+  ai-pill:
+    backgroundColor: "{colors.accent-soft}"
+    textColor: "{colors.accent-strong}"
+    typography: "{typography.label}"
+    rounded: "13px"
+    padding: "0 10px"
+    height: "26px"
+  ai-box:
+    backgroundColor: "{colors.accent-soft}"
+    textColor: "{colors.text}"
+    rounded: "{rounded.md}"
+    padding: "12px 14px"
+  ai-box-quiet:
+    backgroundColor: "{colors.surface-2}"
+    textColor: "{colors.text-2}"
+  menu:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.text}"
+    rounded: "{rounded.lg}"
+    padding: "6px"
+  menu-item:
+    rounded: "{rounded.sm}"
+    padding: "0 14px 0 10px"
+    height: "36px"
   toast:
-    backgroundColor: "{colors.ink}"
-    textColor: "{colors.paper}"
-    rounded: "{rounded.control}"
-    padding: "6px 6px 6px 14px"
-    height: "40px"
+    backgroundColor: "{colors.text}"
+    textColor: "{colors.bg}"
+    rounded: "{rounded.lg}"
+    padding: "6px 6px 6px 16px"
   toast-error:
-    backgroundColor: "{colors.fire-ink}"
+    backgroundColor: "{colors.danger-text}"
     textColor: "#ffffff"
   sheet:
-    backgroundColor: "{colors.paper}"
-    textColor: "{colors.ink}"
-    rounded: "{rounded.control}"
-    padding: "26px 28px 24px"
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.text}"
+    rounded: "{rounded.xl}"
+    padding: "28px 28px 24px"
     width: "440px"
-  keycap:
-    backgroundColor: "{colors.steel-raised}"
-    textColor: "{colors.steel-ink-2}"
-    typography: "{typography.keycap}"
-    rounded: "{rounded.inset}"
-    padding: "3px 5px"
+  auth-card:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.text}"
+    rounded: "{rounded.xl}"
+    padding: "32px 32px 28px"
+    width: "400px"
+  avatar:
+    backgroundColor: "{colors.accent-soft}"
+    textColor: "{colors.accent-strong}"
+    rounded: "{rounded.pill}"
+    size: "28px"
 ---
 
-# Design System: Demandas
+# Design System: Lumo
 
 ## Overview
 
-**Creative North Star: "The Kitchen Pass"**
+**Creative North Star: "The Quiet Desk"**
 
-Demands arrive like orders at a kitchen pass. Each one prints as a numbered ticket on thermal paper with its age running, hangs on a steel rail while it is being worked, and gets torn off when done. The application shell is the kitchen's brushed steel: a cool grey ground and a darker sidebar that never carry content of their own. Everything that *is* a demand, or is written onto one, is paper: off-white, near-black receipt ink, a 3px corner, a faint ticket shadow.
+Lumo is a clean, minimalist workspace that recedes so the demands and their state carry the screen. A tinted, almost-white ground holds white surfaces drawn with 1px hairlines, softly rounded corners and shallow two-layer shadows. One pine-teal accent marks what the user can act on, what is selected, what has focus and what is in progress; red, amber, blue and green appear only where they mean something (overdue, due today or high, waiting, done). Everything else is a teal-leaning gray.
 
-The density is that of an expediter's station: 48px rows, 6px between them, every row readable at a glance from the sequence number, title, due tag and elapsed age. Colour is rationed by heat. Fire red means urgent or overdue, heat-lamp amber means due today or aging, and everything else stays ink on paper or ink on steel. Numbers that measure something (ticket numbers, ages, counts, dates, keycaps) are set in JetBrains Mono; everything a person reads as language is Archivo.
+Density is calm-dense: a 1280x820 window holds the sidebar, the capture field, the in-progress cards and the overdue / due-today / urgent groups without scrolling. Groups are single rounded containers with hairline-divided rows, not stacks of floating cards. Type is Figtree alone, with tabular numerals everywhere so counts, sequence numbers and ages align. Icons are Lucide line icons at a 1.6 stroke, inline SVG in `currentColor`.
 
-The dark theme is the same kitchen after hours: blackened steel shell, tickets as dim warm paper (#2c2b29), inks lifted, fire and heat brightened so they still read as alarms.
+Motion is short and purposeful: completing a demand fills the round checkbox with the accent and the row slides out (260ms); a new demand arrives with a soft accent ring (320ms); everything else is a 160-200ms state change on one ease-out curve. Lumo ships a light and a dark theme with an explicit toggle; both are complete token sets.
 
 **Key Characteristics:**
-- Two materials, steel and paper, each with its own ink set.
-- Numbered tickets with perforated (scalloped) edges where paper is torn from the printer.
-- A steel rail that holds in-progress tickets; done tears the ticket off.
-- Heat-coded colour: fire for burning, heat for warming, nothing else shouts.
-- Monospaced measurement, grotesk language.
-- Keyboard-first: keycaps are first-class, visible elements.
+- Tinted neutral ground (pine-teal leaning grays), white surfaces, 1px hairlines.
+- One accent: pine teal for action, selection, focus and in-progress.
+- Status color reserved for meaning: red overdue/urgent, amber due-today/high, blue waiting, green done.
+- Figtree only, tabular numerals on by default.
+- Four radii (8/10/14/18px) plus full pills and circles for chips, badges and checkboxes.
+- Soft two-layer shadows, hairline first.
+- Light and dark themes, user-selectable, following the system until chosen.
 
 ## Colors
 
-A cool steel neutral family, a warm off-white paper family, and four status hues used only as small fills and text, never as surfaces.
+A cool, teal-tinted neutral field with a single pine-teal voice and four semantic status hues. Every color has a light and a dark value; dark tokens are prefixed `dark-` in the frontmatter and map one-to-one onto the same CSS custom properties (`--accent`, `--bg`, `--danger-soft`...).
 
 ### Primary
-- **Receipt Ink** (ink): the primary action colour. Fills the primary button and the toast, draws focus outlines and selected-ticket outlines on paper. In dark mode it inverts to near-white so the primary button becomes a light slip on dim paper.
-- **Fire Red** (fire, with fire-soft fill and fire-ink text): urgent and overdue only. Urgent priority marks, overdue group titles and ages, the "Hoje" count when something is burning, the capture-bar slot and text caret on focus, invalid fields, destructive hovers.
+- **Pine Teal** (`accent`): primary buttons, the focused capture field border and plus glyph, the current view's icon, the round checkbox when checked, the in-progress dot on cards, focus outlines and the 3px focus ring (22% teal). It is also the logo's ground color, so brand and action share one hue.
+- **Deep Pine** (`accent-strong`): hover state of primary buttons, accent text on soft teal fills (filter chips, avatar initial, AI pill, token syntax in the capture help).
+- **Teal Mist** (`accent-soft`): selected row fill, pressed project filter, avatar disc, AI suggestion box and pill, empty-state icon tile.
+- **On Accent** (`on-accent`): text and check marks on Pine Teal. In dark mode this flips to a near-black teal because the dark accent is light.
 
-### Secondary
-- **Heat-Lamp Amber** (heat, with heat-soft fill): due today, high priority, and aging tickets. The warning before fire.
+### Status (meaning only)
+- **Overdue Red** (`danger`, `danger-text`, `danger-soft`): overdue groups and due chips, the urgent priority dot, the hot count badge on Hoje, form errors, destructive actions, error toasts.
+- **Due-Today Amber** (`warn`, `warn-text`, `warn-soft`): the due-today group, due-today chips, the high priority dot, medium password strength.
+- **Waiting Blue** (`info`, `info-text`, `info-soft`): the waiting status chip and the waiting segment in the detail panel. Nothing else.
+- **Done Green** (`success`, `success-text`, `success-soft`): done chips and segment, the "salvo" confirmation, strong password strength.
 
-### Tertiary
-- **Pass Blue** (wait, wait-soft): "Aguardando", waiting on someone else. Tag fill and segmented-control selection only.
-- **Cleared Green** (done, done-soft): finished work and the tick hover. Tag fill, tick, password-strength full.
+Each status hue has three steps: a saturated dot color, an AA text color, and a soft fill. Text on a soft fill always uses the matching `-text` step.
 
 ### Neutral
-- **Brushed Steel Ground** (steel-ground): the main board background.
-- **Sidebar Steel** (steel-side): the sidebar and the top of the auth gradient.
-- **Raised Steel** (steel-raised): keycaps and filter chips sitting on steel.
-- **Steel Seam** (steel-line): sidebar border, chip and keycap strokes, empty-rail dashed outline, scrollbar thumbs.
-- **Steel Ink / Steel Ink 2** (steel-ink, steel-ink-2): headings, nav labels and counts that sit directly on steel.
-- **Rail Steel** (rail-mid, with rail-hi highlight): the rail bar itself.
-- **Thermal Paper** (paper): every ticket, input, panel, menu, sheet and the active nav item.
-- **Sunk Paper** (paper-sunk): neutral tags, done rows, segmented-control track, ghost hovers.
-- **Paper Edge** (paper-edge): ticket borders and the dashed tear lines inside tickets.
-- **Ink 2 / Ink 3** (ink-2, ink-3): secondary and tertiary text on paper; ink-3 also draws idle ticks and normal-priority marks.
-- **Selection Amber** (select-bg): text selection highlight, a heat-lamp yellow.
+- **Mist Ground** (`bg`): the window ground behind the sidebar and topbar; the auth screen ground.
+- **Pale Panel** (`panel`): the large rounded board panel that holds the day's content.
+- **White Surface** (`surface`): cards, row containers, inputs, menus, sheets, the detail panel, the auth card.
+- **Soft Fill** (`surface-2`): neutral chips, count badges, segmented control track, skeletons, recovery code well.
+- **Hairline** (`line`) and **Strong Hairline** (`line-strong`): 1px borders and row dividers; strong for inputs, the unchecked checkbox ring and scrollbar thumbs.
+- **Ink** (`text`), **Slate Ink** (`text-2`), **Quiet Ink** (`text-3`): primary text, secondary text and labels, metadata and icons at rest.
+- Hover and press washes are translucent ink (4.5% and 8% in light, 5% and 9% in dark), never a separate gray.
+
+### Brand
+- **Lumo Teal** (`accent`) is the logo square; the app icon adds a soft gradient from `brand-teal-light` to `accent-strong`.
+- **Light Amber** (`brand-amber`): the logo's light dot only. It is a brand color, not a UI status color; amber in the interface is `warn`.
 
 ### Named Rules
-**The Two Inks Rule.** Paper carries receipt ink (ink, ink-2, ink-3); steel carries steel ink (steel-ink, steel-ink-2). A control that changes material changes ink with it: the search field is steel at rest and becomes paper with receipt ink on focus.
+**The One Teal Rule.** Pine teal is the only accent. It marks primary action, selection, focus, in-progress and completion; it never decorates a heading, a divider or an empty area.
 
-**The Heat Rule.** Fire marks what is burning (urgent, overdue), heat marks what is warming (due today, high priority, aging). Neither is ever a decorative accent, a brand colour, or a large surface; they appear as small marks, text, and soft tag fills.
+**The Meaning-Only Rule.** Red, amber, blue and green appear only when a demand is overdue/urgent, due today/high, waiting or done. A status color without a status behind it is a bug.
 
-**The Status Fill Rule.** Wait blue and done green appear only as tag fills, segmented selections and tick states. They never colour a ticket, a row, or a section.
+**The Tinted Neutral Rule.** Every gray leans toward the accent hue (hue around 160). Stock zinc, slate or pure-gray neutrals do not belong in Lumo.
 
 ## Typography
 
-**Display Font:** Archivo (self-hosted variable, 100–900), with Segoe UI Variable Text, Segoe UI, system-ui fallback
-**Body Font:** Archivo
-**Label/Mono Font:** JetBrains Mono (self-hosted 400/500/600), with Cascadia Mono, Consolas fallback
+**Display Font:** Figtree (with Segoe UI Variable Text, Segoe UI, system-ui)
+**Body Font:** Figtree
+**Label/Mono Font:** Figtree (keyboard hints, counts, codes and the recovery code are all Figtree)
 
-**Character:** A sturdy, slightly condensed grotesk for language, a clean mono for anything that measures. The pairing reads like a printed kitchen ticket: words in the house face, numbers in the printer's face.
+**Character:** A friendly geometric grotesque used at a narrow weight band (400 to 720) with fine steps (550, 650) instead of size jumps. Headings tighten tracking slightly; small text never goes uppercase. Figtree is bundled as a variable woff2 (weights 300-900, latin and latin-ext) with `font-display: block` so the UI never flashes a fallback.
 
 ### Hierarchy
-- **Display** (680, 22px, 1.2, -0.025em): the board heading ("Hoje", "Fila"), on steel.
-- **Headline** (650, 21px, 1.25, -0.02em): auth ticket headings; sheet headings use the same voice at 18px.
-- **Title** (640, 17px, 1.35, -0.012em): the editable demand title in the detail panel.
-- **Ticket Title** (600, 14px, 1.35): rail ticket titles, clamped to three lines. Row titles use 540 at body size, single line with ellipsis.
-- **Body** (400, 14px, 1.45): default UI text. Capture input is 14.5px.
-- **Group Label** (620, 13px): section titles on the board ("Na mesa", "Atrasadas"), coloured fire or heat when the section is.
-- **Label** (560, 12.5px): field labels, small buttons, chips. Hints and meta are 12px in ink-3.
-- **Number** (JetBrains Mono 500, 12px, tabular): ages, counts, dates, the board date, ticket heads. **Number Strong** (600) for sequence numbers ("Nº 0031", "0033").
-- **Keycap** (JetBrains Mono 500, 11px): keyboard shortcuts.
-
-Archivo uses intermediate variable weights (520, 540, 560, 620, 640, 650, 680) rather than stepping 400/600/700; keep to the observed steps.
+- **Headline** (700, 24px, 1.2, -0.025em): the board title (Hoje, Fila, Aguardando, Feitas), followed by the date in Quiet Ink.
+- **Headline Small** (700, 22px, 1.25, -0.02em): the auth card heading. Sheet headings use 700 at 19px.
+- **Title** (700, 18px, 1.35, -0.015em): the editable demand title in the detail panel. Empty-state headings use 650 at 17px.
+- **Wordmark** (720, 18px, -0.035em): "lumo", lowercase, next to the logo mark.
+- **Item** (550-600, 14.5px, 1.4): demand titles in rows and in-progress cards (600 on cards), and the capture input.
+- **Body** (400, 14px, 1.5): base text, ledes, notes (1.6 line height in notes and AI text).
+- **Control** (600, 13.5px): buttons; menu items and project filters use 500 at the same size.
+- **Label** (600, 12.5px): field labels, tags and chips (550), the AI pill, group hints (450).
+- **Meta** (600, 12px): sequence numbers, count badges, card headers, section titles such as "Projetos". Group titles sit between label and meta at 650, 13px.
 
 ### Named Rules
-**The Measurement Is Mono Rule.** Ticket numbers, elapsed ages, counts, dates, times and keycaps are JetBrains Mono with tabular figures. Words, including status and priority names, are never mono.
+**The One Family Rule.** Figtree sets everything, including keyboard hints and codes. Hierarchy comes from weight and a 1-2px size step, not from a second family.
 
-**The Honest Age Rule.** Every open ticket shows its elapsed age (5h, 1d, 40min) right-aligned in mono; it warms to heat and then fire as it ages.
+**The Tabular Rule.** `font-variant-numeric: tabular-nums` is set on the document; counts, sequence numbers (#31), ages (5h, 2d) and dates line up in columns.
 
 ## Layout
 
-A fixed three-zone desktop workspace. The sidebar (236px) holds views with mono counts and a proportional share bar under each, then project filters, then the account. The main column has a 56px top bar (capture bar flexing, search 220px, right padding reserving 150px for the window controls), a capture preview strip that expands to 30px while typing, then the board. The detail panel (380px) docks to the right as a paper sheet with 8px/16px gutters when a ticket is selected.
+The workspace is a two-column grid: a 248px sidebar on the ground, and a main column with a 60px topbar (capture field, search, theme toggle) above a single rounded board panel. The board panel is inset 8px from the window edge on the right and bottom and scrolls internally with 8px 28px 64px padding. The detail panel opens inside the board panel as a floating 384px card on the right, inset 10px.
 
-The board is a single column padded 8px 24px 64px 20px. Today stacks the "Na mesa" rail (30px below it), then grouped sections 26px apart. Rows sit 6px apart; rail tickets 12px apart in a horizontally scrolling, snap-aligned track.
+Vertical rhythm: groups and the in-progress rail are separated by 22px; a group title sits 10px above its container; the board head sits 20px below the top and 16px above content. In-progress cards flow in a horizontal, snap-scrolling track of 240-280px columns with a 12px gap. Rows are 44px minimum.
 
-Spacing is a tight, mostly even rhythm: 2, 4, 6, 10, 14, 18, 22, 26px. Control heights are 30 (inset buttons, ticks), 36 (buttons, nav, search), 40 (capture, inputs, block buttons), 48 (rows).
+In the desktop build the topbar reserves 150px on the right for the Windows title bar controls and the topbar and sidebar header are drag regions.
 
-Responsive: under 1180px the detail panel narrows to 340px. Under 980px the sidebar collapses to a 64px icon rail with counts beneath icons, project filters hide, search collapses to a 44px icon that expands to 200px on focus, and the detail panel floats over the board. Row tags drop by container width: project tags hide under 760px, all tags under 680px.
+### Responsive behavior
+- **≤1180px:** detail panel narrows to 344px; row gaps tighten to 8px.
+- **≤980px:** the sidebar collapses to a 68px icon rail (brand name, view labels, project list and account name hidden; counts sit under the icons). Projects move into a popover opened from a Projetos rail button. Search collapses to a 42px icon field that expands to 200px on focus. The detail panel overlays the board.
+- **≤560px:** group hints are hidden.
+- **Touch (`hover: none`):** in-progress card actions are always visible and flow in the card instead of appearing on hover.
+- **Container queries** on the board (`container-type: inline-size`): under 880px rows drop the project tag; under 700px rows drop all tags, keeping checkbox, priority dot, sequence, title, due chip and age.
 
 ## Elevation & Depth
 
-Depth is paper weight on steel. Steel is flat and shadowless; every paper surface carries a faint ticket shadow, and paper lifts further only when it is picked up (hover), floats (menus, toasts, sheets, detail panel), or is the one paper sheet on the login screen. Dark mode deepens the same two shadows.
+Hybrid, hairline first. Every surface is drawn by a 1px hairline and a tinted value step (ground, panel, surface); shadows are soft, two-layer and shallow, tinted with the ink color in light mode and pure black in dark mode. Lift is reserved for floating things and for hover.
 
 ### Shadow Vocabulary
-- **Ticket** (`box-shadow: 0 1px 0 rgb(20 24 28 / 0.04), 0 2px 6px -2px rgb(20 24 28 / 0.14)`): resting paper: rows, rail tickets, capture bar, active nav item, segmented selection.
-- **Lift** (`box-shadow: 0 2px 0 rgb(20 24 28 / 0.05), 0 10px 24px -10px rgb(20 24 28 / 0.32)`): hovered rows and rail tickets, detail panel, auth ticket, menus, toasts, sheets.
-- **Rail bar** (`box-shadow: 0 2px 4px -1px rgb(0 0 0 / 0.25)`): the steel rail only, with a 1px rail-hi top highlight.
+- **Rest** (`--sh-1`: `0 1px 2px rgb(19 32 28 / 0.05)`): cards, row containers, capture field, active view item, theme toggle.
+- **Lift** (`--sh-2`: `0 1px 2px rgb(19 32 28 / 0.05), 0 8px 22px -12px rgb(19 32 28 / 0.18)`): in-progress card on hover, the detail panel.
+- **Float** (`--sh-3`: `0 2px 6px rgb(19 32 28 / 0.06), 0 20px 50px -18px rgb(19 32 28 / 0.28)`): account menu, projects popover, toasts, sheets, the auth card.
+- **Focus Ring** (`--ring`: `0 0 0 3px` of accent at 22%): focused inputs, capture field, search, selected in-progress card. Keyboard focus elsewhere is a 2px accent outline offset 2px.
+- Dark mode uses the same three roles with black shadows at 0.3-0.75 alpha.
 
 ### Named Rules
-**The Paper Weight Rule.** Only paper casts shadows, and only the two paper shadows exist. Hover lifts paper from Ticket to Lift; it never changes the paper colour.
+**The Hairline-First Rule.** Separate with a 1px hairline and a value step before reaching for shadow. Rows inside a container are divided by hairlines, never by gaps and per-row shadows.
+
+**The Float-Only-When-Floating Rule.** The Float shadow belongs to things above the page (menus, toasts, sheets, the auth card). Content at rest takes Rest; Lift is a response to hover or to the detail panel's open state.
 
 ## Shapes
 
-Paper is nearly square (3px); controls are gently rounded (6px); things inside controls are 4px; filter chips are full pills (13px); avatars and ticks are circles. Paper edges that came off the printer are perforated: a 10px-pitch scallop of 3.5px half-circles cut by a CSS mask along the top (detail panel, auth ticket) or bottom (rail tickets). Inside a ticket, sections are separated by 1px dashed paper-edge tear lines (ticket head, detail head, detail meta, auth head). Priority marks are 8px squares with a 2px corner: filled fire, heat, or ink-3, or an outlined square for low.
+Soft, consistent corners from a four-step scale: 8px (small controls: menu items, icon buttons, card action buttons, the password reveal), 10px (buttons, inputs, view items, segmented control, AI box), 14px (cards, row containers, capture field, menus, toasts, the detail panel), 18px (the board panel, sheets, the auth card). Chips, count badges, filter chips and the AI pill are full pills (half their height: 12, 10, 14, 13px). The checkbox, avatar and priority/in-progress dots are circles. Keyboard hints (6px) and segmented buttons (7px inside a 10px track) are the only off-scale radii, nested inside larger shapes.
+
+Borders are 1px hairlines throughout; the checkbox ring is 1.6px; the empty in-progress state is the only dashed border (1.5px, Strong Hairline). Long chip rows in cards fade out at the right edge with a gradient mask instead of wrapping.
+
+### Named Rules
+**The Four Radii Rule.** Corners come from 8/10/14/18px, pills and circles. Nesting steps down: an 18px panel holds 14px containers, which hold 10px and 8px controls.
 
 ## Components
 
 ### Buttons
-Compact, inky, decisive.
-- **Shape:** gently rounded (6px), 36px high, 14px side padding, weight 560, icon gap 8px.
-- **Primary:** receipt ink fill with paper text. Hover mixes 14% fire into the ink. Disabled at 55% opacity.
-- **Ghost:** transparent with a paper-edge stroke and ink-2 text; hover fills sunk paper.
-- **Danger:** transparent, fire-ink text, a 35% fire stroke; hover fills fire-soft.
-- **Press:** every button sinks 1px on active (120ms). Block buttons are 40px and full width. In-ticket buttons are 28px high, 12.5px text.
-- **Icon button:** 30px square, ink-3 icon, sunk-paper hover; danger variant hovers to fire-soft.
+- **Shape:** gently rounded (10px), 36px tall, 14px horizontal padding, 600 weight at 13.5px, icon gap 8px.
+- **Primary:** Pine Teal fill, On Accent text, a faint teal-tinted 1px shadow. Hover deepens to Deep Pine.
+- **Ghost:** White Surface with a hairline border and Slate Ink text; hover moves to Soft Fill and Ink.
+- **Danger:** transparent with red text and a hairline border; hover fills Overdue Red soft.
+- **Block:** full width, 42px, 14px text (auth forms).
+- **Press:** scales to 0.98 (120ms). Disabled primary drops to 50% opacity. Loading shows a 14px spinning ring in `currentColor`.
+- **Icon button:** 32px square, 8px radius, Quiet Ink, hover wash; the danger variant hovers red.
+- **Link:** unstyled Quiet Ink text, 500 at 13px, hover Deep Pine.
 
-### Chips
-- **Tags:** 22px, 4px corner, 12px/500 text with a 12px Lucide icon, sunk-paper fill. Status variants use fire, heat, wait or done soft fills with matching text and icon.
-- **Filter chip:** steel-raised pill (13px radius) with a steel-line stroke and a round clear button; it sits on steel, so it uses steel ink.
+### Theme Toggle
+A 38px square White Surface button with a hairline border, 10px radius and Rest shadow, holding an 18px Lucide moon (in light) or sun (in dark). It sits at the right of the topbar and fixed at the top right of the auth screen. Clicking flips the effective theme and stores the choice; hover darkens the icon and border.
 
-### Inputs / Fields
-- **Style:** paper fill, paper-edge stroke, 6px corner, 40px (36px inside the detail panel), 12px padding. Labels sit above at 12.5px/560 in ink-2 with a 6px gap.
-- **Focus:** stroke turns ink plus a 3px ink halo at 12%. No coloured focus.
-- **Error:** fire stroke; form errors are a fire-soft banner with fire-ink text and an alert icon.
-- **Password strength:** four 3px bars filling fire, heat, then done.
+Theming is explicit: `:root[data-theme="dark"]` applies the dark set, `:root[data-theme="light"]` pins light, and with no attribute the system preference decides through `prefers-color-scheme`. The choice persists in local storage (`lumo-theme`), is passed to the desktop shell so the native title bar matches, and the toggle repaints when the host page changes `data-theme` (the claude.ai build).
 
-### Navigation
-Sidebar views are 36px rows on steel: 18px icon, label, right-aligned mono count. Hover tints steel by 7% ink. The current view becomes a paper slip (paper fill, ticket shadow, receipt ink), so selection reads as "this ticket is pulled". A 2px share bar under each label shows that view's count proportionally; the Today bar turns fire when something is overdue or urgent. Project filters are 30px rows with a hash icon and mono count; pressed state is a 12% steel tint.
+### Sidebar Views and Count Badges
+- **View item:** 38px rows with an 18px icon, label (550) and a count, 10px radius, Slate Ink. Hover adds the translucent wash. The current view becomes a White Surface pill with Rest shadow plus a hairline ring, Ink text, and a Pine Teal icon.
+- **Views:** Hoje (sun), Fila (list-todo), Aguardando (clock), Feitas (circle-check), shortcuts Ctrl 1-4.
+- **Count badge:** 20px pill, 12px/600 Quiet Ink, hidden when empty. On Hoje, when anything is overdue, the badge turns hot: Overdue Red soft fill with red text.
+- **Projects:** a "Projetos" section title (12px/600 Quiet Ink, sentence case) above 34px filter items with a hash icon and count; the pressed project fills Teal Mist with Deep Pine text.
+- **Account:** a 44px button at the sidebar foot with a 28px Teal Mist avatar initial, the username and a settings icon.
 
-### Capture Bar (signature)
-The printer slot. A paper field 40px high with the ticket shadow, a 12px ink-3 slot mark at its left edge, and an "Enter" keycap that fades in on focus. On focus the stroke becomes ink with the 3px halo, the slot mark widens to 16px and turns fire, and a preview strip below unfolds (160ms) to show parsed inline tokens (`!urgente`, `@pessoa`, `#projeto`, dates) as live tags in their heat colours.
+### Capture Field with Live Token Chips
+The signature input. A 42px White Surface bar with a hairline border, 14px radius and Rest shadow, led by an 18px plus glyph in Quiet Ink. On focus the border, glyph and ring turn Pine Teal and an "Enter" keyboard hint fades in on the right. Below it, a preview strip opens (to 30px): empty, it lists the inline syntax with tokens in Deep Pine (`!urgente`, `@pessoa`, `#projeto`, dates, `~aguardando`); while typing, each recognized token renders as a live chip using the same tag styles as rows (urgente red, alta amber, aguardando blue, others neutral).
 
-### Ticket Rows
-Dense paper strips, 48px minimum, 6px apart, 3px corner. Grid: a 30px round tick, a 58px sequence column (priority square plus mono number, fire when urgent), the title and tags, the due tag, and the mono age right-aligned. Hover lifts to the Lift shadow (160ms); selection is a 2px ink outline offset 1px. Done rows sink to paper-sunk with an ink-3 struck-through title.
+Search sits beside it: a 38px, 220px translucent-wash field with a search icon and a Ctrl F hint that becomes a White Surface with teal border and ring on focus.
 
-### Rail Tickets (signature)
-The "Na mesa" rail is a 12px steel bar (rail-mid with a rail-hi top edge and a soft drop) that overhangs the board by 8px each side; tickets hang from it in a horizontal snap-scrolling track. Each rail ticket is a 228px paper slip with a perforated bottom edge: a mono head ("Nº 0031" left in ink 600, age right in ink-3) over a dashed tear line, a three-line title, tags, and in-ticket Concluir (primary) and pause (ghost) buttons. Hover swings the ticket from its top edge (rotate -0.6deg, down 1px) and lifts it; selection is a 2px ink outline. An empty rail is a 112px dashed steel-line outline with a keycap hint.
+### Chips and Tags
+- **Tag:** 24px pill, Soft Fill, Slate Ink at 12.5px/550, 13px leading icon in Quiet Ink (user, hash, calendar, hourglass, play), truncated at 170px.
+- **Status tags:** fire (red), heat (amber), wait (blue), done (green), each soft fill with its text step; icons take the text color.
+- **Filter chip:** 28px Teal Mist pill with Deep Pine text and a round 20px remove button, shown beside the board title.
 
-### Segmented Controls
-Status and priority pickers in the detail panel: a sunk-paper track with a paper-edge stroke and 2px inner padding; 30px segments, 4px corners, 12.5px/540 ink-2. The selected segment becomes a raised paper slip (paper fill, ticket shadow) whose text takes the option's heat or status colour (fire-ink for urgent, heat for high, wait, done).
+### In-Progress Cards
+White Surface cards (14px radius, hairline, Rest shadow, 13px 14px 14px padding) in a horizontal snap track under "Em andamento". Header: a 7px Pine Teal dot with a 3px Teal Mist halo, the sequence number, and the age on the right. Title: 600 at 14.5px, clamped to two lines. Meta: priority, due and person/project tags in one row that fades out at the right edge.
+
+Hover lifts the card 1px with the Lift shadow (200ms) and reveals the actions in the top right, replacing the age: a 28px primary "Concluir" button with a check-check icon and a 28px square ghost pause button (8px radius). Selected cards take a teal border and the focus ring and keep the actions visible. On touch the actions are always shown. The empty state is a dashed 14px box with a keyboard hint.
+
+### Grouped List Containers and Rows
+- **Group title:** 13px/650 Slate Ink with a 20px count pill; overdue groups ("Atrasadas") and urgent groups turn red, due-today ("Vencem hoje") turns amber; an optional right-aligned hint at 12.5px/450.
+- **Container:** one White Surface box per group with a hairline border, 14px radius, Rest shadow, clipped corners.
+- **Row:** 44px minimum, a grid of checkbox, priority dot plus sequence, title with tags, due chip, and age. Rows are divided by 1px hairlines. Hover adds the wash; selected rows fill Teal Mist with a 2px inset teal bar on the left. Done rows grey out with a strike in Strong Hairline.
+- **Priority dot:** 7px circle: urgente red with a soft halo, alta amber with a soft halo, normal Strong Hairline, baixa an empty ring.
+- **Age:** right-aligned 12.5px Quiet Ink; stale items become Slate Ink 650.
+
+### Round Checkbox
+A 28px hit target holding an 18px circle with a 1.6px Strong Hairline ring on White Surface. Hover turns the ring teal and previews a faint teal check. Checked fills the circle with Pine Teal and shows a white check (2.6 stroke). Completing then plays the finish animation: the row fades and slides 14px right while scaling to 0.985 over 260ms.
 
 ### Detail Panel
-A tall paper sheet (380px) perforated along its top edge, with the Lift shadow. The head is mono ("Nº 0033 · chegou há 9d") over a dashed tear line, with a "salvo" mono flash and icon buttons for delete and close. The body stacks the editable title, segmented controls, a two-column date/requester grid, project, notes (160px textarea), a full-width Concluir or Reabrir action, and a dashed-rule meta block of mono timestamps.
+A floating White Surface card (14px radius, Lift shadow, 384px, inset 10px inside the board panel). Header: sequence number and 32px icon buttons. Body (20px sides, 18px gaps): the editable title (18px/700, transparent until hover wash or focus, focus adds teal border and ring), segmented controls for priority and status (Soft Fill track, 3px padding, selected segment raised to White Surface with Rest shadow and colored by meaning: urgente red, alta amber, fazendo teal, aguardando blue, feito green), a two-column grid of 38px fields (due date with a masked calendar icon that turns teal on hover, requester/project), the notes textarea (150px minimum, 1.6 line height), a hairline-topped meta list, and full-width 40px action buttons.
 
-### Auth Ticket
-Login, registration, recovery and reset are a single 400px paper ticket, perforated along the top, lifted, centred on a steel gradient (steel-side fading to steel-ground by 38%). The head carries the brand mark, name and a mono timestamp stamp over a dashed tear line. The recovery code is set in 17px/600 mono with 0.04em tracking in a sunk-paper box with a dashed ink-3 border.
+### AI Writing Suggestion
+- **"Melhorar escrita" pill:** a 26px Teal Mist pill with Deep Pine text at 12.5px/600 and a 14px sparkles icon, sitting to the right of the Anotações label. Hover deepens the fill (18% accent mixed in); disabled is 50% opacity.
+- **Suggestion box:** below the notes, a 10px-radius Teal Mist box with a 30% teal hairline, 12px 14px padding, popping in over 200ms. Head: sparkles icon and "Sugestão de escrita" in Deep Pine 12.5px/650. Text: 13.5px/1.6 Ink, pre-wrapped. Actions: a 32px primary "Aplicar" and a ghost "Ignorar".
+- **Working state:** a 13px spinning ring with "Revisando…" and a "Parar" link.
+- **Quiet state:** for "nothing to change" and errors, the box drops to Soft Fill with a hairline and Slate Ink head.
+- An opt-in checkbox below the notes controls automatic review.
+
+### Account Menu
+A White Surface popover (14px radius, hairline, Float shadow, 6px padding) opening upward from the account button, sized to its content (up to 320px). Items are 36px rows with a 16px Quiet Ink icon, 13.5px/500 label and an optional right-aligned keyboard hint; hover and keyboard focus use the wash. Groups are split by inset hairlines; a small Quiet Ink meta line can head the menu. It pops in over 180ms (fade, 4px rise, 0.98 scale). The narrow-width projects popover uses the same menu shell beside the icon rail.
 
 ### Toasts
-Dark receipt slips: ink fill, paper text, 6px corner, Lift shadow, bottom-centred. They lead with the mono ticket number ("Nº 0033 anotada") and offer a translucent paper-tinted Desfazer button with its mono shortcut. Errors use fire-ink. Enter with the 180ms pop, leave with a 160ms fade and 6px drop.
+Bottom-center, inverted: an Ink bar (14px radius, Float shadow) with Ground-colored text at 13.5px/500, up to three stacked. A leading sequence number at 70% opacity, then the message, then 30px action buttons on a translucent ground-tinted fill ("Ver", "Desfazer Ctrl Z"). Error toasts use the red text color as their fill with white text. They pop in over 200ms and leave over 160ms (fade and 6px drop); normal toasts stay 4.5s, errors 6s.
 
 ### Sheets
-Modal dialogs are 440px paper with a 6px corner, paper-edge stroke and Lift shadow over a 42% near-black backdrop; 18px/650 heading, 13.5px ink-2 lede, right-aligned actions. The shortcuts sheet is a two-column list of labels and sunk-paper keycaps.
+Native dialogs: White Surface, 18px radius, hairline, Float shadow, up to 440px wide, 28px padding, popping in over 200ms over a 35% dark scrim with a 2px blur. Heading 19px/700, lede in Slate Ink, actions right-aligned with 8px gaps. Used for the shortcut list, change password and recovery code.
 
-### Keycaps
-Mono 11px/500, 1px stroke with a 2px bottom stroke so the key reads as pressed-in plastic, 4px corner. On steel they use steel-raised and steel-line; on paper, sunk paper and paper-edge.
+### Auth Card
+A centered White Surface card on the Mist Ground: 400px, 18px radius, Float shadow, 32px 32px 28px padding. It opens with the logo mark and the lowercase wordmark, then a 22px/700 heading, a Slate Ink lede, fields and a block primary button; a small Quiet Ink line below the card states that data stays on the machine. The theme toggle floats at the top right.
+
+- **Inputs:** 40px, White Surface, Strong Hairline border, 10px radius; hover darkens the border, focus turns it teal with the ring; invalid turns it red. Labels 12.5px/600 Slate Ink; hints 12px Quiet Ink.
+- **Masked username:** the username field renders typed characters as discs like a password (with slight letter spacing), while the placeholder stays readable. A 30px eye button inside the field reveals or re-masks it, same as the password field.
+- **Form error:** an Overdue Red soft banner with red text and a leading alert icon.
+- **Password strength:** four 4px segments filling red, amber, then green.
+- **Recovery code:** a Soft Fill well, 14px radius, 650 at 17px with 0.08em tracking, select-all.
+
+### Brand
+- **Logo mark:** a rounded teal square (corner radius one quarter of its side, 116/464) carrying a thick white rounded "L" (stroke with round caps and joins) and an amber light dot at the top right of the L. The in-app mark (`src/renderer/assets/mark.svg`) is flat Lumo Teal; the app icon (`build/icon.svg`) adds a teal gradient and a soft amber glow behind the dot. Rendered at 22px beside the wordmark.
+- **Wordmark:** "lumo", always lowercase, Figtree 720 at 18px with -0.035em tracking, in Ink, 10px from the mark.
+- **Lockups:** `build/lumo-logo.png` for light grounds, `build/lumo-logo-escuro.png` for dark grounds.
 
 ### Motion
-One easing for everything: `cubic-bezier(0.16, 1, 0.3, 1)`. State transitions run 150ms (colour, border, focus halo), 160ms (row lift, preview strip, menu out), 180–200ms (toasts, sheets, rail ticket swing, slot width), 240ms (nav share bars). The **print** (280ms) reveals a new ticket top-down with a clip-path wipe and a 6px drop. The **tear** (260ms) rises 3px with a slight counter-rotation, then pulls 22px up, rotates -3deg, blurs 1px and fades. Reduced motion collapses all of it to 1ms.
+One curve, `cubic-bezier(0.22, 1, 0.36, 1)` (a soft ease-out), for everything.
+- **State transitions:** 160ms for color, border and shadow changes; 200ms for card lift, checkbox fill, search width and strength bars; 120ms for button press.
+- **Pop in:** 180-200ms fade, 4px rise and 0.98 scale for menus, toasts, sheets and the AI box.
+- **Finish (260ms):** completing a row or card fades it and slides it 14px right at 0.985 scale.
+- **Arrive (320ms):** a new demand drops in from 6px above at 0.99 scale with the accent focus ring fading out.
+- **Reduced motion:** under `prefers-reduced-motion: reduce`, all animations and transitions collapse to 1ms.
 
 ## Do's and Don'ts
 
 ### Do:
-- **Do** put every demand, field and floating surface on paper (paper fill, paper-edge stroke, 3px or 6px corner, ticket shadow) and leave the shell as flat steel.
-- **Do** switch ink with material: receipt ink on paper, steel ink on steel, including focus outlines.
-- **Do** set ticket numbers, ages, counts, dates and keycaps in JetBrains Mono with tabular figures, and prefix ticket numbers "Nº" on tickets, toasts and the detail head.
-- **Do** separate sections inside a ticket with a 1px dashed paper-edge tear line, and perforate the edge a ticket was torn from.
-- **Do** mark completion with the tear (260ms) and creation with the print (280ms), both on the shared ease-out curve.
-- **Do** colour urgency by heat: fire for urgent and overdue, heat for due today, high priority and aging.
-- **Do** show the keyboard shortcut as a keycap wherever an action has one.
+- **Do** use Pine Teal for the one primary action on a surface, the selection, focus and in-progress state, and nothing else.
+- **Do** pair every status fill with its own text step (`danger-soft` with `danger-text`, and so on) so chips stay AA in both themes.
+- **Do** group lists as one rounded container (14px) with 1px hairline rows.
+- **Do** set every value from tokens so both themes stay complete: a new color needs a light and a dark value under `:root` and `[data-theme="dark"]`.
+- **Do** use Lucide icons as inline SVG at a 1.6 stroke in `currentColor`, 16px by default, 12-14px inside chips and small buttons, 18px in navigation.
+- **Do** keep numbers tabular and keyboard hints visible next to the actions they trigger.
+- **Do** honor reduced motion and keep the finish (260ms) and arrive (320ms) moments as the only expressive motion.
 
 ### Don't:
-- **Don't** use fire or heat as a brand accent, button fill or large surface; they are alarms.
-- **Don't** colour a ticket or row background by status; status lives in tags, marks, ages and group titles.
-- **Don't** add shadows to steel or invent a third paper shadow; paper is Ticket at rest and Lift when picked up.
-- **Don't** set words (status names, labels, headings) in mono, or numbers that measure in Archivo.
-- **Don't** round a ticket (row, rail ticket, detail panel, auth ticket) beyond 3px; the near-square corner is part of the material. Fields, menus, sheets and toasts take 6px.
+- **Don't** use red, amber, blue or green for decoration, categories or emphasis; they mean overdue/urgent, due-today/high, waiting and done.
+- **Don't** introduce untinted grays, a second accent, or the logo's amber as a UI color.
+- **Don't** add a second typeface or monospace for codes and shortcuts; Figtree sets everything.
+- **Don't** use radii outside 8/10/14/18px, pills and circles for new surfaces.
+- **Don't** put the Float shadow on content at rest or stack per-row shadows inside a group container.
+- **Don't** write the wordmark capitalized or recolor the logo mark.
