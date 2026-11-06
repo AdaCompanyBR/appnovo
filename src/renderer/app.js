@@ -416,7 +416,7 @@
 
   function renderWsButton() {
     const name = currentWs().name;
-    wsBtn.innerHTML = `<span class="ws-dot" aria-hidden="true">${esc(name.slice(0, 1).toUpperCase())}</span><span class="ws-name">${esc(name)}</span>${icon('chevron-down', 14)}`;
+    wsBtn.innerHTML = `<span class="ws-name">${esc(name)}</span>${icon('chevron-down', 14)}`;
     wsBtn.setAttribute('aria-label', `Empresa: ${name}. Trocar ou criar empresa`);
     wsBtn.title = name;
   }
@@ -430,7 +430,7 @@
     wsMenu.innerHTML = `
       <div class="menu-meta">Empresas</div>
       ${list.map((w) => `<button type="button" role="menuitemradio" aria-checked="${w.id === state.ws}" data-ws="${esc(w.id)}">
-        <span class="ws-dot" aria-hidden="true">${esc(w.name.slice(0, 1).toUpperCase())}</span><span class="ws-item-name">${esc(w.name)}</span>
+<span class="ws-item-name">${esc(w.name)}</span>
         <span class="ws-count num">${wsOpenCount(w.id) || ''}</span>${w.id === state.ws ? icon('check', 14) : '<span class="ws-check-space"></span>'}</button>`).join('')}
       <hr>
       ${creating
