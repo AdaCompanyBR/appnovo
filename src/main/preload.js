@@ -21,6 +21,7 @@ contextBridge.exposeInMainWorld('api', {
     remove: call('demands:delete'),
     restore: call('demands:restore'),
   },
+  settings: { get: call('settings:get'), set: call('settings:set') },
   data: { export: call('data:export') },
   app: { info: call('app:info'), openDataDir: call('app:open-data-dir'), copy: call('app:copy'), setTheme: call('app:set-theme') },
   on: (event, fn) => {

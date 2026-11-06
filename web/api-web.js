@@ -103,6 +103,7 @@
       due: typeof d.due === 'string' && DATE_RE.test(d.due) ? d.due : null,
       requester: cleanText(d.requester, 80),
       project: cleanText(d.project, 80),
+      ws: cleanText(d.ws, 64) || null,
       createdAt: d.createdAt || new Date().toISOString(),
       updatedAt: d.updatedAt || d.createdAt || new Date().toISOString(),
       doneAt: d.doneAt || null,
@@ -121,7 +122,7 @@
         const uid = user ? await user.id() : null;
         if (!db || !uid) throw new VaultError('unavailable', 'Não foi possível acessar o armazenamento. Entre na sua conta do claude.ai e abra a página de novo.');
         const accountRef = db.doc(`data/users/${uid}/account`);
-        return { db, downloads, accountRef, demandsCol: accountRef.collection('demands') };
+        return { db, downloads, accountRef, demandsCol: accountRef.collection('demands'), settingsRef: db.doc(`data/users/${uid}/settings`) };
       })();
       ready.catch(() => { ready = null; });
     }
@@ -382,6 +383,24 @@
       return writeDemand(sanitizeDemand(demand));
     },
 
+    async 'settings:get'() {
+      requireSession();
+      const { settingsRef } = await backend();
+      const snap = await dbCall(() => settingsRef.get());
+      const body = snap.exists ? snap.data() : null;
+      if (!body || !body.box) return {};
+      try { return JSON.parse(dec.decode(await open(session.dek, body.box))); } catch { return {}; }
+    },
+
+    async 'settings:set'(settings) {
+      requireSession();
+      const { settingsRef } = await backend();
+      const clean = JSON.parse(JSON.stringify(settings || {}));
+      const box = await seal(session.dek, enc.encode(JSON.stringify(clean)));
+      await dbCall(() => settingsRef.set({ box, v: 1 }));
+      return clean;
+    },
+
     async 'data:export'() {
       requireSession();
       const { downloads } = await backend();
@@ -420,6 +439,7 @@
       list: call('demands:list'), create: call('demands:create'), update: call('demands:update'),
       remove: call('demands:delete'), restore: call('demands:restore'),
     },
+    settings: { get: call('settings:get'), set: call('settings:set') },
     data: { export: call('data:export') },
     app: {
       info: call('app:info'),

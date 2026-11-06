@@ -136,6 +136,8 @@ function registerIpc() {
   handle('demands:update', (id, patch) => vault.updateDemand(String(id), patch || {}));
   handle('demands:delete', (id) => vault.deleteDemand(String(id)));
   handle('demands:restore', (demand) => vault.restoreDemand(demand));
+  handle('settings:get', () => vault.getSettings());
+  handle('settings:set', (settings) => vault.setSettings(settings));
 
   handle('data:export', async () => {
     const payload = vault.exportData();

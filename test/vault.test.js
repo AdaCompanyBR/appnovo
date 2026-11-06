@@ -105,3 +105,18 @@ test('sem sessão, nada é lido', async () => {
   const v = new Vault(tmpDir());
   assert.throws(() => v.listDemands(), { code: 'signed_out' });
 });
+
+test('configurações cifradas e campo de empresa nas demandas', async () => {
+  const dir = tmpDir();
+  const v = new Vault(dir);
+  await v.register('ana', 'senha-boa-1');
+  v.setSettings({ workspaces: [{ id: 'comexport', name: 'Comexport' }, { id: 'ws-x', name: 'Cliente X' }], current: 'ws-x' });
+  const d = v.createDemand({ title: 'Demanda do cliente', ws: 'ws-x' });
+  assert.equal(d.ws, 'ws-x');
+  v.logout();
+  const raw = fs.readdirSync(dir).map((f) => fs.readFileSync(path.join(dir, f), 'utf8')).join('\n');
+  assert.ok(!raw.includes('Cliente X'), 'nome da empresa não pode aparecer em texto puro');
+  await v.login('ana', 'senha-boa-1');
+  assert.equal(v.getSettings().current, 'ws-x');
+  assert.equal(v.listDemands()[0].ws, 'ws-x');
+});

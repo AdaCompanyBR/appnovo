@@ -390,6 +390,20 @@ class Vault {
     return restored;
   }
 
+  getSettings() {
+    this._requireSession();
+    return this.session.data.settings || {};
+  }
+
+  setSettings(settings) {
+    this._requireSession();
+    const clean = JSON.parse(JSON.stringify(settings || {}));
+    if (JSON.stringify(clean).length > 50000) throw new VaultError('too_large', 'Configurações grandes demais.');
+    this.session.data.settings = clean;
+    this._save();
+    return clean;
+  }
+
   exportData() {
     this._requireSession();
     return {
@@ -420,6 +434,7 @@ function sanitizeDemand(d) {
     due: typeof d.due === 'string' && DATE_RE.test(d.due) ? d.due : null,
     requester: cleanText(d.requester, 80),
     project: cleanText(d.project, 80),
+    ws: cleanText(d.ws, 64) || null,
     createdAt: d.createdAt || new Date().toISOString(),
     updatedAt: d.updatedAt || d.createdAt || new Date().toISOString(),
     doneAt: d.doneAt || null,

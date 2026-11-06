@@ -114,8 +114,9 @@
     return PRIORITY_RANK[a.priority] - PRIORITY_RANK[b.priority] || ad - bd || a.seq - b.seq;
   }
 
+  const inWs = (d) => (d.ws || state.legacyWs) === state.ws;
   function scoped(list) {
-    return list.filter((d) =>
+    return list.filter((d) => inWs(d) &&
       (!state.project || d.project.toLowerCase() === state.project.toLowerCase()) &&
       (!state.requester || d.requester.toLowerCase() === state.requester.toLowerCase()));
   }
@@ -388,6 +389,110 @@
       toast(err.message, { error: true });
       state.demands = [];
     }
+    await loadWorkspaces();
+    renderAll();
+    captureInput.focus();
+  }
+
+  /* ---------- empresas ---------- */
+
+  const wsBtn = $('#ws-btn');
+  const wsMenu = $('#ws-menu');
+  let settings = {};
+
+  async function loadWorkspaces() {
+    try { settings = await call(api.settings.get()) || {}; } catch { settings = {}; }
+    if (!Array.isArray(settings.workspaces) || !settings.workspaces.length) {
+      // Primeira vez: as demandas que já existem pertencem à Comexport.
+      settings = { ...settings, workspaces: [{ id: 'comexport', name: 'Comexport' }], current: 'comexport', legacyWs: 'comexport' };
+      try { await call(api.settings.set(settings)); } catch { /* tenta de novo na próxima mudança */ }
+    }
+    state.legacyWs = settings.legacyWs || settings.workspaces[0].id;
+    state.ws = settings.workspaces.some((w) => w.id === settings.current) ? settings.current : settings.workspaces[0].id;
+    renderWsButton();
+  }
+
+  const currentWs = () => (settings.workspaces || []).find((w) => w.id === state.ws) || { name: '' };
+
+  function renderWsButton() {
+    const name = currentWs().name;
+    wsBtn.innerHTML = `<span class="ws-dot" aria-hidden="true">${esc(name.slice(0, 1).toUpperCase())}</span><span class="ws-name">${esc(name)}</span>${icon('chevron-down', 14)}`;
+    wsBtn.setAttribute('aria-label', `Empresa: ${name}. Trocar ou criar empresa`);
+    wsBtn.title = name;
+  }
+
+  function wsOpenCount(id) {
+    return state.demands.filter((d) => (d.ws || state.legacyWs) === id && isOpen(d)).length;
+  }
+
+  function openWsMenu(creating = false, error = '') {
+    const list = settings.workspaces || [];
+    wsMenu.innerHTML = `
+      <div class="menu-meta">Empresas</div>
+      ${list.map((w) => `<button type="button" role="menuitemradio" aria-checked="${w.id === state.ws}" data-ws="${esc(w.id)}">
+        <span class="ws-dot" aria-hidden="true">${esc(w.name.slice(0, 1).toUpperCase())}</span><span class="ws-item-name">${esc(w.name)}</span>
+        <span class="ws-count num">${wsOpenCount(w.id) || ''}</span>${w.id === state.ws ? icon('check', 14) : '<span class="ws-check-space"></span>'}</button>`).join('')}
+      <hr>
+      ${creating
+        ? `<form class="ws-new" id="ws-new" novalidate><input class="input" id="ws-new-name" maxlength="40" placeholder="Nome da empresa" autocomplete="off" aria-label="Nome da nova empresa">
+            <button type="submit" class="btn btn-primary">Criar</button></form>${error ? `<div class="ws-error">${esc(error)}</div>` : ''}`
+        : `<button type="button" role="menuitem" data-ws-new>${icon('plus')}Nova empresa</button>`}`;
+    wsMenu.hidden = false;
+    wsBtn.setAttribute('aria-expanded', 'true');
+    const f = creating ? $('#ws-new-name') : wsMenu.querySelector('button');
+    if (f) f.focus();
+  }
+  function closeWsMenu() { wsMenu.hidden = true; wsBtn.setAttribute('aria-expanded', 'false'); }
+
+  wsBtn.addEventListener('click', (e) => { e.stopPropagation(); if (wsMenu.hidden) openWsMenu(); else closeWsMenu(); });
+  document.addEventListener('click', (e) => { if (!wsMenu.hidden && !e.target.closest('#ws-menu') && !e.target.closest('#ws-btn')) closeWsMenu(); });
+  wsMenu.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') { closeWsMenu(); wsBtn.focus(); e.stopPropagation(); return; }
+    if (e.target.id === 'ws-new-name') return;
+    const items = [...wsMenu.querySelectorAll('button')];
+    const i = items.indexOf(document.activeElement);
+    if (e.key === 'ArrowDown') { e.preventDefault(); items[(i + 1) % items.length].focus(); }
+    if (e.key === 'ArrowUp') { e.preventDefault(); items[(i - 1 + items.length) % items.length].focus(); }
+  });
+  wsMenu.addEventListener('click', async (e) => {
+    e.stopPropagation();
+    if (e.target.closest('[data-ws-new]')) { openWsMenu(true); return; }
+    const b = e.target.closest('[data-ws]');
+    if (!b) return;
+    closeWsMenu();
+    await switchWs(b.dataset.ws);
+  });
+  wsMenu.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name = $('#ws-new-name').value.trim().replace(/\s+/g, ' ');
+    if (!name) { openWsMenu(true, 'Escreva o nome da empresa.'); return; }
+    if ((settings.workspaces || []).some((w) => w.name.toLocaleLowerCase('pt-BR') === name.toLocaleLowerCase('pt-BR'))) {
+      openWsMenu(true, 'Já existe uma empresa com esse nome.');
+      $('#ws-new-name').value = name;
+      return;
+    }
+    const id = `ws-${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
+    const next = { ...settings, workspaces: [...settings.workspaces, { id, name }], current: id };
+    try {
+      settings = await call(api.settings.set(next));
+    } catch (err) { openWsMenu(true, err.message); return; }
+    closeWsMenu();
+    await switchWs(id, true);
+    toast(`Empresa ${name} criada. As novas demandas vão para ela.`);
+  });
+
+  async function switchWs(id, saved = false) {
+    if (id === state.ws && !saved) return;
+    state.ws = id;
+    state.selectedId = null;
+    state.project = state.requester = null;
+    state.search = '';
+    searchInput.value = '';
+    if (!saved) {
+      settings = { ...settings, current: id };
+      try { settings = await call(api.settings.set(settings)); } catch { /* troca vale nesta sessão */ }
+    }
+    renderWsButton();
     renderAll();
     captureInput.focus();
   }
@@ -421,7 +526,7 @@
     }
 
     const tally = new Map();
-    for (const d of state.demands) {
+    for (const d of state.demands.filter(inWs)) {
       if (!d.project || !isOpen(d)) continue;
       const key = d.project.toLowerCase();
       const cur = tally.get(key) || { name: d.project, n: 0 };
@@ -865,7 +970,7 @@
   function knownValues(key) {
     // Nomes já usados, sem repetir (ignora maiúsculas e acentos); os mais usados e recentes primeiro.
     const map = new Map();
-    for (const d of state.demands) {
+    for (const d of state.demands.filter(inWs)) {
       const v = (d[key] || '').trim();
       if (!v) continue;
       const k = fold(v);
@@ -1209,7 +1314,7 @@ ${text.slice(0, 12000)}
     if (!text.trim()) return;
     const p = parseCapture(text);
     if (!p.title) { toast('Falta o título: escreva o que precisa ser feito além dos marcadores.', { error: true }); return; }
-    const input = { title: p.title, priority: p.priority || 'normal', requester: p.requester, project: p.project, due: p.due, status: p.status || 'todo' };
+    const input = { title: p.title, priority: p.priority || 'normal', requester: p.requester, project: p.project, due: p.due, status: p.status || 'todo', ws: state.ws };
     captureInput.value = '';
     renderPreview();
     try {

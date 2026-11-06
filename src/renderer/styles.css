@@ -882,3 +882,41 @@ kbd {
 }
 .rows-head .h-due, .rows-head .h-age { text-align: right; }
 .row .r-due { justify-self: end; }
+
+/* ---------- empresas ---------- */
+.sidebar-top { position: relative; }
+.ws-btn {
+  margin-left: auto; display: inline-flex; align-items: center; gap: 7px;
+  max-width: 132px; height: 32px; padding: 0 8px 0 5px;
+  border: 1px solid var(--line); border-radius: var(--r-md);
+  background: var(--surface); color: var(--text); box-shadow: var(--sh-1);
+  font-size: 13px; font-weight: 600;
+  transition: border-color 160ms var(--ease), background-color 160ms var(--ease);
+}
+.ws-btn:hover, .ws-btn[aria-expanded="true"] { border-color: var(--line-strong); }
+.ws-btn .icon { color: var(--text-3); flex: none; }
+.ws-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.ws-dot {
+  width: 20px; height: 20px; flex: none; border-radius: 6px; display: grid; place-items: center;
+  background: var(--accent-soft); color: var(--accent-strong); font-size: 11px; font-weight: 750;
+}
+.ws-menu { left: 12px; right: 12px; top: calc(100% - 6px); bottom: auto; width: auto; max-height: 70vh; overflow: auto; }
+.ws-menu button { gap: 10px; }
+.ws-menu .ws-item-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; text-align: left; }
+.ws-menu .ws-count { font-size: 12px; color: var(--text-3); }
+.ws-menu button[aria-checked="true"] { color: var(--accent-strong); font-weight: 600; }
+.ws-menu button[aria-checked="true"] .icon { color: var(--accent); }
+.ws-check-space { width: 14px; flex: none; }
+.ws-new { display: flex; gap: 6px; padding: 4px; }
+.ws-new .input { height: 34px; font-size: 13.5px; }
+.ws-new .btn { height: 34px; padding: 0 12px; }
+.ws-error { padding: 2px 8px 6px; font-size: 12px; color: var(--danger-text); }
+@media (max-width: 980px) {
+  .sidebar-top { flex-direction: column; justify-content: center; height: auto; padding: 14px 0 6px; gap: 10px; }
+  .ws-btn { margin-left: 0; padding: 0; width: 34px; height: 34px; justify-content: center; }
+  .ws-btn .ws-name, .ws-btn .icon { display: none; }
+  .ws-menu { left: calc(100% - 6px); right: auto; top: 10px; width: 240px; }
+}
+.menu .ws-new .input { flex: 1; min-width: 0; }
+.menu .ws-new .btn { flex: none; width: auto; height: 34px; padding: 0 14px; justify-content: center; border-radius: var(--r-sm); background: var(--accent); color: var(--on-accent); font-weight: 650; }
+.menu .ws-new .btn:hover { background: var(--accent-strong); }
