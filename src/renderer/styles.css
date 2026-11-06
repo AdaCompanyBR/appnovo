@@ -802,3 +802,7 @@ kbd {
 .theme-btn:hover { color: var(--text); border-color: var(--line-strong); }
 .theme-btn .icon { width: 18px; height: 18px; }
 .auth .theme-btn { position: fixed; top: 10px; right: calc(var(--titlebar-controls) + 0px); z-index: 5; -webkit-app-region: no-drag; }
+
+/* Usuário digitado aparece como bolinhas, como a senha. */
+.input.masked { -webkit-text-security: disc; text-security: disc; letter-spacing: 0.08em; }
+.input.masked::placeholder { -webkit-text-security: none; letter-spacing: normal; }

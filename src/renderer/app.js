@@ -181,10 +181,20 @@
       const b = e.target.closest('[data-reveal]');
       if (!b) return;
       const input = document.getElementById(b.dataset.reveal);
-      const show = input.type === 'password';
-      input.type = show ? 'text' : 'password';
+      const isUser = input.classList.contains('masked') || input.classList.contains('unmasked');
+      let show;
+      if (isUser) {
+        show = input.classList.contains('masked');
+        input.classList.toggle('masked', !show);
+        input.classList.toggle('unmasked', show);
+      } else {
+        show = input.type === 'password';
+        input.type = show ? 'text' : 'password';
+      }
+      const what = isUser ? 'usuário' : 'senha';
       b.setAttribute('aria-pressed', String(show));
-      b.setAttribute('aria-label', show ? 'Ocultar senha' : 'Mostrar senha');
+      b.setAttribute('aria-label', show ? `Ocultar ${what}` : `Mostrar ${what}`);
+      input.focus();
       b.innerHTML = icon(show ? 'eye-off' : 'eye');
     });
   }
@@ -211,7 +221,7 @@
       <form id="register-form" novalidate>
         <div class="field">
           <label class="field-label" for="r-user">Usuário</label>
-          <input class="input" id="r-user" type="text" autocomplete="username" spellcheck="false" required maxlength="32" placeholder="ex.: guilherme">
+          <div class="input-wrap"><input class="input masked" id="r-user" type="text" autocomplete="username" spellcheck="false" autocapitalize="off" autocorrect="off" required maxlength="32" placeholder="ex.: guilherme"><button type="button" class="reveal" data-reveal="r-user" aria-label="Mostrar usuário" aria-pressed="false">${icon('eye')}</button></div>
         </div>
         ${passwordField('r-pass', 'Senha', { autocomplete: 'new-password', strength: true, hint: 'Pelo menos 8 caracteres. Uma frase curta é mais forte e fácil de lembrar.' })}
         ${passwordField('r-pass2', 'Confirme a senha', { autocomplete: 'new-password' })}
@@ -264,7 +274,7 @@
       <form id="login-form" novalidate>
         <div class="field">
           <label class="field-label" for="l-user">Usuário</label>
-          <input class="input" id="l-user" type="text" autocomplete="username" spellcheck="false" required value="${esc(username || '')}">
+          <div class="input-wrap"><input class="input masked" id="l-user" type="text" autocomplete="username" spellcheck="false" autocapitalize="off" autocorrect="off" required value="${esc(username || '')}"><button type="button" class="reveal" data-reveal="l-user" aria-label="Mostrar usuário" aria-pressed="false">${icon('eye')}</button></div>
         </div>
         ${passwordField('l-pass', 'Senha')}
         <div class="actions">
@@ -313,7 +323,7 @@
       <form id="recover-form" novalidate>
         <div class="field">
           <label class="field-label" for="c-user">Usuário</label>
-          <input class="input" id="c-user" type="text" autocomplete="username" spellcheck="false" required value="${esc(username || '')}">
+          <div class="input-wrap"><input class="input masked" id="c-user" type="text" autocomplete="username" spellcheck="false" autocapitalize="off" autocorrect="off" required value="${esc(username || '')}"><button type="button" class="reveal" data-reveal="c-user" aria-label="Mostrar usuário" aria-pressed="false">${icon('eye')}</button></div>
         </div>
         <div class="field">
           <label class="field-label" for="c-code">Código de recuperação</label>
