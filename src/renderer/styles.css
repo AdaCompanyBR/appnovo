@@ -996,7 +996,7 @@ kbd {
 .note-editor .ql-editor h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.02em; margin: 0.6em 0 0.3em; }
 .note-editor .ql-editor h2 { font-size: 21px; font-weight: 700; letter-spacing: -0.015em; margin: 0.6em 0 0.3em; }
 .note-editor .ql-editor h3 { font-size: 17px; font-weight: 700; margin: 0.6em 0 0.2em; }
-.note-editor .ql-editor blockquote { border-left: 3px solid var(--accent); color: var(--text-2); margin: 8px 0; padding-left: 14px; }
+.note-editor .ql-editor blockquote { border: 0; background: var(--surface-2); border-radius: var(--r-md); color: var(--text-2); margin: 8px 0; padding: 8px 14px; font-style: italic; }
 .note-editor .ql-editor .ql-code-block-container { background: var(--surface-2); color: var(--text); border-radius: var(--r-md); padding: 10px 14px; font-size: 13.5px; }
 .note-editor .ql-editor a { color: var(--accent-strong); text-decoration: underline; text-underline-offset: 2px; }
 .note-editor .ql-editor li[data-list="checked"] > .ql-ui, .note-editor .ql-editor li[data-list="unchecked"] > .ql-ui { color: var(--accent); }

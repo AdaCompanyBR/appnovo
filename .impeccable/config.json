@@ -11,6 +11,54 @@
         ],
         "createdAt": "2026-11-06T14:16:17.870Z",
         "reason": "agent triage: .search is a 36px pill whose input fills its full height with text vertically centered; the inset is the input's own 18px line box, verified in desktop.png"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "georgia",
+        "createdAt": "2026-11-06T20:02:37.895Z",
+        "reason": "user requested a complete font picker in the notebook editor; these are the picker's font choices"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "consolas",
+        "createdAt": "2026-11-06T20:02:37.905Z",
+        "reason": "user requested a complete font picker in the notebook editor; these are the picker's font choices"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "arial",
+        "createdAt": "2026-11-06T20:02:37.914Z",
+        "reason": "user requested a complete font picker in the notebook editor; these are the picker's font choices"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "times new roman",
+        "createdAt": "2026-11-06T20:02:37.924Z",
+        "reason": "user requested a complete font picker in the notebook editor; these are the picker's font choices"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "courier new",
+        "createdAt": "2026-11-06T20:02:37.933Z",
+        "reason": "user requested a complete font picker in the notebook editor; these are the picker's font choices"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "verdana",
+        "createdAt": "2026-11-06T20:02:37.942Z",
+        "reason": "user requested a complete font picker in the notebook editor; these are the picker's font choices"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "trebuchet ms",
+        "createdAt": "2026-11-06T20:02:37.951Z",
+        "reason": "user requested a complete font picker in the notebook editor; these are the picker's font choices"
+      },
+      {
+        "rule": "overused-font",
+        "value": "arial",
+        "createdAt": "2026-11-06T20:02:37.960Z",
+        "reason": "user requested a complete font picker in the notebook editor; these are the picker's font choices"
       }
     ]
   }
