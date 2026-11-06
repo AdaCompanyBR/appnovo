@@ -806,3 +806,11 @@ kbd {
 /* Usuário digitado aparece como bolinhas, como a senha. */
 .input.masked { -webkit-text-security: disc; text-security: disc; letter-spacing: 0.08em; }
 .input.masked::placeholder { -webkit-text-security: none; letter-spacing: normal; }
+
+/* Menu da conta: largura pelo conteúdo, um item por linha. */
+.sidebar-foot .menu { right: auto; width: max-content; min-width: calc(100% - 24px); max-width: 320px; padding: 6px; }
+.menu button { white-space: nowrap; min-height: 36px; height: auto; gap: 12px; padding: 0 14px 0 10px; }
+.menu button .icon { width: 16px; height: 16px; }
+.menu hr { margin: 6px 8px; }
+.menu .menu-meta { padding: 8px 10px 4px; }
+.sidebar-foot { margin-top: auto; }
