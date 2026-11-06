@@ -739,9 +739,9 @@
           ${segHtml('Prioridade', ['urgente', 'alta', 'normal', 'baixa'].map((p) => [p, PRIORITY_LABEL[p], `<span class="pri" data-p="${p}" aria-hidden="true"></span>`]), d.priority)}</div>
         <div class="d-grid">
           <div class="field"><label class="field-label" for="d-due">Prazo</label><input class="input num" id="d-due" type="date" value="${d.due || ''}"></div>
-          <div class="field"><label class="field-label" for="d-req">Quem pediu</label><input class="input" id="d-req" type="text" maxlength="80" value="${esc(d.requester)}" placeholder="Nome"></div>
+          <div class="field has-suggest"><label class="field-label" for="d-req">Quem pediu</label><input class="input" id="d-req" type="text" maxlength="80" value="${esc(d.requester)}" placeholder="Nome" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="suggest-d-req"><div class="suggest" id="suggest-d-req" role="listbox" hidden></div></div>
         </div>
-        <div class="field"><label class="field-label" for="d-proj">Projeto ou cliente</label><input class="input" id="d-proj" type="text" maxlength="80" value="${esc(d.project)}" placeholder="ex.: portal, infra, cliente X"></div>
+        <div class="field has-suggest"><label class="field-label" for="d-proj">Projeto ou cliente</label><input class="input" id="d-proj" type="text" maxlength="80" value="${esc(d.project)}" placeholder="ex.: portal, infra, cliente X" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="suggest-d-proj"><div class="suggest" id="suggest-d-proj" role="listbox" hidden></div></div>
         <div class="field">
           <div class="notes-head"><label class="field-label" for="d-notes">Anotações</label>${ai.available ? `<button type="button" class="ai-btn" data-dact="ai" title="Revisar ortografia, gramática e clareza com IA">${icon('sparkles', 14)}Melhorar escrita</button>` : ''}</div>
           <textarea class="d-notes" id="d-notes" placeholder="Contexto, links, passos, o que foi combinado…">${esc(d.notes)}</textarea>
@@ -791,6 +791,7 @@
 
   detailEl.addEventListener('input', (e) => {
     if (e.target.id === 'd-title') autosize(e.target);
+    if (SUGGEST_FIELDS[e.target.id]) showSuggestions(e.target);
     if (!['d-title', 'd-notes', 'd-req', 'd-proj'].includes(e.target.id)) return;
     clearTimeout(detailTimer);
     detailTimer = setTimeout(saveDetailText, 450);
@@ -803,6 +804,7 @@
     if (e.target.id === 'd-due') setField(state.selectedId, { due: e.target.value || null }).then(flashSaved);
   });
   detailEl.addEventListener('focusout', (e) => {
+    if (SUGGEST_FIELDS[e.target.id]) hideSuggestions(e.target);
     if (['d-title', 'd-notes', 'd-req', 'd-proj'].includes(e.target.id)) { clearTimeout(detailTimer); saveDetailText(); }
     // Revisão automática: só quando o texto mudou enquanto você estava no campo.
     if (e.target.id === 'd-notes' && ai.available && aiAuto() && e.target.value !== ai.focusValue
@@ -812,6 +814,7 @@
     }
   });
   detailEl.addEventListener('keydown', (e) => {
+    if (SUGGEST_FIELDS[e.target.id] && suggestKeydown(e)) return;
     if (e.target.id === 'd-title' && e.key === 'Enter') { e.preventDefault(); e.target.blur(); }
   });
 
@@ -829,6 +832,97 @@
     await setField(d.id, patch);
     flashSaved();
   }
+
+  /* ---------- sugestões em "Quem pediu" e "Projeto" ---------- */
+
+  const SUGGEST_FIELDS = { 'd-req': 'requester', 'd-proj': 'project' };
+  const fold = (t) => String(t).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+
+  function knownValues(key) {
+    // Nomes já usados, sem repetir (ignora maiúsculas e acentos); os mais usados e recentes primeiro.
+    const map = new Map();
+    for (const d of state.demands) {
+      const v = (d[key] || '').trim();
+      if (!v) continue;
+      const k = fold(v);
+      const cur = map.get(k) || { value: v, n: 0, last: '' };
+      cur.n++;
+      const capital = (t) => t[0] !== t[0].toLowerCase();
+      // Prefere a grafia com inicial maiúscula; entre iguais, a mais recente.
+      if ((capital(v) && !capital(cur.value)) || (capital(v) === capital(cur.value) && d.updatedAt > cur.last) || !cur.n) cur.value = v;
+      if (d.updatedAt > cur.last) cur.last = d.updatedAt;
+      map.set(k, cur);
+    }
+    return [...map.values()].sort((a, b) => b.n - a.n || b.last.localeCompare(a.last));
+  }
+
+  function showSuggestions(input) {
+    const box = document.getElementById(`suggest-${input.id}`);
+    if (!box) return;
+    const q = fold(input.value);
+    if (!q) { hideSuggestions(input); return; }
+    const matches = knownValues(SUGGEST_FIELDS[input.id])
+      .filter((v) => { const f = fold(v.value); return f !== q && (f.startsWith(q) || f.split(/[\s._-]+/).some((w) => w.startsWith(q))); })
+      .slice(0, 6);
+    if (!matches.length) { hideSuggestions(input); return; }
+    box.innerHTML = matches.map((m, i) => {
+      const f = fold(m.value);
+      let start = f.startsWith(q) ? 0 : -1;
+      for (let k = 1; start < 0 && k < f.length; k++) if (/[\s._-]/.test(f[k - 1]) && f.startsWith(q, k)) start = k;
+      const label = start >= 0
+        ? `${esc(m.value.slice(0, start))}<b>${esc(m.value.slice(start, start + q.length))}</b>${esc(m.value.slice(start + q.length))}`
+        : esc(m.value);
+      return `<div class="suggest-item" role="option" id="${input.id}-opt-${i}" data-value="${esc(m.value)}" aria-selected="${i === 0}">${icon(SUGGEST_FIELDS[input.id] === 'requester' ? 'user' : 'hash', 14)}<span>${label}</span><span class="suggest-n">${m.n}</span></div>`;
+    }).join('');
+    box.hidden = false;
+    input.setAttribute('aria-expanded', 'true');
+    input.setAttribute('aria-activedescendant', `${input.id}-opt-0`);
+  }
+
+  function hideSuggestions(input) {
+    const box = document.getElementById(`suggest-${input.id}`);
+    if (box) { box.hidden = true; box.innerHTML = ''; }
+    input.setAttribute('aria-expanded', 'false');
+    input.removeAttribute('aria-activedescendant');
+  }
+
+  function pickSuggestion(input, value) {
+    input.value = value;
+    hideSuggestions(input);
+    clearTimeout(detailTimer);
+    saveDetailText();
+  }
+
+  function suggestKeydown(e) {
+    const input = e.target;
+    const box = document.getElementById(`suggest-${input.id}`);
+    if (!box || box.hidden) return false;
+    const items = [...box.querySelectorAll('.suggest-item')];
+    let i = items.findIndex((el) => el.getAttribute('aria-selected') === 'true');
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      i = (i + (e.key === 'ArrowDown' ? 1 : -1) + items.length) % items.length;
+      items.forEach((el, j) => el.setAttribute('aria-selected', String(j === i)));
+      input.setAttribute('aria-activedescendant', items[i].id);
+      return true;
+    }
+    if ((e.key === 'Enter' || e.key === 'Tab') && i >= 0) {
+      e.preventDefault();
+      pickSuggestion(input, items[i].dataset.value);
+      return true;
+    }
+    if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); hideSuggestions(input); return true; }
+    return false;
+  }
+
+  // mousedown (e não click) para escolher antes de o campo perder o foco.
+  detailEl.addEventListener('mousedown', (e) => {
+    const item = e.target.closest('.suggest-item');
+    if (!item) return;
+    e.preventDefault();
+    const input = item.closest('.field').querySelector('input');
+    pickSuggestion(input, item.dataset.value);
+  });
 
   /* ---------- revisão das anotações com IA (versão web) ---------- */
 
