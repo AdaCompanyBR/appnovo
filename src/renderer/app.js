@@ -12,7 +12,7 @@
   const $ = (sel, root = document) => root.querySelector(sel);
   const ESC = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ESC[c]);
-  const seqLabel = (n) => String(n).padStart(4, '0');
+  const seqLabel = (n) => `#${n}`;
   const WEEK = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'];
   const MONTHS = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
   const PRIORITY_LABEL = { urgente: 'Urgente', alta: 'Alta', normal: 'Normal', baixa: 'Baixa' };
@@ -169,7 +169,7 @@
   function showAuth(html, focusSel) {
     workspaceEl.hidden = true;
     authEl.hidden = false;
-    $('.auth-ticket').className = 'auth-ticket paper perforated';
+    $('.auth-ticket').className = 'auth-ticket paper';
     $('.auth-head').innerHTML = `<span class="brand-mark" aria-hidden="true"></span><span class="brand-name">Demandas</span><span class="stamp">${stamp()}</span>`;
     authBody.innerHTML = html;
     const f = focusSel && $(focusSel, authBody);
@@ -389,10 +389,10 @@
   }
 
   const VIEWS = [
-    { id: 'hoje', label: 'Hoje', icon: 'flame', key: '1' },
-    { id: 'fila', label: 'Fila', icon: 'inbox', key: '2' },
-    { id: 'aguardando', label: 'Aguardando', icon: 'hourglass', key: '3' },
-    { id: 'feitas', label: 'Feitas', icon: 'check-check', key: '4' },
+    { id: 'hoje', label: 'Hoje', icon: 'sun', key: '1' },
+    { id: 'fila', label: 'Fila', icon: 'list-todo', key: '2' },
+    { id: 'aguardando', label: 'Aguardando', icon: 'clock-3', key: '3' },
+    { id: 'feitas', label: 'Feitas', icon: 'circle-check-big', key: '4' },
   ];
 
   function renderSidebar() {
@@ -549,7 +549,7 @@
     const done = d.status === 'done';
     return `
       <div class="row paper ${done ? 'is-done' : ''} ${state.justCreated === d.id ? 'printing' : ''}" role="option" data-id="${d.id}" data-p="${d.priority}" aria-selected="${state.selectedId === d.id}">
-        <button type="button" class="tick" role="checkbox" aria-checked="${done}" data-act="toggle" aria-label="${done ? 'Reabrir' : 'Concluir'} demanda ${seqLabel(d.seq)}">${icon(done ? 'circle-check' : 'circle', 18)}</button>
+        <button type="button" class="tick" role="checkbox" aria-checked="${done}" data-act="toggle" aria-label="${done ? 'Reabrir' : 'Concluir'} demanda ${seqLabel(d.seq)}">${icon('check', 12)}</button>
         <span class="r-seq"><span class="pri" data-p="${d.priority}" title="Prioridade ${PRIORITY_LABEL[d.priority]}"></span>${seqLabel(d.seq)}</span>
         <span class="r-main"><span class="r-title">${esc(d.title)}</span><span class="r-tags">${tagsHtml(d, { status: state.view !== 'aguardando' })}</span></span>
         <span class="r-due">${dueHtml(d)}</span>
@@ -560,8 +560,8 @@
   function railTicketHtml(d) {
     const a = age(d.createdAt);
     return `
-      <div class="rail-ticket paper perforated-bottom ${state.justCreated === d.id ? 'printing' : ''}" role="option" data-id="${d.id}" data-p="${d.priority}" aria-selected="${state.selectedId === d.id}">
-        <div class="t-head"><span class="seq">Nº ${seqLabel(d.seq)}</span><span title="Chegou em ${fullDate(d.createdAt)}">${a.text}</span></div>
+      <div class="rail-ticket paper ${state.justCreated === d.id ? 'printing' : ''}" role="option" data-id="${d.id}" data-p="${d.priority}" aria-selected="${state.selectedId === d.id}">
+        <div class="t-head"><span class="seq">${seqLabel(d.seq)}</span><span title="Chegou em ${fullDate(d.createdAt)}">${a.text}</span></div>
         <div class="t-title">${esc(d.title)}</div>
         <div class="t-meta">${d.priority !== 'normal' ? `<span class="tag ${d.priority === 'urgente' ? 'fire' : d.priority === 'alta' ? 'heat' : ''}">${PRIORITY_LABEL[d.priority]}</span>` : ''}${dueHtml(d)}${tagsHtml(d, { status: false })}</div>
         <div class="t-actions">
@@ -579,7 +579,7 @@
   }
 
   function emptyHtml(view) {
-    const ticket = `<svg class="empty-ticket" viewBox="0 0 54 64" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4 6 q3 4 6 0 q3 4 6 0 q3 4 6 0 q3 4 6 0 q3 4 6 0 q3 4 6 0 q3 4 6 0 q3 4 6 0 V60 a2 2 0 0 1 -2 2 H6 a2 2 0 0 1 -2 -2 Z"/><path d="M12 22 h30 M12 31 h22 M12 40 h14" stroke-dasharray="2 4"/></svg>`;
+    const ticket = `<div class="empty-ticket" aria-hidden="true">${icon(state.search ? 'search' : (VIEWS.find((v) => v.id === view) || VIEWS[0]).icon, 26)}</div>`;
     if (state.search) return `<div class="empty">${ticket}<h2>Nada encontrado</h2><p>Nenhuma demanda tem “${esc(state.search)}” no título, notas, projeto ou pessoa.</p></div>`;
     if (!state.demands.length) {
       return `<div class="empty">${ticket}<h2>Sua primeira demanda leva cinco segundos</h2>
@@ -588,7 +588,7 @@
         ${IS_WEB ? '<p class="empty-shortcut">Com a página aberta, aperte <kbd>N</kbd> para anotar.</p>' : '<p class="empty-shortcut">De qualquer lugar do Windows: <kbd>Ctrl</kbd> <kbd>Shift</kbd> <kbd>Espaço</kbd></p>'}</div>`;
     }
     const msgs = {
-      hoje: ['Nada pegando fogo hoje', 'Sem atrasadas, sem prazos para hoje e sem urgências. Puxe algo da fila quando quiser.'],
+      hoje: ['Tudo em dia por hoje', 'Sem atrasadas, sem prazos para hoje e sem urgências. Puxe algo da fila quando quiser.'],
       fila: ['Fila vazia', 'Tudo o que você anotou já foi concluído ou está aguardando alguém.'],
       aguardando: ['Ninguém te devendo resposta', 'Marque uma demanda como Aguardando (tecla W) quando depender de outra pessoa.'],
       feitas: ['Nenhuma concluída ainda', 'Conclua uma demanda com Espaço ou clicando no círculo.'],
@@ -603,12 +603,12 @@
     let html = `<div class="board-head"><h1>${esc(state.search ? 'Busca' : model.title)}</h1>${state.view === 'hoje' && !state.search ? `<span class="date">${longToday()}</span>` : ''}${filtersHtml()}</div>`;
 
     if (model.rail) {
-      html += `<div class="rail-wrap"><h2 class="group-title">Na mesa <span class="count">${model.rail.length || ''}</span><span class="hint">o que você está fazendo agora</span></h2>`;
+      html += `<div class="rail-wrap"><h2 class="group-title">Em andamento <span class="count">${model.rail.length || ''}</span><span class="hint">o que você está fazendo agora</span></h2>`;
       if (model.rail.length) {
-        html += `<div class="rail"><div class="rail-track" role="listbox" aria-label="Na mesa">${model.rail.map(railTicketHtml).join('')}</div></div>`;
+        html += `<div class="rail"><div class="rail-track" role="listbox" aria-label="Em andamento">${model.rail.map(railTicketHtml).join('')}</div></div>`;
         model.rail.forEach((d) => order.push(d.id));
       } else {
-        html += `<div class="rail"><div class="rail-empty"><span>Nada na mesa. Selecione uma demanda e aperte <kbd>F</kbd> para começar a fazer.</span></div></div>`;
+        html += `<div class="rail"><div class="rail-empty"><span>Nada em andamento. Selecione uma demanda e aperte <kbd>F</kbd> para começar.</span></div></div>`;
       }
       html += '</div>';
     }
@@ -675,10 +675,10 @@
     const d = state.selectedId && byId(state.selectedId);
     if (!d) { detailEl.hidden = true; detailEl.innerHTML = ''; return; }
     detailEl.hidden = false;
-    detailEl.className = 'detail paper perforated';
+    detailEl.className = 'detail paper';
     detailEl.innerHTML = `
       <div class="d-head">
-        <span class="seq">Nº ${seqLabel(d.seq)}</span><span>· chegou há ${age(d.createdAt).text}</span>
+        <span class="seq">${seqLabel(d.seq)}</span><span>· criada há ${age(d.createdAt).text}</span>
         <span class="spacer"></span><span class="saved" id="saved" aria-live="polite"></span>
         <button type="button" class="icon-btn danger" data-dact="delete" title="Excluir (Delete)" aria-label="Excluir demanda">${icon('trash-2')}</button>
         <button type="button" class="icon-btn" data-dact="close" title="Fechar (Esc)" aria-label="Fechar painel">${icon('x')}</button>
@@ -793,7 +793,7 @@
       renderBoard();
       if (message) {
         pushUndo(message, () => call(api.demands.update(id, snapshot)).then(replaceLocal));
-        toast(`<span class="num">Nº ${seqLabel(updated.seq)}</span> ${esc(message)}`, { undo: true, html: true });
+        toast(`<span class="num">${seqLabel(updated.seq)}</span> ${esc(message)}`, { undo: true, html: true });
       }
       return updated;
     } catch (err) {
@@ -828,7 +828,7 @@
       renderDetail();
       const label = finishing ? 'concluída' : 'reaberta';
       pushUndo(label, () => call(api.demands.update(id, snapshot)).then(replaceLocal));
-      toast(`<span class="num">Nº ${seqLabel(updated.seq)}</span> ${label}`, { undo: true, html: true });
+      toast(`<span class="num">${seqLabel(updated.seq)}</span> ${label}`, { undo: true, html: true });
     } catch (err) {
       toast(err.message, { error: true });
       renderBoard();
@@ -846,7 +846,7 @@
       state.selectedId = !detailEl.hidden ? (state.order[i + 1] || state.order[i - 1] || null) : null;
       renderAll();
       pushUndo('excluída', () => call(api.demands.restore(removed)).then(replaceLocal));
-      toast(`<span class="num">Nº ${seqLabel(removed.seq)}</span> excluída`, { undo: true, html: true });
+      toast(`<span class="num">${seqLabel(removed.seq)}</span> excluída`, { undo: true, html: true });
     } catch (err) {
       toast(err.message, { error: true });
     }
@@ -867,7 +867,7 @@
   /* ---------- captura rápida ---------- */
 
   const TOKEN_LABEL = {
-    priority: (v) => `${icon('flame', 12)}${PRIORITY_LABEL[v]}`,
+    priority: (v) => `${icon('flag', 12)}${PRIORITY_LABEL[v]}`,
     requester: (v) => `${icon('user', 12)}${esc(v)}`,
     project: (v) => `${icon('hash', 12)}${esc(v)}`,
     due: (v) => `${icon('calendar', 12)}${esc(dueInfo({ due: v, status: 'todo' }).label)} <span class="num">${v.split('-').reverse().slice(0, 2).join('/')}</span>`,
@@ -923,10 +923,10 @@
       if (visible) {
         const el = boardEl.querySelector(`[data-id="${created.id}"]`);
         if (el) el.scrollIntoView({ block: 'nearest' });
-        toast(`<span class="num">Nº ${seqLabel(created.seq)}</span> anotada`, { undo: true, html: true });
+        toast(`<span class="num">${seqLabel(created.seq)}</span> anotada`, { undo: true, html: true });
       } else {
         const names = { hoje: 'Hoje', fila: 'Fila', aguardando: 'Aguardando' };
-        toast(`<span class="num">Nº ${seqLabel(created.seq)}</span> anotada em ${names[where]}`, { undo: true, html: true, action: { label: 'Ver', fn: () => { setView(where); select(created.id, { scroll: true }); } } });
+        toast(`<span class="num">${seqLabel(created.seq)}</span> anotada em ${names[where]}`, { undo: true, html: true, action: { label: 'Ver', fn: () => { setView(where); select(created.id, { scroll: true }); } } });
       }
     } catch (err) {
       captureInput.value = text;
@@ -1100,7 +1100,7 @@
       ['Fechar painel / limpar', 'Esc'],
       ['Na demanda selecionada', null],
       ['Concluir ou reabrir', 'Espaço ou X'],
-      ['Fazendo agora (vai para a mesa)', 'F'],
+      ['Começar a fazer (em andamento)', 'F'],
       ['Aguardando alguém', 'W'],
       ['Prioridade urgente · alta · normal · baixa', '1 – 4'],
       ['Excluir', 'Delete'],
@@ -1186,7 +1186,7 @@
       case 'ArrowLeft': if (state.view === 'hoje') { e.preventDefault(); moveSelection(-1); } break;
       case 'Enter': if (id) { e.preventDefault(); renderDetail(); const ti = $('#d-title'); if (ti) ti.focus(); } break;
       case ' ': case 'x': case 'X': if (id) { e.preventDefault(); toggleDone(id); } break;
-      case 'f': case 'F': if (id) { const d = byId(id); setField(id, { status: d.status === 'doing' ? 'todo' : 'doing' }, d.status === 'doing' ? 'voltou para a fila' : 'na mesa'); } break;
+      case 'f': case 'F': if (id) { const d = byId(id); setField(id, { status: d.status === 'doing' ? 'todo' : 'doing' }, d.status === 'doing' ? 'voltou para a fila' : 'em andamento'); } break;
       case 'w': case 'W': if (id) { const d = byId(id); setField(id, { status: d.status === 'waiting' ? 'todo' : 'waiting' }, d.status === 'waiting' ? 'voltou para a fila' : 'aguardando'); } break;
       case '1': case '2': case '3': case '4':
         if (id) { const p = ['urgente', 'alta', 'normal', 'baixa'][Number(e.key) - 1]; setField(id, { priority: p }).then(() => { if (!detailEl.hidden) renderDetail(); }); }

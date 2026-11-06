@@ -11,6 +11,7 @@ const dataUri = (p) => `data:image/svg+xml;base64,${Buffer.from(R(p)).toString('
 let css = R('src/renderer/styles.css');
 css = css.replace(/@font-face\s*{[^}]*}\s*/g, '');
 css = css.replace('url("assets/mark.svg")', `url("${dataUri('src/renderer/assets/mark.svg')}")`);
+css = css.replace('url("assets/plus.svg")', `url("${dataUri('src/renderer/assets/plus.svg')}")`);
 css = css.replace('url("assets/calendar.svg")', `url("${dataUri('src/renderer/assets/calendar.svg')}")`);
 css = css.replace('--titlebar-controls: 150px;', '--titlebar-controls: 20px;');
 // O claude.ai também escolhe o tema por data-theme; repete o bloco escuro para ele.
@@ -43,7 +44,7 @@ const out = `<title>Demandas</title>
 <meta name="description" content="Anote as demandas do dia em segundos, com login e dados cifrados.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400..700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400..750&display=swap">
 <style>
 ${css}
 </style>

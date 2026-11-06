@@ -24,8 +24,8 @@ if (!app.requestSingleInstanceLock()) {
 
 function titleBarColors() {
   return nativeTheme.shouldUseDarkColors
-    ? { color: '#1a1d20', symbolColor: '#c9ced4', height: 40 }
-    : { color: '#e4e7ea', symbolColor: '#2a2e33', height: 40 };
+    ? { color: '#0f0f11', symbolColor: '#b4b4bc', height: 40 }
+    : { color: '#f4f4f5', symbolColor: '#52525b', height: 40 };
 }
 
 function showWindow({ focusCapture = false } = {}) {
@@ -45,7 +45,7 @@ function createWindow() {
     show: false,
     title: 'Demandas',
     icon: ICON,
-    backgroundColor: nativeTheme.shouldUseDarkColors ? '#15171a' : '#e4e7ea',
+    backgroundColor: nativeTheme.shouldUseDarkColors ? '#0f0f11' : '#f4f4f5',
     titleBarStyle: 'hidden',
     titleBarOverlay: titleBarColors(),
     webPreferences: {
