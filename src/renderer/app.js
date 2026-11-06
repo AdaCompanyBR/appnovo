@@ -574,8 +574,8 @@
     closeNotesPop();
     renderAll();
     boardEl.scrollTop = 0;
-    const el = $(focusTitle ? '#note-title' : '#note-body');
-    if (el) el.focus();
+    if (focusTitle) { const t = $('#note-title'); if (t) t.focus(); }
+    else if (noteQuill) noteQuill.focus();
   }
 
   function renderNote() {
@@ -590,21 +590,105 @@
           <button type="button" class="icon-btn danger" data-note-act="delete" title="Excluir bloco" aria-label="Excluir bloco de notas">${icon('trash-2')}</button>
         </div>
         <p class="note-meta">Criado em ${fullDate(n.createdAt)} · editado ${age(n.updatedAt).text === 'agora' ? 'agora' : `há ${age(n.updatedAt).text}`}</p>
-        <label class="visually-hidden" for="note-body">Conteúdo do bloco</label>
-        <textarea class="note-body" id="note-body" placeholder="Escreva aqui. Tudo é salvo sozinho enquanto você digita.">${esc(n.body)}</textarea>
+        <div class="note-editor"><div id="note-body" aria-label="Conteúdo do bloco"></div></div>
       </div>`;
+    mountEditor(n);
     state.order = [];
     return true;
+  }
+
+  /* --- editor de texto (Quill) --- */
+
+  let noteQuill = null;
+  const NOTE_FONTS = ['sans', 'serif', 'mono', 'arial', 'georgia', 'times', 'courier', 'verdana', 'trebuchet'];
+  const NOTE_SIZES = ['12px', '14px', '16px', '18px', '22px', '28px', '36px'];
+  let quillReady = false;
+
+  function setupQuill() {
+    if (quillReady || !window.Quill) return Boolean(window.Quill);
+    const Font = window.Quill.import('attributors/class/font');
+    Font.whitelist = NOTE_FONTS;
+    window.Quill.register(Font, true);
+    const Size = window.Quill.import('attributors/style/size');
+    Size.whitelist = NOTE_SIZES;
+    window.Quill.register(Size, true);
+    quillReady = true;
+    return true;
+  }
+
+  const TOOL_TITLES = {
+    'ql-bold': 'Negrito (Ctrl+B)', 'ql-italic': 'Itálico (Ctrl+I)', 'ql-underline': 'Sublinhado (Ctrl+U)', 'ql-strike': 'Riscado',
+    'ql-color': 'Cor do texto', 'ql-background': 'Marca-texto', 'ql-font': 'Fonte', 'ql-size': 'Tamanho', 'ql-header': 'Estilo do parágrafo',
+    'ql-blockquote': 'Citação', 'ql-code-block': 'Bloco de código', 'ql-link': 'Link (Ctrl+K)', 'ql-clean': 'Limpar formatação', 'ql-align': 'Alinhamento',
+  };
+
+  function mountEditor(n) {
+    noteQuill = null;
+    const host = $('#note-body');
+    if (!host) return;
+    if (!setupQuill()) {
+      host.innerHTML = '<p class="note-fallback">O editor não carregou. Verifique a conexão e recarregue a página.</p>';
+      return;
+    }
+    const q = new window.Quill(host, {
+      theme: 'snow',
+      placeholder: 'Escreva aqui. Tudo é salvo sozinho enquanto você digita.',
+      formats: ['font', 'size', 'bold', 'italic', 'underline', 'strike', 'color', 'background', 'header', 'list', 'indent', 'align', 'blockquote', 'code-block', 'link', 'script'],
+      modules: {
+        toolbar: [
+          [{ font: [false, ...NOTE_FONTS.slice(1)] }, { size: [false, ...NOTE_SIZES.filter((x) => x !== '16px')] }],
+          [{ header: [1, 2, 3, false] }],
+          ['bold', 'italic', 'underline', 'strike'],
+          [{ color: [] }, { background: [] }],
+          [{ list: 'bullet' }, { list: 'ordered' }, { list: 'check' }],
+          [{ indent: '-1' }, { indent: '+1' }, { align: [] }],
+          ['blockquote', 'code-block', 'link'],
+          [{ script: 'sub' }, { script: 'super' }],
+          ['clean'],
+        ],
+        clipboard: { matchVisual: false },
+        history: { delay: 800, maxStack: 200, userOnly: true },
+      },
+    });
+    if (Array.isArray(n.doc) && n.doc.length) q.setContents({ ops: n.doc }, 'silent');
+    else if (n.body) q.setText(n.body, 'silent');
+    q.history.clear();
+    // Dicas em português nos botões da barra.
+    const toolbar = q.getModule('toolbar').container;
+    toolbar.setAttribute('aria-label', 'Formatação do texto');
+    for (const el of toolbar.querySelectorAll('button, .ql-picker')) {
+      const cls = [...el.classList].find((c) => TOOL_TITLES[c]);
+      let title = cls ? TOOL_TITLES[cls] : '';
+      if (el.classList.contains('ql-list')) title = { bullet: 'Lista com marcadores', ordered: 'Lista numerada', check: 'Lista de tarefas' }[el.value] || 'Lista';
+      if (el.classList.contains('ql-indent')) title = el.value === '+1' ? 'Aumentar recuo' : 'Diminuir recuo';
+      if (el.classList.contains('ql-script')) title = el.value === 'super' ? 'Sobrescrito' : 'Subscrito';
+      if (title) { el.title = title; if (el.tagName === 'BUTTON') el.setAttribute('aria-label', title); }
+    }
+    const linkInput = host.parentElement.querySelector('.ql-tooltip input[type=text]');
+    if (linkInput) linkInput.dataset.link = 'https://…';
+    q.on('text-change', (_d, _o, source) => {
+      if (source !== 'user') return;
+      clearTimeout(noteTimer);
+      noteTimer = setTimeout(saveNote, 700);
+    });
+    q.root.addEventListener('blur', () => saveNote());
+    noteQuill = q;
   }
 
   let noteTimer = null;
   async function saveNote() {
     clearTimeout(noteTimer);
     const n = (state.notes || []).find((x) => x.id === state.noteId);
-    const t = $('#note-title'); const b = $('#note-body');
-    if (!n || !t || !b) return;
-    const patch = { title: t.value.trim(), body: b.value };
-    if (patch.title === n.title && patch.body === n.body) return;
+    const t = $('#note-title');
+    if (!n || !t) return;
+    const patch = { title: t.value.trim() };
+    if (noteQuill) {
+      patch.doc = noteQuill.getContents().ops;
+      patch.body = noteQuill.getText().replace(/\n$/, '');
+    }
+    const docChanged = Boolean(noteQuill) && JSON.stringify(patch.doc) !== JSON.stringify(n.doc || null)
+      && !(!n.doc && patch.body === n.body && noteQuill.getContents().ops.every((op) => !op.attributes));
+    if (patch.title === n.title && !docChanged) return;
     try {
       const saved = await call(api.notes.update(n.id, patch));
       state.notes = state.notes.map((x) => (x.id === saved.id ? saved : x));
@@ -617,15 +701,15 @@
   }
 
   boardEl.addEventListener('input', (e) => {
-    if (e.target.id !== 'note-title' && e.target.id !== 'note-body') return;
+    if (e.target.id !== 'note-title') return;
     clearTimeout(noteTimer);
     noteTimer = setTimeout(saveNote, 600);
   });
   boardEl.addEventListener('focusout', (e) => {
-    if (e.target.id === 'note-title' || e.target.id === 'note-body') saveNote();
+    if (e.target.id === 'note-title') saveNote();
   });
   boardEl.addEventListener('keydown', (e) => {
-    if (e.target.id === 'note-title' && e.key === 'Enter') { e.preventDefault(); const b = $('#note-body'); if (b) b.focus(); }
+    if (e.target.id === 'note-title' && e.key === 'Enter') { e.preventDefault(); if (noteQuill) noteQuill.focus(); }
   });
   boardEl.addEventListener('click', (e) => {
     if (!e.target.closest('[data-note-act="delete"]')) return;

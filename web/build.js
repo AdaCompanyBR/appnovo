@@ -8,7 +8,7 @@ const root = path.join(__dirname, '..');
 const R = (p) => fs.readFileSync(path.join(root, p), 'utf8');
 const dataUri = (p) => `data:image/svg+xml;base64,${Buffer.from(R(p)).toString('base64')}`;
 
-let css = R('src/renderer/styles.css');
+let css = R('src/renderer/vendor/quill.snow.css') + '\n' + R('src/renderer/styles.css');
 css = css.replace(/@font-face\s*{[^}]*}\s*/g, '');
 css = css.replace('url("assets/mark.svg")', `url("${dataUri('src/renderer/assets/mark.svg')}")`);
 css = css.replace('url("assets/plus.svg")', `url("${dataUri('src/renderer/assets/plus.svg')}")`);
@@ -33,7 +33,9 @@ css += `
 const html = R('src/renderer/index.html');
 let body = html.slice(html.indexOf('<body>') + 6, html.indexOf('<script'));
 
-const scripts = ['src/renderer/icons.js', 'src/renderer/parse.js', 'web/api-web.js', 'src/renderer/app.js']
+// O editor de texto (Quill) vem da CDN permitida pelo claude.ai; o resto vai embutido.
+const QUILL_CDN = '<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>';
+const scripts = QUILL_CDN + '\n' + ['src/renderer/icons.js', 'src/renderer/parse.js', 'web/api-web.js', 'src/renderer/app.js']
   .map((p) => `<script>\n${R(p).replace(/<\/script/gi, '<\\/script')}\n</script>`).join('\n');
 
 const out = `<title>Lumo</title>

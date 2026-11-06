@@ -107,4 +107,4 @@ npm test
 
 ## Licenças de terceiros
 
-Fonte Figtree (SIL Open Font License) e ícones Lucide (ISC). Os arquivos de licença estão em `src/renderer/fonts/` e `src/renderer/assets/`.
+Fonte Figtree (SIL Open Font License), editor de texto Quill (BSD-3-Clause) e ícones Lucide (ISC). Os arquivos de licença estão em `src/renderer/fonts/` e `src/renderer/assets/`.

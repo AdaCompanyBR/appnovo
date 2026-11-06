@@ -91,12 +91,33 @@
 
   const importDek = (raw) => subtle.importKey('raw', raw, 'AES-GCM', false, ['encrypt', 'decrypt']);
 
+  function sanitizeDoc(doc) {
+    // Conteúdo formatado do editor (Delta do Quill): só texto e atributos simples.
+    if (!Array.isArray(doc)) return null;
+    const ops = doc.filter((op) => op && typeof op.insert === 'string').map((op) => {
+      const out = { insert: op.insert };
+      if (op.attributes && typeof op.attributes === 'object') {
+        const attrs = {};
+        for (const [k, v] of Object.entries(op.attributes)) {
+          if (/^[a-z-]{1,20}$/.test(k) && (typeof v === 'string' || typeof v === 'number' || typeof v === 'boolean')) attrs[k] = typeof v === 'string' ? v.slice(0, 200) : v;
+        }
+        if (Object.keys(attrs).length) out.attributes = attrs;
+      }
+      return out;
+    });
+    if (JSON.stringify(ops).length > 150000) {
+      throw new VaultError('too_large', 'Este bloco ficou grande demais para salvar. Divida o conteúdo em dois blocos.');
+    }
+    return ops;
+  }
+
   function sanitizeNote(n) {
     return {
       id: String(n.id),
       title: (typeof n.title === 'string' ? n.title.replace(/\u0000/g, '').slice(0, 200) : '').trim(),
       body: typeof n.body === 'string' ? n.body.slice(0, 100000) : '',
       ws: typeof n.ws === 'string' && n.ws ? n.ws.slice(0, 64) : null,
+      doc: sanitizeDoc(n.doc),
       createdAt: n.createdAt || new Date().toISOString(),
       updatedAt: n.updatedAt || n.createdAt || new Date().toISOString(),
     };
