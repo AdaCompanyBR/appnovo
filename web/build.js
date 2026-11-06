@@ -19,8 +19,9 @@ css += `
 @media (max-width: 560px) {
   .topbar { gap: 8px; padding-left: 12px; }
   .board { padding: 8px 12px 64px; }
-  .row { grid-template-columns: 30px minmax(0, 1fr) auto; padding-right: 10px; }
-  .row .r-seq, .row .r-due { display: none; }
+  .rows { --cols: 28px minmax(0, 1fr) 76px; }
+  .row { padding-right: 10px; }
+  .row .r-seq, .row .r-due, .rows-head .h-seq, .rows-head .h-due { display: none; }
   .r-title { min-width: 0; }
   .rail-ticket { flex-basis: 210px; }
   .detail { left: 12px; width: auto; }

@@ -588,6 +588,18 @@
     return out.join('');
   }
 
+  function statusTag(d) {
+    return d.status === 'waiting'
+      ? `<span class="tag wait">${icon('hourglass', 12)}Aguardando</span>`
+      : `<span class="tag">${icon('play', 12)}Fazendo</span>`;
+  }
+
+  function rowsHeadHtml(group) {
+    const doneList = group.id === 'done' || state.view === 'feitas';
+    const ageLabel = state.search ? 'Há' : doneList ? 'Concluída há' : 'Criada há';
+    return `<div class="rows-head" aria-hidden="true"><span></span><span class="h-seq">Nº</span><span>Demanda</span><span class="h-tags">Quem pediu · Projeto</span><span class="h-due">Prazo</span><span class="h-age">${ageLabel}</span></div>`;
+  }
+
   function dueHtml(d) {
     const info = dueInfo(d);
     if (!info) return '';
@@ -607,7 +619,8 @@
       <div class="row paper ${done ? 'is-done' : ''} ${state.justCreated === d.id ? 'printing' : ''}" role="option" data-id="${d.id}" data-p="${d.priority}" aria-selected="${state.selectedId === d.id}">
         <button type="button" class="tick" role="checkbox" aria-checked="${done}" data-act="toggle" aria-label="${done ? 'Reabrir' : 'Concluir'} demanda ${seqLabel(d.seq)}">${icon('check', 12)}</button>
         <span class="r-seq"><span class="pri" data-p="${d.priority}" title="Prioridade ${PRIORITY_LABEL[d.priority]}"></span>${seqLabel(d.seq)}</span>
-        <span class="r-main"><span class="r-title">${esc(d.title)}</span><span class="r-tags">${tagsHtml(d, { status: state.view !== 'aguardando' })}</span></span>
+        <span class="r-main"><span class="r-title">${esc(d.title)}</span>${state.view !== 'aguardando' && (d.status === 'doing' || d.status === 'waiting') ? statusTag(d) : ''}</span>
+        <span class="r-tags">${tagsHtml(d, { status: false })}</span>
         <span class="r-due">${dueHtml(d)}</span>
         ${ageHtml(d)}
       </div>`;
@@ -670,7 +683,7 @@
     }
 
     for (const g of model.groups) {
-      html += `<section class="group" aria-label="${esc(g.title)}"><h2 class="group-title ${g.tone || ''}">${esc(g.title)} <span class="count">${g.items.length}</span>${g.hint ? `<span class="hint">${esc(g.hint)}</span>` : ''}</h2><div class="rows" role="listbox" aria-label="${esc(g.title)}">${g.items.map(rowHtml).join('')}</div></section>`;
+      html += `<section class="group" aria-label="${esc(g.title)}"><h2 class="group-title ${g.tone || ''}">${esc(g.title)} <span class="count">${g.items.length}</span>${g.hint ? `<span class="hint">${esc(g.hint)}</span>` : ''}</h2><div class="rows" role="listbox" aria-label="${esc(g.title)}">${rowsHeadHtml(g)}${g.items.map(rowHtml).join('')}</div></section>`;
       if (g.more) html = html.replace(/<\/section>$/, `<p class="more"><button type="button" class="link" data-goto="fila">Ver mais ${g.more} na Fila</button></p></section>`);
       g.items.forEach((d) => order.push(d.id));
     }

@@ -544,7 +544,7 @@ kbd {
 
 .row {
   display: grid;
-  grid-template-columns: 28px 44px minmax(0, 1fr) auto auto;
+  grid-template-columns: var(--cols);
   align-items: center; gap: 10px;
   min-height: 44px; padding: 5px 16px 5px 12px;
   cursor: pointer; position: relative;
@@ -581,10 +581,13 @@ kbd {
 
 .r-main { min-width: 0; display: flex; align-items: center; gap: 10px; }
 .r-title { font-weight: 550; font-size: 14.5px; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 0 1 auto; min-width: min(36ch, 100%); }
-.r-tags { display: flex; gap: 6px; flex: 0 1 auto; min-width: 0; overflow: hidden; }
+.r-tags { display: flex; gap: 6px; min-width: 0; overflow: hidden; }
 .r-tags .tag { flex: none; }
 @container (max-width: 880px) { .r-tags .tag[data-k="project"] { display: none; } }
-@container (max-width: 700px) { .r-tags { display: none; } }
+@container (max-width: 700px) {
+  .rows { --cols: 28px 48px minmax(0, 1fr) 100px 84px; }
+  .r-tags, .h-tags { display: none; }
+}
 
 .tag {
   display: inline-flex; align-items: center; gap: 5px;
@@ -867,3 +870,15 @@ kbd {
 .group-title.done { color: var(--success-text); }
 .group-title.done .count { background: var(--success-soft); color: var(--success-text); }
 .group .more { margin: 10px 0 0 2px; }
+
+/* ---------- títulos das colunas ---------- */
+:where(.rows) { --cols: 28px 48px minmax(0, 1fr) minmax(0, 250px) 100px 84px; }
+.rows-head {
+  display: grid; grid-template-columns: var(--cols); align-items: center; gap: 10px;
+  padding: 9px 16px 8px 12px;
+  border-bottom: 1px solid var(--line);
+  font-size: 11.5px; font-weight: 600; color: var(--text-3); letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+.rows-head .h-due, .rows-head .h-age { text-align: right; }
+.row .r-due { justify-self: end; }
