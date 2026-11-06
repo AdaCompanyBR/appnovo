@@ -419,6 +419,11 @@
       tally.set(key, cur);
     }
     const list = [...tally.values()].sort((a, b) => b.n - a.n || a.name.localeCompare(b.name, 'pt-BR'));
+    state.projectList = list;
+    viewsEl.insertAdjacentHTML('beforeend', `
+      <button type="button" class="view view-projects" id="projects-btn" aria-haspopup="menu" aria-expanded="false" title="Projetos">
+        ${icon('folder', 17)}<span>Projetos</span><span class="count num">${state.project ? '1' : ''}</span>
+      </button>`);
     projectsEl.innerHTML = `
       <div class="side-title"><span>Projetos</span></div>
       ${list.length ? list.map((p) => `
@@ -431,6 +436,37 @@
     const b = e.target.closest('[data-view]');
     if (b) setView(b.dataset.view);
   });
+  const projectsPop = document.createElement('div');
+  projectsPop.className = 'menu projects-pop';
+  projectsPop.setAttribute('role', 'menu');
+  projectsPop.hidden = true;
+  $('.sidebar').appendChild(projectsPop);
+  function closeProjects() { projectsPop.hidden = true; const b = $('#projects-btn'); if (b) b.setAttribute('aria-expanded', 'false'); }
+  viewsEl.addEventListener('click', (e) => {
+    const b = e.target.closest('#projects-btn');
+    if (!b) return;
+    e.stopPropagation();
+    if (!projectsPop.hidden) { closeProjects(); return; }
+    const list = state.projectList || [];
+    projectsPop.innerHTML = list.length
+      ? list.map((p) => `<button type="button" role="menuitemcheckbox" aria-checked="${Boolean(state.project && state.project.toLowerCase() === p.name.toLowerCase())}" data-project="${esc(p.name)}">${icon('hash')}${esc(p.name)}<span class="count num">${p.n}</span></button>`).join('')
+      : '<div class="menu-meta">Use #projeto ao anotar para agrupar aqui.</div>';
+    projectsPop.style.top = `${b.getBoundingClientRect().top}px`;
+    projectsPop.hidden = false;
+    b.setAttribute('aria-expanded', 'true');
+  });
+  projectsPop.addEventListener('click', (e) => {
+    const b = e.target.closest('[data-project]');
+    if (!b) return;
+    const p = b.dataset.project;
+    state.project = state.project && state.project.toLowerCase() === p.toLowerCase() ? null : p;
+    closeProjects();
+    renderSidebar();
+    renderBoard();
+  });
+  document.addEventListener('click', (e) => { if (!projectsPop.hidden && !e.target.closest('.projects-pop')) closeProjects(); });
+  projectsPop.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeProjects(); e.stopPropagation(); } });
+
   projectsEl.addEventListener('click', (e) => {
     const b = e.target.closest('[data-project]');
     if (!b) return;
@@ -541,7 +577,7 @@
   function ageHtml(d) {
     if (!isOpen(d)) return `<span class="r-age num" title="Concluída em ${fullDate(d.doneAt || d.updatedAt)}">${age(d.doneAt || d.updatedAt).text}</span>`;
     const a = age(d.createdAt);
-    const cls = a.mins >= 7 * 1440 ? 'hot' : a.mins >= 3 * 1440 ? 'warm' : '';
+    const cls = a.mins >= 7 * 1440 ? 'stale' : '';
     return `<span class="r-age num ${cls}" title="Chegou em ${fullDate(d.createdAt)}">${a.text}</span>`;
   }
 

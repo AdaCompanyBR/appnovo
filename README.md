@@ -105,4 +105,4 @@ npm test
 
 ## Licenças de terceiros
 
-Fontes Archivo e JetBrains Mono (SIL Open Font License) e ícones Lucide (ISC). Os arquivos de licença estão em `src/renderer/fonts/` e `src/renderer/assets/`.
+Fonte Figtree (SIL Open Font License) e ícones Lucide (ISC). Os arquivos de licença estão em `src/renderer/fonts/` e `src/renderer/assets/`.
