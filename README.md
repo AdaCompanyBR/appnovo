@@ -9,7 +9,7 @@ Cada demanda vira uma comanda numerada. As que você está fazendo ficam presas 
 Pré-requisito: [Node.js 20 ou mais novo](https://nodejs.org/) (versão LTS).
 
 ```bash
-git clone <url-do-repositório> demandas
+git clone https://github.com/AdaCompanyBR/appnovo.git demandas
 cd demandas
 npm install
 npm start
@@ -23,7 +23,7 @@ No primeiro uso o app pede para criar a conta (usuário e senha) e mostra um **c
 npm run dist
 ```
 
-O instalador e uma versão portátil saem na pasta `dist/`. Depois de instalado, o app aparece no menu Iniciar como **Demandas**.
+O instalador (`Demandas-instalador-<versão>.exe`) e a versão portátil (`Demandas-portatil-<versão>.exe`) saem na pasta `dist/`. Como não são assinados digitalmente, o Windows mostra o aviso "O Windows protegeu o computador": clique em **Mais informações → Executar assim mesmo**. Depois de instalado, o app aparece no menu Iniciar como **Demandas**.
 
 ## Anotar rápido
 
