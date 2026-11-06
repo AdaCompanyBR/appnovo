@@ -515,15 +515,25 @@
         else if (b === 'urgent') urgent.push(d);
       }
       rail.sort(sortOpen); late.sort(sortOpen); today.sort(sortOpen); urgent.sort(sortOpen);
-      const rest = list.filter((d) => d.status === 'todo' && !bucketToday(d)).length;
+      // Próximas da fila: o que não é urgente também aparece, até 5 por vez.
+      const todo = list.filter((d) => d.status === 'todo' && !bucketToday(d)).sort(sortOpen);
+      const next = todo.slice(0, 5);
+      const hasHot = late.length + today.length + urgent.length > 0;
+      // Concluídas hoje: o que você já terminou no dia.
+      const t0 = parseISODate(todayISO()).getTime();
+      const doneToday = list
+        .filter((d) => d.status === 'done' && new Date(d.doneAt || d.updatedAt).getTime() >= t0)
+        .sort((a, b) => new Date(b.doneAt || b.updatedAt) - new Date(a.doneAt || a.updatedAt));
       return {
         title: 'Hoje',
         rail,
-        rest,
+        rest: todo.length - next.length,
         groups: [
           { id: 'late', title: 'Atrasadas', tone: 'fire', items: late },
           { id: 'today', title: 'Vencem hoje', tone: 'heat', items: today },
           { id: 'urgent', title: 'Urgentes', tone: 'fire', items: urgent },
+          { id: 'next', title: hasHot ? 'Próximas' : 'A fazer', items: next, more: todo.length - next.length },
+          { id: 'done', title: 'Concluídas hoje', tone: 'done', items: doneToday },
         ].filter((g) => g.items.length),
       };
     }
@@ -661,13 +671,14 @@
 
     for (const g of model.groups) {
       html += `<section class="group" aria-label="${esc(g.title)}"><h2 class="group-title ${g.tone || ''}">${esc(g.title)} <span class="count">${g.items.length}</span>${g.hint ? `<span class="hint">${esc(g.hint)}</span>` : ''}</h2><div class="rows" role="listbox" aria-label="${esc(g.title)}">${g.items.map(rowHtml).join('')}</div></section>`;
+      if (g.more) html = html.replace(/<\/section>$/, `<p class="more"><button type="button" class="link" data-goto="fila">Ver mais ${g.more} na Fila</button></p></section>`);
       g.items.forEach((d) => order.push(d.id));
     }
 
     const nothing = !order.length;
     if (nothing && !(model.rail && state.view === 'hoje' && state.demands.length)) html += emptyHtml(state.view);
     else if (nothing) html += emptyHtml('hoje');
-    if (model.rest) html += `<p class="more"><button type="button" class="link" data-goto="fila">Mais ${model.rest} na fila</button></p>`;
+
 
     state.order = order;
     if (state.selectedId && !byId(state.selectedId)) state.selectedId = null;

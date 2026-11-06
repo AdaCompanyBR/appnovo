@@ -863,3 +863,7 @@ kbd {
 .suggest-item:hover { background: var(--hover); }
 .suggest-item[aria-selected="true"] { background: var(--accent-soft); color: var(--accent-strong); }
 .suggest-item[aria-selected="true"] .icon, .suggest-item[aria-selected="true"] b { color: var(--accent-strong); }
+
+.group-title.done { color: var(--success-text); }
+.group-title.done .count { background: var(--success-soft); color: var(--success-text); }
+.group .more { margin: 10px 0 0 2px; }
