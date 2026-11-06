@@ -850,7 +850,7 @@
     const st = ai.state;
     if (!st || st.id !== d.id) return '';
     if (st.status === 'thinking' || st.status === 'streaming') {
-      return `<div class="ai-box" aria-live="polite"><div class="ai-head">${icon('sparkles', 14)}<span>Revisando…</span><button type="button" class="link" data-dact="ai-stop">Parar</button></div>${st.text ? `<div class="ai-text">${esc(st.text)}</div>` : '<div class="ai-wait"><span></span><span></span><span></span></div>'}</div>`;
+      return `<div class="ai-box" aria-live="polite"><div class="ai-head"><span class="ai-spin" aria-hidden="true"></span><span>Revisando…</span><button type="button" class="link" data-dact="ai-stop">Parar</button></div>${st.text ? `<div class="ai-text">${esc(st.text)}</div>` : ''}</div>`;
     }
     if (st.status === 'done') {
       return `<div class="ai-box" aria-live="polite"><div class="ai-head">${icon('sparkles', 14)}<span>Sugestão de escrita</span></div><div class="ai-text">${esc(st.text)}</div>
