@@ -136,6 +136,10 @@ function registerIpc() {
   handle('demands:update', (id, patch) => vault.updateDemand(String(id), patch || {}));
   handle('demands:delete', (id) => vault.deleteDemand(String(id)));
   handle('demands:restore', (demand) => vault.restoreDemand(demand));
+  handle('notes:list', () => vault.listNotes());
+  handle('notes:create', (input) => vault.createNote(input || {}));
+  handle('notes:update', (id, patch) => vault.updateNote(String(id), patch || {}));
+  handle('notes:delete', (id) => vault.deleteNote(String(id)));
   handle('settings:get', () => vault.getSettings());
   handle('settings:set', (settings) => vault.setSettings(settings));
 

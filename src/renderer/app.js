@@ -389,6 +389,8 @@
       toast(err.message, { error: true });
       state.demands = [];
     }
+    try { state.notes = await call(api.notes.list()); } catch { state.notes = []; }
+    state.noteId = null;
     await loadWorkspaces();
     renderAll();
     captureInput.focus();
@@ -485,6 +487,7 @@
     if (id === state.ws && !saved) return;
     state.ws = id;
     state.selectedId = null;
+    state.noteId = null;
     state.project = state.requester = null;
     state.search = '';
     searchInput.value = '';
@@ -514,7 +517,7 @@
     const c = counts();
     const n = { hoje: c.hoje, fila: c.fila, aguardando: c.wait, feitas: c.done };
     viewsEl.innerHTML = VIEWS.map((v) => `
-      <button type="button" class="view" data-view="${v.id}" ${state.view === v.id && !state.search ? 'aria-current="page"' : ''} title="${v.label} (Ctrl+${v.key})">
+      <button type="button" class="view" data-view="${v.id}" ${state.view === v.id && !state.search && !state.noteId ? 'aria-current="page"' : ''} title="${v.label} (Ctrl+${v.key})">
         ${icon(v.icon, 17)}<span>${v.label}</span>
         <span class="count num ${v.id === 'hoje' && c.hot ? 'hot' : ''}">${n[v.id] || ''}</span>
         <span class="share ${v.id === 'hoje' && c.hot ? 'hot' : ''}" aria-hidden="true"></span>
@@ -525,74 +528,161 @@
       el.querySelector('.share').style.setProperty('--share', String((n[el.dataset.view] || 0) / total));
     }
 
-    const tally = new Map();
-    for (const d of state.demands.filter(inWs)) {
-      if (!d.project || !isOpen(d)) continue;
-      const key = d.project.toLowerCase();
-      const cur = tally.get(key) || { name: d.project, n: 0 };
-      cur.n++;
-      tally.set(key, cur);
-    }
-    const list = [...tally.values()].sort((a, b) => b.n - a.n || a.name.localeCompare(b.name, 'pt-BR'));
-    state.projectList = list;
     viewsEl.insertAdjacentHTML('beforeend', `
-      <button type="button" class="view view-projects" id="projects-btn" aria-haspopup="menu" aria-expanded="false" title="Projetos">
-        ${icon('folder', 17)}<span>Projetos</span><span class="count num">${state.project ? '1' : ''}</span>
+      <button type="button" class="view view-projects" id="notes-btn" aria-haspopup="menu" aria-expanded="false" title="Blocos de notas">
+        ${icon('notebook-pen', 17)}<span>Blocos de notas</span><span class="count num">${wsNotes().length || ''}</span>
       </button>`);
-    projectsEl.innerHTML = `
-      <div class="side-title"><span>Projetos</span></div>
-      ${list.length ? list.map((p) => `
-        <button type="button" class="tag-filter" data-project="${esc(p.name)}" aria-pressed="${state.project && state.project.toLowerCase() === p.name.toLowerCase()}">
-          ${icon('hash', 14)}<span>${esc(p.name)}</span><span class="count num">${p.n}</span>
-        </button>`).join('') : '<p class="side-empty">Use <span class="num">#projeto</span> ao anotar para agrupar aqui.</p>'}`;
+    renderNotesList();
   }
+
+  /* ---------- blocos de notas ---------- */
+
+  const wsNotes = () => (state.notes || [])
+    .filter((n) => (n.ws || state.legacyWs) === state.ws)
+    .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+  const noteTitle = (n) => n.title || 'Sem título';
+
+  function renderNotesList() {
+    const list = wsNotes();
+    projectsEl.innerHTML = `
+      <div class="side-title"><span>Blocos de notas</span><button type="button" class="side-add" data-note-new title="Novo bloco de notas" aria-label="Novo bloco de notas">${icon('plus', 15)}</button></div>
+      ${list.length ? list.map((n) => `
+        <button type="button" class="tag-filter note-link" data-note="${esc(n.id)}" ${state.noteId === n.id ? 'aria-current="page"' : ''}>
+          ${icon('file-text', 15)}<span>${esc(noteTitle(n))}</span><span></span>
+        </button>`).join('') : `<button type="button" class="side-empty-btn" data-note-new>${icon('plus', 14)}Criar um bloco de notas</button>`}`;
+  }
+
+  projectsEl.addEventListener('click', (e) => {
+    if (e.target.closest('[data-note-new]')) { createNote(); return; }
+    const b = e.target.closest('[data-note]');
+    if (b) openNote(b.dataset.note);
+  });
+
+  async function createNote() {
+    try {
+      const n = await call(api.notes.create({ title: '', body: '', ws: state.ws }));
+      state.notes = [...(state.notes || []), n];
+      openNote(n.id, true);
+    } catch (err) { toast(err.message, { error: true }); }
+  }
+
+  function openNote(id, focusTitle = false) {
+    state.noteId = id;
+    state.selectedId = null;
+    state.search = '';
+    searchInput.value = '';
+    closeNotesPop();
+    renderAll();
+    boardEl.scrollTop = 0;
+    const el = $(focusTitle ? '#note-title' : '#note-body');
+    if (el) el.focus();
+  }
+
+  function renderNote() {
+    const n = (state.notes || []).find((x) => x.id === state.noteId);
+    if (!n) { state.noteId = null; return false; }
+    boardEl.innerHTML = `
+      <div class="note-view">
+        <div class="note-head">
+          <label class="visually-hidden" for="note-title">Título do bloco</label>
+          <input class="note-title" id="note-title" maxlength="200" placeholder="Sem título" value="${esc(n.title)}" autocomplete="off">
+          <span class="saved" id="note-saved" aria-live="polite"></span>
+          <button type="button" class="icon-btn danger" data-note-act="delete" title="Excluir bloco" aria-label="Excluir bloco de notas">${icon('trash-2')}</button>
+        </div>
+        <p class="note-meta">Criado em ${fullDate(n.createdAt)} · editado ${age(n.updatedAt).text === 'agora' ? 'agora' : `há ${age(n.updatedAt).text}`}</p>
+        <label class="visually-hidden" for="note-body">Conteúdo do bloco</label>
+        <textarea class="note-body" id="note-body" placeholder="Escreva aqui. Tudo é salvo sozinho enquanto você digita.">${esc(n.body)}</textarea>
+      </div>`;
+    state.order = [];
+    return true;
+  }
+
+  let noteTimer = null;
+  async function saveNote() {
+    clearTimeout(noteTimer);
+    const n = (state.notes || []).find((x) => x.id === state.noteId);
+    const t = $('#note-title'); const b = $('#note-body');
+    if (!n || !t || !b) return;
+    const patch = { title: t.value.trim(), body: b.value };
+    if (patch.title === n.title && patch.body === n.body) return;
+    try {
+      const saved = await call(api.notes.update(n.id, patch));
+      state.notes = state.notes.map((x) => (x.id === saved.id ? saved : x));
+      // Atualiza só o nome na lista, sem redesenhar a barra (um clique em andamento não se perde).
+      const label = projectsEl.querySelector(`.note-link[data-note="${CSS.escape(saved.id)}"] span:nth-child(2)`);
+      if (label) label.textContent = noteTitle(saved);
+      const s = $('#note-saved');
+      if (s) { s.textContent = 'salvo'; clearTimeout(saveNote.t); saveNote.t = setTimeout(() => { if ($('#note-saved')) $('#note-saved').textContent = ''; }, 1400); }
+    } catch (err) { toast(err.message, { error: true }); }
+  }
+
+  boardEl.addEventListener('input', (e) => {
+    if (e.target.id !== 'note-title' && e.target.id !== 'note-body') return;
+    clearTimeout(noteTimer);
+    noteTimer = setTimeout(saveNote, 600);
+  });
+  boardEl.addEventListener('focusout', (e) => {
+    if (e.target.id === 'note-title' || e.target.id === 'note-body') saveNote();
+  });
+  boardEl.addEventListener('keydown', (e) => {
+    if (e.target.id === 'note-title' && e.key === 'Enter') { e.preventDefault(); const b = $('#note-body'); if (b) b.focus(); }
+  });
+  boardEl.addEventListener('click', (e) => {
+    if (!e.target.closest('[data-note-act="delete"]')) return;
+    const n = (state.notes || []).find((x) => x.id === state.noteId);
+    if (!n) return;
+    openSheet(`
+      <h2>Excluir bloco de notas?</h2>
+      <p class="lede">“${esc(noteTitle(n))}” será apagado. Essa ação não pode ser desfeita.</p>
+      <div class="actions"><button type="button" class="btn btn-ghost" data-close>Cancelar</button><button type="button" class="btn btn-danger" id="note-del-ok">${icon('trash-2', 15)}Excluir</button></div>`, '#note-del-ok');
+    $('#note-del-ok').addEventListener('click', async () => {
+      try {
+        await call(api.notes.remove(n.id));
+        state.notes = state.notes.filter((x) => x.id !== n.id);
+        sheet.close();
+        state.noteId = null;
+        renderAll();
+        toast('Bloco de notas excluído.');
+      } catch (err) { toast(err.message, { error: true }); }
+    });
+  });
+
+  // Janela estreita: os blocos ficam num menu no ícone de caderno.
+  const notesPop = document.createElement('div');
+  notesPop.className = 'menu projects-pop';
+  notesPop.setAttribute('role', 'menu');
+  notesPop.hidden = true;
+  $('.sidebar').appendChild(notesPop);
+  function closeNotesPop() { notesPop.hidden = true; const b = $('#notes-btn'); if (b) b.setAttribute('aria-expanded', 'false'); }
+  viewsEl.addEventListener('click', (e) => {
+    const b = e.target.closest('#notes-btn');
+    if (!b) return;
+    e.stopPropagation();
+    if (!notesPop.hidden) { closeNotesPop(); return; }
+    const list = wsNotes();
+    notesPop.innerHTML = `<div class="menu-meta">Blocos de notas</div>
+      ${list.map((n) => `<button type="button" role="menuitem" data-note="${esc(n.id)}">${icon('file-text')}<span class="ws-item-name">${esc(noteTitle(n))}</span></button>`).join('')}
+      ${list.length ? '<hr>' : ''}<button type="button" role="menuitem" data-note-new>${icon('plus')}Novo bloco de notas</button>`;
+    notesPop.style.top = `${b.getBoundingClientRect().top}px`;
+    notesPop.hidden = false;
+    b.setAttribute('aria-expanded', 'true');
+  });
+  notesPop.addEventListener('click', (e) => {
+    if (e.target.closest('[data-note-new]')) { closeNotesPop(); createNote(); return; }
+    const b = e.target.closest('[data-note]');
+    if (b) openNote(b.dataset.note);
+  });
+  document.addEventListener('click', (e) => { if (!notesPop.hidden && !e.target.closest('.projects-pop')) closeNotesPop(); });
+  notesPop.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeNotesPop(); e.stopPropagation(); } });
 
   viewsEl.addEventListener('click', (e) => {
     const b = e.target.closest('[data-view]');
     if (b) setView(b.dataset.view);
   });
-  const projectsPop = document.createElement('div');
-  projectsPop.className = 'menu projects-pop';
-  projectsPop.setAttribute('role', 'menu');
-  projectsPop.hidden = true;
-  $('.sidebar').appendChild(projectsPop);
-  function closeProjects() { projectsPop.hidden = true; const b = $('#projects-btn'); if (b) b.setAttribute('aria-expanded', 'false'); }
-  viewsEl.addEventListener('click', (e) => {
-    const b = e.target.closest('#projects-btn');
-    if (!b) return;
-    e.stopPropagation();
-    if (!projectsPop.hidden) { closeProjects(); return; }
-    const list = state.projectList || [];
-    projectsPop.innerHTML = list.length
-      ? list.map((p) => `<button type="button" role="menuitemcheckbox" aria-checked="${Boolean(state.project && state.project.toLowerCase() === p.name.toLowerCase())}" data-project="${esc(p.name)}">${icon('hash')}${esc(p.name)}<span class="count num">${p.n}</span></button>`).join('')
-      : '<div class="menu-meta">Use #projeto ao anotar para agrupar aqui.</div>';
-    projectsPop.style.top = `${b.getBoundingClientRect().top}px`;
-    projectsPop.hidden = false;
-    b.setAttribute('aria-expanded', 'true');
-  });
-  projectsPop.addEventListener('click', (e) => {
-    const b = e.target.closest('[data-project]');
-    if (!b) return;
-    const p = b.dataset.project;
-    state.project = state.project && state.project.toLowerCase() === p.toLowerCase() ? null : p;
-    closeProjects();
-    renderSidebar();
-    renderBoard();
-  });
-  document.addEventListener('click', (e) => { if (!projectsPop.hidden && !e.target.closest('.projects-pop')) closeProjects(); });
-  projectsPop.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeProjects(); e.stopPropagation(); } });
-
-  projectsEl.addEventListener('click', (e) => {
-    const b = e.target.closest('[data-project]');
-    if (!b) return;
-    const p = b.dataset.project;
-    state.project = state.project && state.project.toLowerCase() === p.toLowerCase() ? null : p;
-    renderSidebar();
-    renderBoard();
-  });
 
   function setView(view) {
     state.view = view;
+    state.noteId = null;
     state.search = '';
     searchInput.value = '';
     renderSidebar();
@@ -772,6 +862,7 @@
   }
 
   function renderBoard() {
+    if (state.noteId && renderNote()) return;
     const model = buildGroups();
     const order = [];
     let html = `<div class="board-head"><h1>${esc(state.search ? 'Busca' : model.title)}</h1>${state.view === 'hoje' && !state.search ? `<span class="date">${longToday()}</span>` : ''}${filtersHtml()}</div>`;
@@ -1543,6 +1634,7 @@ ${text.slice(0, 12000)}
   api.on('app:data', async () => {
     if (workspaceEl.hidden) return;
     try { state.demands = await call(api.demands.list()); } catch { return; }
+    if (state.noteId) { renderSidebar(); return; }
     if (document.activeElement && detailEl.contains(document.activeElement)) { renderSidebar(); renderBoard(); return; }
     renderAll();
   });
@@ -1608,6 +1700,7 @@ ${text.slice(0, 12000)}
   setInterval(() => {
     if (workspaceEl.hidden) return;
     if (document.activeElement && detailEl.contains(document.activeElement)) return;
+    if (state.noteId) { renderSidebar(); return; } // não atrapalha quem está escrevendo no bloco
     renderSidebar();
     renderBoard();
   }, 60000);

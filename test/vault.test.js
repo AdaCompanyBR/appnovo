@@ -120,3 +120,21 @@ test('configurações cifradas e campo de empresa nas demandas', async () => {
   assert.equal(v.getSettings().current, 'ws-x');
   assert.equal(v.listDemands()[0].ws, 'ws-x');
 });
+
+test('blocos de notas: criar, editar, excluir e persistir cifrado', async () => {
+  const dir = tmpDir();
+  const v = new Vault(dir);
+  await v.register('ana', 'senha-boa-1');
+  const n = v.createNote({ title: 'Reunião com despachante', body: 'Pontos: container ABC123', ws: 'comexport' });
+  v.updateNote(n.id, { body: 'Pontos: container ABC123\nRetorno até sexta' });
+  const extra = v.createNote({ title: 'Rascunho' });
+  v.deleteNote(extra.id);
+  v.logout();
+  const raw = fs.readdirSync(dir).map((f) => fs.readFileSync(path.join(dir, f), 'utf8')).join('\n');
+  assert.ok(!raw.includes('despachante'), 'nota não pode aparecer em texto puro');
+  await v.login('ana', 'senha-boa-1');
+  const notes = v.listNotes();
+  assert.equal(notes.length, 1);
+  assert.match(notes[0].body, /Retorno até sexta/);
+  assert.equal(notes[0].ws, 'comexport');
+});

@@ -390,6 +390,46 @@ class Vault {
     return restored;
   }
 
+  /* ---------- blocos de notas ---------- */
+
+  _notes() {
+    this._requireSession();
+    if (!Array.isArray(this.session.data.notes)) this.session.data.notes = [];
+    return this.session.data.notes;
+  }
+
+  listNotes() {
+    return this._notes();
+  }
+
+  createNote(input) {
+    const notes = this._notes();
+    const now = new Date().toISOString();
+    const note = sanitizeNote({ ...input, id: crypto.randomUUID(), createdAt: now, updatedAt: now });
+    notes.push(note);
+    this._save();
+    return note;
+  }
+
+  updateNote(id, patch) {
+    const notes = this._notes();
+    const i = notes.findIndex((n) => n.id === id);
+    if (i < 0) throw new VaultError('not_found', 'Bloco de notas não encontrado.');
+    const next = sanitizeNote({ ...notes[i], ...patch, id: notes[i].id, createdAt: notes[i].createdAt, updatedAt: new Date().toISOString() });
+    notes[i] = next;
+    this._save();
+    return next;
+  }
+
+  deleteNote(id) {
+    const notes = this._notes();
+    const i = notes.findIndex((n) => n.id === id);
+    if (i < 0) throw new VaultError('not_found', 'Bloco de notas não encontrado.');
+    const [removed] = notes.splice(i, 1);
+    this._save();
+    return removed;
+  }
+
   getSettings() {
     this._requireSession();
     return this.session.data.settings || {};
@@ -411,8 +451,22 @@ class Vault {
       exportedAt: new Date().toISOString(),
       username: this.session.username,
       demands: this.session.data.demands,
+      notes: this.session.data.notes || [],
     };
   }
+}
+
+const NOTE_MAX = 100000;
+
+function sanitizeNote(n) {
+  return {
+    id: String(n.id),
+    title: (typeof n.title === 'string' ? n.title.replace(/\u0000/g, '').slice(0, 200) : '').trim(),
+    body: typeof n.body === 'string' ? n.body.slice(0, NOTE_MAX) : '',
+    ws: typeof n.ws === 'string' && n.ws ? n.ws.slice(0, 64) : null,
+    createdAt: n.createdAt || new Date().toISOString(),
+    updatedAt: n.updatedAt || n.createdAt || new Date().toISOString(),
+  };
 }
 
 const PRIORITIES = ['urgente', 'alta', 'normal', 'baixa'];

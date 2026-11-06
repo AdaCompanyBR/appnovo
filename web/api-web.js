@@ -91,6 +91,25 @@
 
   const importDek = (raw) => subtle.importKey('raw', raw, 'AES-GCM', false, ['encrypt', 'decrypt']);
 
+  function sanitizeNote(n) {
+    return {
+      id: String(n.id),
+      title: (typeof n.title === 'string' ? n.title.replace(/\u0000/g, '').slice(0, 200) : '').trim(),
+      body: typeof n.body === 'string' ? n.body.slice(0, 100000) : '',
+      ws: typeof n.ws === 'string' && n.ws ? n.ws.slice(0, 64) : null,
+      createdAt: n.createdAt || new Date().toISOString(),
+      updatedAt: n.updatedAt || n.createdAt || new Date().toISOString(),
+    };
+  }
+
+  async function writeNote(n) {
+    const { notesCol } = await backend();
+    const box = await seal(session.dek, enc.encode(JSON.stringify(n)));
+    await dbCall(() => notesCol.doc(n.id).set({ box, v: 1 }));
+    session.notes.set(n.id, n);
+    return n;
+  }
+
   function cleanText(v, max) { return typeof v === 'string' ? v.replace(/\u0000/g, '').trim().slice(0, max) : ''; }
   function sanitizeDemand(d) {
     return {
@@ -122,7 +141,7 @@
         const uid = user ? await user.id() : null;
         if (!db || !uid) throw new VaultError('unavailable', 'Não foi possível acessar o armazenamento. Entre na sua conta do claude.ai e abra a página de novo.');
         const accountRef = db.doc(`data/users/${uid}/account`);
-        return { db, downloads, accountRef, demandsCol: accountRef.collection('demands'), settingsRef: db.doc(`data/users/${uid}/settings`) };
+        return { db, downloads, accountRef, demandsCol: accountRef.collection('demands'), settingsRef: db.doc(`data/users/${uid}/settings`), notesCol: accountRef.collection('notes') };
       })();
       ready.catch(() => { ready = null; });
     }
@@ -147,7 +166,7 @@
 
   /* ---------- sessão ---------- */
 
-  const session = { username: null, dek: null, cache: new Map(), unsub: null, lastUsername: '' };
+  const session = { username: null, dek: null, cache: new Map(), notes: new Map(), unsub: null, lastUsername: '' };
   const listeners = { 'app:locked': new Set(), 'app:focus-capture': new Set(), 'app:data': new Set() };
   const emit = (ev) => listeners[ev].forEach((fn) => { try { fn(); } catch (e) { console.error(e); } });
 
@@ -164,6 +183,7 @@
     session.unsub = null;
     session.dek = null;
     session.cache = new Map();
+    session.notes = new Map();
     session.username = null;
     clearTimeout(idleTimer);
   }
@@ -184,6 +204,13 @@
     session.dek = await importDek(dekRaw);
     dekRaw.fill(0);
     session.cache = new Map();
+    const { notesCol } = await backend();
+    session.notes = new Map();
+    const nsnap = await dbCall(() => notesCol.get());
+    for (const doc of nsnap.docs) {
+      const body = doc.data();
+      try { const n = sanitizeNote(JSON.parse(dec.decode(await open(session.dek, body.box)))); session.notes.set(n.id, n); } catch { /* ignora registro ilegível */ }
+    }
     const snap = await dbCall(() => demandsCol.get());
     for (const doc of snap.docs) {
       const d = await decryptDoc(doc);
@@ -383,6 +410,31 @@
       return writeDemand(sanitizeDemand(demand));
     },
 
+    async 'notes:list'() { requireSession(); return [...session.notes.values()]; },
+
+    async 'notes:create'(input) {
+      requireSession();
+      const now = new Date().toISOString();
+      return writeNote(sanitizeNote({ ...input, id: crypto.randomUUID(), createdAt: now, updatedAt: now }));
+    },
+
+    async 'notes:update'(id, patch) {
+      requireSession();
+      const before = session.notes.get(String(id));
+      if (!before) throw new VaultError('not_found', 'Bloco de notas não encontrado.');
+      return writeNote(sanitizeNote({ ...before, ...patch, id: before.id, createdAt: before.createdAt, updatedAt: new Date().toISOString() }));
+    },
+
+    async 'notes:delete'(id) {
+      requireSession();
+      const before = session.notes.get(String(id));
+      if (!before) throw new VaultError('not_found', 'Bloco de notas não encontrado.');
+      const { notesCol } = await backend();
+      await dbCall(() => notesCol.doc(before.id).delete());
+      session.notes.delete(before.id);
+      return before;
+    },
+
     async 'settings:get'() {
       requireSession();
       const { settingsRef } = await backend();
@@ -405,7 +457,7 @@
       requireSession();
       const { downloads } = await backend();
       if (!downloads) throw new VaultError('unavailable', 'Este navegador não permite baixar arquivos pela página.');
-      const payload = { app: 'Lumo', exportedAt: new Date().toISOString(), username: session.username, demands: [...session.cache.values()] };
+      const payload = { app: 'Lumo', exportedAt: new Date().toISOString(), username: session.username, demands: [...session.cache.values()], notes: [...session.notes.values()] };
       try {
         await downloads.save({ filename: `demandas-${payload.exportedAt.slice(0, 10)}.json`, data: JSON.stringify(payload, null, 2) });
         return { saved: true };
@@ -439,6 +491,7 @@
       list: call('demands:list'), create: call('demands:create'), update: call('demands:update'),
       remove: call('demands:delete'), restore: call('demands:restore'),
     },
+    notes: { list: call('notes:list'), create: call('notes:create'), update: call('notes:update'), remove: call('notes:delete') },
     settings: { get: call('settings:get'), set: call('settings:set') },
     data: { export: call('data:export') },
     app: {
