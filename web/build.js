@@ -32,7 +32,6 @@ css += `
 
 const html = R('src/renderer/index.html');
 let body = html.slice(html.indexOf('<body>') + 6, html.indexOf('<script'));
-body = body.replace('Tudo fica neste computador, cifrado com a sua senha.', 'Suas demandas são cifradas no navegador com a sua senha antes de serem salvas.');
 
 const scripts = ['src/renderer/icons.js', 'src/renderer/parse.js', 'web/api-web.js', 'src/renderer/app.js']
   .map((p) => `<script>\n${R(p).replace(/<\/script/gi, '<\\/script')}\n</script>`).join('\n');
