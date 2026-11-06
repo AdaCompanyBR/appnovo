@@ -4,6 +4,23 @@ App de desktop para anotar as demandas do dia a dia em segundos. É local, funci
 
 Cada demanda vira uma comanda numerada. As que você está fazendo ficam presas no trilho **Na mesa**, as atrasadas e as que vencem hoje aparecem primeiro, e concluir uma demanda "arranca" a comanda do trilho.
 
+## Versão para navegador (sem instalar nada)
+
+O Demandas também roda como uma página privada no claude.ai: https://claude.ai/artifact/F2Az8VEAKX5ogjomP3q2B5
+
+- Abre em qualquer computador com o seu login do claude.ai, sem instalar nada.
+- As demandas são cifradas **no navegador** com a sua senha (PBKDF2-SHA256 + AES-256-GCM) antes de serem salvas na sua área privada do claude.ai, que nem o dono da página consegue ler.
+- A página bloqueia sozinha depois de 20 minutos sem uso.
+- O atalho global (Ctrl+Shift+Espaço) e o ícone na bandeja só existem na versão desktop. No navegador, aperte **N** com a página aberta.
+
+A página é gerada a partir do mesmo código da versão desktop:
+
+```bash
+node web/build.js
+```
+
+O arquivo sai em `web/dist/demandas.html`. A camada de dados da versão web fica em `web/api-web.js`.
+
 ## Como rodar no Windows
 
 Pré-requisito: [Node.js 20 ou mais novo](https://nodejs.org/) (versão LTS).

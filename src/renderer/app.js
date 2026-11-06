@@ -5,6 +5,7 @@
   const api = window.api;
   const { parseCapture, iso, addDays } = window.DemandParse;
   const icon = window.icon;
+  const IS_WEB = api.platform === 'web';
 
   /* ---------- utilidades ---------- */
 
@@ -248,7 +249,7 @@
       <label class="check"><input type="checkbox" id="saved-code"><span>Guardei o código em um lugar seguro.</span></label>
       <div class="actions"><button class="btn btn-primary btn-block" id="continue" disabled>Continuar</button></div>`, '#copy-code');
     $('#copy-code').addEventListener('click', async () => {
-      await api.app.copy(code);
+      if ((await api.app.copy(code)) === false) { selectText($('#code')); return; }
       $('#copy-code').innerHTML = `${icon('circle-check')}Copiado`;
     });
     $('#saved-code').addEventListener('change', (e) => { $('#continue').disabled = !e.target.checked; });
@@ -584,7 +585,7 @@
       return `<div class="empty">${ticket}<h2>Sua primeira demanda leva cinco segundos</h2>
         <p>Escreva no campo acima e aperte Enter. Detalhes são opcionais e vão na mesma linha:</p>
         <div class="example paper">Subir hotfix do login <b>!urgente</b><br><b>@carla</b> <b>#portal</b> <b>hoje</b></div>
-        <p class="empty-shortcut">De qualquer lugar do Windows: <kbd>Ctrl</kbd> <kbd>Shift</kbd> <kbd>Espaço</kbd></p></div>`;
+        ${IS_WEB ? '<p class="empty-shortcut">Com a página aberta, aperte <kbd>N</kbd> para anotar.</p>' : '<p class="empty-shortcut">De qualquer lugar do Windows: <kbd>Ctrl</kbd> <kbd>Shift</kbd> <kbd>Espaço</kbd></p>'}</div>`;
     }
     const msgs = {
       hoje: ['Nada pegando fogo hoje', 'Sem atrasadas, sem prazos para hoje e sem urgências. Puxe algo da fila quando quiser.'],
@@ -984,10 +985,10 @@
       <button type="button" role="menuitem" data-m="password">${icon('key-round')}Trocar senha</button>
       <button type="button" role="menuitem" data-m="recovery">${icon('life-buoy')}Novo código de recuperação</button>
       <button type="button" role="menuitem" data-m="export">${icon('download')}Exportar demandas (JSON)</button>
-      <button type="button" role="menuitem" data-m="folder">${icon('folder-open')}Abrir pasta dos dados</button>
+      ${IS_WEB ? '' : `<button type="button" role="menuitem" data-m="folder">${icon('folder-open')}Abrir pasta dos dados</button>`}
       <button type="button" role="menuitem" data-m="shortcuts">${icon('keyboard')}Atalhos de teclado</button>
       <hr>
-      <button type="button" role="menuitem" data-m="lock">${icon('lock')}Bloquear <kbd class="menu-kbd">Ctrl L</kbd></button>
+      <button type="button" role="menuitem" data-m="lock">${icon('lock')}Bloquear${IS_WEB ? '' : ' <kbd class="menu-kbd">Ctrl L</kbd>'}</button>
       <button type="button" role="menuitem" data-m="logout">${icon('log-out')}Sair da conta</button>
       <div class="menu-meta num">Demandas ${esc(info.version || '')}${info.shortcutActive === false ? ' · atalho global indisponível' : ''}</div>`;
     accountMenu.hidden = false;
@@ -1081,7 +1082,7 @@
           <p class="lede">Ele não aparece de novo.</p>
           <div class="recovery-code">${esc(out.recoveryCode)}</div>
           <div class="actions"><button type="button" class="btn btn-ghost" id="rc-copy">${icon('copy')}Copiar</button><button type="button" class="btn btn-primary" data-close>Pronto</button></div>`, '#rc-copy');
-        $('#rc-copy').addEventListener('click', async () => { await api.app.copy(out.recoveryCode); $('#rc-copy').innerHTML = `${icon('circle-check')}Copiado`; });
+        $('#rc-copy').addEventListener('click', async () => { if ((await api.app.copy(out.recoveryCode)) === false) { selectText($('.sheet .recovery-code')); return; } $('#rc-copy').innerHTML = `${icon('circle-check')}Copiado`; });
       } catch (err) { openRecoverySheet(err.message); }
     });
   }
@@ -1089,7 +1090,7 @@
   function openShortcuts() {
     const rows = [
       ['Anotar', null],
-      ['Nova demanda (de qualquer lugar do Windows)', 'Ctrl Shift Espaço'],
+      ...(IS_WEB ? [] : [['Nova demanda (de qualquer lugar do Windows)', 'Ctrl Shift Espaço']]),
       ['Ir para o campo de captura', 'N ou Ctrl N'],
       ['Buscar', 'Ctrl F'],
       ['Navegar', null],
@@ -1104,7 +1105,7 @@
       ['Prioridade urgente · alta · normal · baixa', '1 – 4'],
       ['Excluir', 'Delete'],
       ['Desfazer', 'Ctrl Z'],
-      ['Bloquear o app', 'Ctrl L'],
+      ...(IS_WEB ? [] : [['Bloquear o app', 'Ctrl L']]),
     ];
     openSheet(`
       <h2>Atalhos de teclado</h2>
@@ -1129,8 +1130,26 @@
     state.demands = [];
     state.undo = [];
     if (sheet.open) sheet.close();
-    renderLogin(state.username, null, 'Bloqueado junto com o Windows. Entre de novo para continuar.');
+    renderLogin(state.username, null, IS_WEB ? 'Bloqueado depois de 20 minutos sem uso. Entre de novo para continuar.' : 'Bloqueado junto com o Windows. Entre de novo para continuar.');
   });
+  // Versão web: mudanças vindas de outra aba ou outro computador.
+  api.on('app:data', async () => {
+    if (workspaceEl.hidden) return;
+    try { state.demands = await call(api.demands.list()); } catch { return; }
+    if (document.activeElement && detailEl.contains(document.activeElement)) { renderSidebar(); renderBoard(); return; }
+    renderAll();
+  });
+
+  function selectText(el) {
+    if (!el) return;
+    const r = document.createRange();
+    r.selectNodeContents(el);
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(r);
+    toast('Código selecionado. Copie com Ctrl C.');
+  }
+
   api.on('app:focus-capture', () => {
     if (!workspaceEl.hidden) { if (sheet.open) sheet.close(); captureInput.focus(); captureInput.select(); }
   });
@@ -1146,7 +1165,7 @@
     if (ctrl && !e.shiftKey && ['1', '2', '3', '4'].includes(e.key)) { e.preventDefault(); setView(VIEWS[Number(e.key) - 1].id); return; }
     if (ctrl && e.key.toLowerCase() === 'f') { e.preventDefault(); searchInput.focus(); searchInput.select(); return; }
     if (ctrl && e.key.toLowerCase() === 'n') { e.preventDefault(); captureInput.focus(); return; }
-    if (ctrl && e.key.toLowerCase() === 'l') { e.preventDefault(); lockApp(); return; }
+    if (!IS_WEB && ctrl && e.key.toLowerCase() === 'l') { e.preventDefault(); lockApp(); return; }
     if (ctrl && e.key.toLowerCase() === 'z' && !typing) { e.preventDefault(); undoLast(); return; }
 
     if (e.key === 'Escape') {
@@ -1202,7 +1221,9 @@
       else if (s.hasAccount) renderLogin(s.lastUsername);
       else renderRegister();
     } catch (err) {
-      renderLogin('', err.message);
+      if (err.code === 'unavailable') {
+        showAuth(`<h1 id="auth-title">Não deu para abrir seus dados</h1><p class="lede">${esc(err.message)}</p>`);
+      } else renderLogin('', err.message);
     }
   })();
 })();
