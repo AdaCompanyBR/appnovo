@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Demandas</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Tela de acesso -->
+  <main id="auth" class="auth" hidden>
+    <div class="titlebar-drag" aria-hidden="true"></div>
+    <section class="auth-ticket" aria-labelledby="auth-title">
+      <header class="auth-head">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span class="brand-name">Demandas</span>
+      </header>
+      <div id="auth-body"></div>
+    </section>
+    <p class="auth-foot">Tudo fica neste computador, cifrado com a sua senha.</p>
+  </main>
+
+  <!-- Área de trabalho -->
+  <div id="workspace" class="workspace" hidden>
+    <aside class="sidebar" aria-label="Navegação">
+      <div class="sidebar-top titlebar-drag">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span class="brand-name">Demandas</span>
+      </div>
+      <nav class="views" id="views" aria-label="Visões"></nav>
+      <div class="side-section" id="projects"></div>
+      <div class="sidebar-foot">
+        <button type="button" class="account" id="account-btn" aria-haspopup="menu" aria-expanded="false"></button>
+        <div class="menu" id="account-menu" role="menu" hidden></div>
+      </div>
+    </aside>
+
+    <div class="main">
+      <header class="topbar titlebar-drag">
+        <form class="capture" id="capture" autocomplete="off">
+          <label class="visually-hidden" for="capture-input">Nova demanda</label>
+          <span class="capture-slot" aria-hidden="true"></span>
+          <input id="capture-input" class="capture-input" type="text" maxlength="500" spellcheck="true"
+                 placeholder="Nova demanda… ex.: Revisar PR do checkout !urgente @carla #pagamentos amanhã">
+          <kbd class="capture-hint" id="capture-hint">Enter</kbd>
+        </form>
+        <div class="search" id="search-wrap">
+          <label class="visually-hidden" for="search-input">Buscar</label>
+          <span class="search-icon" id="search-icon"></span>
+          <input id="search-input" class="search-input" type="search" placeholder="Buscar" spellcheck="false">
+          <kbd>Ctrl F</kbd>
+        </div>
+      </header>
+      <div class="capture-preview" id="capture-preview" aria-live="polite"></div>
+
+      <div class="content">
+        <section class="board" id="board" tabindex="-1" aria-live="off"></section>
+        <aside class="detail" id="detail" aria-label="Detalhes da demanda" hidden></aside>
+      </div>
+    </div>
+  </div>
+
+  <div class="toasts" id="toasts" role="status" aria-live="polite"></div>
+  <dialog class="sheet" id="sheet"></dialog>
+
+  <script src="icons.js"></script>
+  <script src="parse.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

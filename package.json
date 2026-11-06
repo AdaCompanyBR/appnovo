@@ -1,0 +1,45 @@
+{
+  "name": "demandas",
+  "productName": "Demandas",
+  "version": "1.0.0",
+  "description": "Registro rápido e local das suas demandas do dia a dia.",
+  "main": "src/main/main.js",
+  "author": "Guilherme Evaristo",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test \"test/*.test.js\"",
+    "dist": "electron-builder --win",
+    "dist:dir": "electron-builder --win --dir"
+  },
+  "build": {
+    "appId": "br.com.adacompany.demandas",
+    "productName": "Demandas",
+    "files": [
+      "src/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "icon": "build/icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "shortcutName": "Demandas"
+    }
+  },
+  "devDependencies": {
+    "electron": "^38.8.6",
+    "electron-builder": "^26.18.0"
+  },
+  "dependencies": {
+    "@fontsource-variable/archivo": "^5.3.0",
+    "@fontsource/jetbrains-mono": "^5.3.0",
+    "lucide-static": "^1.70.0"
+  }
+}

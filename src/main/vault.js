@@ -1,0 +1,429 @@
+'use strict';
+
+/*
+ * Cofre local de contas e demandas.
+ *
+ * - Cada conta tem uma chave de dados aleatória (DEK, AES-256-GCM) que cifra
+ *   o arquivo de demandas.
+ * - A DEK é guardada "embrulhada" duas vezes: pela chave derivada da senha
+ *   (scrypt) e pela chave derivada do código de recuperação.
+ * - A senha nunca é gravada. Gravamos apenas sal + verificador scrypt.
+ * - Trocar a senha só reembrulha a DEK; os dados não precisam ser recifrados.
+ */
+
+const crypto = require('node:crypto');
+const fs = require('node:fs');
+const path = require('node:path');
+
+const SCRYPT = { N: 2 ** 15, r: 8, p: 1, maxmem: 96 * 1024 * 1024 };
+const MAX_ATTEMPTS = 5;
+const BASE_LOCK_MS = 30 * 1000;
+const MAX_LOCK_MS = 15 * 60 * 1000;
+const USERNAME_RE = /^[\p{L}\p{N}._-]{3,32}$/u;
+const MIN_PASSWORD = 8;
+const RECOVERY_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+
+class VaultError extends Error {
+  constructor(code, message, extra = {}) {
+    super(message);
+    this.code = code;
+    Object.assign(this, extra);
+  }
+}
+
+function scrypt(secret, salt) {
+  return new Promise((resolve, reject) => {
+    crypto.scrypt(secret.normalize('NFC'), salt, 64, SCRYPT, (err, key) => (err ? reject(err) : resolve(key)));
+  });
+}
+
+function seal(key, plaintext) {
+  const iv = crypto.randomBytes(12);
+  const cipher = crypto.createCipheriv('aes-256-gcm', key, iv);
+  const ct = Buffer.concat([cipher.update(plaintext), cipher.final()]);
+  return { iv: iv.toString('base64'), tag: cipher.getAuthTag().toString('base64'), ct: ct.toString('base64') };
+}
+
+function open(key, box) {
+  const decipher = crypto.createDecipheriv('aes-256-gcm', key, Buffer.from(box.iv, 'base64'));
+  decipher.setAuthTag(Buffer.from(box.tag, 'base64'));
+  return Buffer.concat([decipher.update(Buffer.from(box.ct, 'base64')), decipher.final()]);
+}
+
+function normalizeUsername(u) {
+  return String(u || '').trim();
+}
+
+function sameUser(a, b) {
+  return a.toLocaleLowerCase('pt-BR') === b.toLocaleLowerCase('pt-BR');
+}
+
+function generateRecoveryCode() {
+  const bytes = crypto.randomBytes(20);
+  let out = '';
+  for (let i = 0; i < 20; i++) {
+    out += RECOVERY_ALPHABET[bytes[i] % RECOVERY_ALPHABET.length];
+    if (i % 4 === 3 && i < 19) out += '-';
+  }
+  return out;
+}
+
+function normalizeRecoveryCode(code) {
+  return String(code || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+}
+
+function validatePassword(password) {
+  if (typeof password !== 'string' || [...password].length < MIN_PASSWORD) {
+    throw new VaultError('weak_password', `A senha precisa ter pelo menos ${MIN_PASSWORD} caracteres.`);
+  }
+  if (/^\s|\s$/.test(password)) {
+    throw new VaultError('weak_password', 'A senha não pode começar nem terminar com espaço.');
+  }
+}
+
+function writeAtomic(file, data) {
+  const tmp = `${file}.${process.pid}.${crypto.randomBytes(4).toString('hex')}.tmp`;
+  const fd = fs.openSync(tmp, 'w', 0o600);
+  try {
+    fs.writeSync(fd, data);
+    fs.fsyncSync(fd);
+  } finally {
+    fs.closeSync(fd);
+  }
+  fs.renameSync(tmp, file);
+}
+
+function emptyData() {
+  return { version: 1, seq: 0, demands: [], settings: {} };
+}
+
+class Vault {
+  constructor(dir) {
+    this.dir = dir;
+    fs.mkdirSync(dir, { recursive: true });
+    this.accountsFile = path.join(dir, 'accounts.json');
+    this.session = null; // { accountId, dek, data }
+  }
+
+  /* ---------- contas ---------- */
+
+  _readAccounts() {
+    if (!fs.existsSync(this.accountsFile)) return { version: 1, accounts: [] };
+    return JSON.parse(fs.readFileSync(this.accountsFile, 'utf8'));
+  }
+
+  _writeAccounts(doc) {
+    writeAtomic(this.accountsFile, JSON.stringify(doc, null, 2));
+  }
+
+  _dataFile(accountId) {
+    return path.join(this.dir, `dados-${accountId}.enc`);
+  }
+
+  _find(doc, username) {
+    const name = normalizeUsername(username);
+    return doc.accounts.find((a) => sameUser(a.username, name));
+  }
+
+  state() {
+    const doc = this._readAccounts();
+    return {
+      hasAccount: doc.accounts.length > 0,
+      lastUsername: doc.lastUsername || (doc.accounts[0] && doc.accounts[0].username) || '',
+      signedIn: Boolean(this.session),
+      username: this.session ? this.session.username : null,
+    };
+  }
+
+  async register(username, password) {
+    const name = normalizeUsername(username);
+    if (!USERNAME_RE.test(name)) {
+      throw new VaultError('bad_username', 'Use de 3 a 32 caracteres: letras, números, ponto, hífen ou sublinhado.');
+    }
+    validatePassword(password);
+    const doc = this._readAccounts();
+    if (this._find(doc, name)) throw new VaultError('username_taken', 'Já existe uma conta com esse usuário.');
+
+    const id = crypto.randomUUID();
+    const dek = crypto.randomBytes(32);
+    const recoveryCode = generateRecoveryCode();
+
+    const account = {
+      id,
+      username: name,
+      createdAt: new Date().toISOString(),
+      failedAttempts: 0,
+      lockedUntil: 0,
+      ...(await this._passwordFields(password, dek)),
+      recovery: await this._recoveryFields(recoveryCode, dek),
+    };
+
+    // Grava os dados vazios antes da conta, para nunca existir conta sem arquivo.
+    writeAtomic(this._dataFile(id), JSON.stringify(seal(dek, Buffer.from(JSON.stringify(emptyData())))));
+    doc.accounts.push(account);
+    doc.lastUsername = name;
+    this._writeAccounts(doc);
+
+    this.session = { accountId: id, username: name, dek, data: emptyData() };
+    return { username: name, recoveryCode };
+  }
+
+  async _passwordFields(password, dek) {
+    const salt = crypto.randomBytes(16);
+    const derived = await scrypt(password, salt);
+    return {
+      kdf: { alg: 'scrypt', N: SCRYPT.N, r: SCRYPT.r, p: SCRYPT.p, salt: salt.toString('base64') },
+      verifier: crypto.createHash('sha256').update(derived.subarray(32)).digest('base64'),
+      wrappedKey: seal(derived.subarray(0, 32), dek),
+    };
+  }
+
+  async _recoveryFields(code, dek) {
+    const salt = crypto.randomBytes(16);
+    const derived = await scrypt(normalizeRecoveryCode(code), salt);
+    return {
+      salt: salt.toString('base64'),
+      verifier: crypto.createHash('sha256').update(derived.subarray(32)).digest('base64'),
+      wrappedKey: seal(derived.subarray(0, 32), dek),
+    };
+  }
+
+  _checkLock(account) {
+    const now = Date.now();
+    if (account.lockedUntil && account.lockedUntil > now) {
+      const seconds = Math.ceil((account.lockedUntil - now) / 1000);
+      throw new VaultError('locked', `Muitas tentativas. Tente de novo em ${seconds} s.`, { retryInSeconds: seconds });
+    }
+  }
+
+  _registerFailure(doc, account) {
+    account.failedAttempts = (account.failedAttempts || 0) + 1;
+    if (account.failedAttempts >= MAX_ATTEMPTS) {
+      const over = account.failedAttempts - MAX_ATTEMPTS;
+      account.lockedUntil = Date.now() + Math.min(BASE_LOCK_MS * 2 ** over, MAX_LOCK_MS);
+    }
+    this._writeAccounts(doc);
+  }
+
+  async _unlockWith(secret, salt, verifier, wrappedKey) {
+    const derived = await scrypt(secret, Buffer.from(salt, 'base64'));
+    const check = crypto.createHash('sha256').update(derived.subarray(32)).digest();
+    const expected = Buffer.from(verifier, 'base64');
+    if (check.length !== expected.length || !crypto.timingSafeEqual(check, expected)) return null;
+    return open(derived.subarray(0, 32), wrappedKey);
+  }
+
+  async login(username, password) {
+    const doc = this._readAccounts();
+    const account = this._find(doc, username);
+    if (!account) {
+      // Gasta o mesmo tempo de uma tentativa real, para não revelar quais usuários existem.
+      await scrypt(String(password || ''), crypto.randomBytes(16));
+      throw new VaultError('bad_credentials', 'Usuário ou senha incorretos.');
+    }
+    this._checkLock(account);
+    const dek = await this._unlockWith(String(password || ''), account.kdf.salt, account.verifier, account.wrappedKey);
+    if (!dek) {
+      this._registerFailure(doc, account);
+      const left = MAX_ATTEMPTS - account.failedAttempts;
+      throw new VaultError(
+        'bad_credentials',
+        left > 0 ? 'Usuário ou senha incorretos.' : 'Usuário ou senha incorretos. Acesso pausado por alguns segundos.',
+        { attemptsLeft: Math.max(left, 0) }
+      );
+    }
+    account.failedAttempts = 0;
+    account.lockedUntil = 0;
+    doc.lastUsername = account.username;
+    this._writeAccounts(doc);
+    this.session = { accountId: account.id, username: account.username, dek, data: this._loadData(account.id, dek) };
+    return { username: account.username };
+  }
+
+  async recover(username, recoveryCode, newPassword) {
+    validatePassword(newPassword);
+    const doc = this._readAccounts();
+    const account = this._find(doc, username);
+    if (!account) {
+      await scrypt('x', crypto.randomBytes(16));
+      throw new VaultError('bad_recovery', 'Usuário ou código de recuperação incorretos.');
+    }
+    this._checkLock(account);
+    const r = account.recovery;
+    const dek = await this._unlockWith(normalizeRecoveryCode(recoveryCode), r.salt, r.verifier, r.wrappedKey);
+    if (!dek) {
+      this._registerFailure(doc, account);
+      throw new VaultError('bad_recovery', 'Usuário ou código de recuperação incorretos.');
+    }
+    const newCode = generateRecoveryCode();
+    Object.assign(account, await this._passwordFields(newPassword, dek));
+    account.recovery = await this._recoveryFields(newCode, dek);
+    account.failedAttempts = 0;
+    account.lockedUntil = 0;
+    doc.lastUsername = account.username;
+    this._writeAccounts(doc);
+    this.session = { accountId: account.id, username: account.username, dek, data: this._loadData(account.id, dek) };
+    return { username: account.username, recoveryCode: newCode };
+  }
+
+  async changePassword(currentPassword, newPassword) {
+    this._requireSession();
+    validatePassword(newPassword);
+    const doc = this._readAccounts();
+    const account = doc.accounts.find((a) => a.id === this.session.accountId);
+    this._checkLock(account);
+    const dek = await this._unlockWith(String(currentPassword || ''), account.kdf.salt, account.verifier, account.wrappedKey);
+    if (!dek) {
+      this._registerFailure(doc, account);
+      throw new VaultError('bad_credentials', 'A senha atual está incorreta.');
+    }
+    if (currentPassword === newPassword) {
+      throw new VaultError('same_password', 'A nova senha precisa ser diferente da atual.');
+    }
+    Object.assign(account, await this._passwordFields(newPassword, dek));
+    account.failedAttempts = 0;
+    account.lockedUntil = 0;
+    this._writeAccounts(doc);
+    return { ok: true };
+  }
+
+  async regenerateRecoveryCode(currentPassword) {
+    this._requireSession();
+    const doc = this._readAccounts();
+    const account = doc.accounts.find((a) => a.id === this.session.accountId);
+    this._checkLock(account);
+    const dek = await this._unlockWith(String(currentPassword || ''), account.kdf.salt, account.verifier, account.wrappedKey);
+    if (!dek) {
+      this._registerFailure(doc, account);
+      throw new VaultError('bad_credentials', 'A senha atual está incorreta.');
+    }
+    const code = generateRecoveryCode();
+    account.recovery = await this._recoveryFields(code, dek);
+    this._writeAccounts(doc);
+    return { recoveryCode: code };
+  }
+
+  logout() {
+    if (this.session) this.session.dek.fill(0);
+    this.session = null;
+  }
+
+  /* ---------- dados ---------- */
+
+  _requireSession() {
+    if (!this.session) throw new VaultError('signed_out', 'Sessão encerrada. Entre novamente.');
+  }
+
+  _loadData(accountId, dek) {
+    const file = this._dataFile(accountId);
+    if (!fs.existsSync(file)) return emptyData();
+    const box = JSON.parse(fs.readFileSync(file, 'utf8'));
+    return { ...emptyData(), ...JSON.parse(open(dek, box).toString('utf8')) };
+  }
+
+  _save() {
+    const { accountId, dek, data } = this.session;
+    const file = this._dataFile(accountId);
+    // Mantém uma cópia do último estado bom antes de sobrescrever.
+    if (fs.existsSync(file)) fs.copyFileSync(file, `${file}.bak`);
+    writeAtomic(file, JSON.stringify(seal(dek, Buffer.from(JSON.stringify(data)))));
+  }
+
+  listDemands() {
+    this._requireSession();
+    return this.session.data.demands;
+  }
+
+  createDemand(input) {
+    this._requireSession();
+    const data = this.session.data;
+    const now = new Date().toISOString();
+    data.seq += 1;
+    const demand = sanitizeDemand({
+      ...input,
+      id: crypto.randomUUID(),
+      seq: data.seq,
+      createdAt: now,
+      updatedAt: now,
+    });
+    if (!demand.title) throw new VaultError('empty_title', 'Escreva pelo menos o título da demanda.');
+    if (demand.status === 'done') demand.doneAt = now;
+    data.demands.push(demand);
+    this._save();
+    return demand;
+  }
+
+  updateDemand(id, patch) {
+    this._requireSession();
+    const data = this.session.data;
+    const i = data.demands.findIndex((d) => d.id === id);
+    if (i < 0) throw new VaultError('not_found', 'Demanda não encontrada.');
+    const before = data.demands[i];
+    const next = sanitizeDemand({ ...before, ...patch, id: before.id, seq: before.seq, createdAt: before.createdAt });
+    if (!next.title) throw new VaultError('empty_title', 'O título não pode ficar vazio.');
+    next.updatedAt = new Date().toISOString();
+    if (next.status === 'done' && before.status !== 'done') next.doneAt = next.updatedAt;
+    if (next.status !== 'done') next.doneAt = null;
+    data.demands[i] = next;
+    this._save();
+    return next;
+  }
+
+  deleteDemand(id) {
+    this._requireSession();
+    const data = this.session.data;
+    const i = data.demands.findIndex((d) => d.id === id);
+    if (i < 0) throw new VaultError('not_found', 'Demanda não encontrada.');
+    const [removed] = data.demands.splice(i, 1);
+    this._save();
+    return removed;
+  }
+
+  restoreDemand(demand) {
+    this._requireSession();
+    const data = this.session.data;
+    if (data.demands.some((d) => d.id === demand.id)) return demand;
+    const restored = sanitizeDemand(demand);
+    data.demands.push(restored);
+    data.seq = Math.max(data.seq, restored.seq);
+    this._save();
+    return restored;
+  }
+
+  exportData() {
+    this._requireSession();
+    return {
+      app: 'Demandas',
+      exportedAt: new Date().toISOString(),
+      username: this.session.username,
+      demands: this.session.data.demands,
+    };
+  }
+}
+
+const PRIORITIES = ['urgente', 'alta', 'normal', 'baixa'];
+const STATUSES = ['todo', 'doing', 'waiting', 'done'];
+const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+
+function cleanText(v, max) {
+  return typeof v === 'string' ? v.replace(/\u0000/g, '').trim().slice(0, max) : '';
+}
+
+function sanitizeDemand(d) {
+  return {
+    id: String(d.id),
+    seq: Number(d.seq) || 0,
+    title: cleanText(d.title, 500),
+    notes: typeof d.notes === 'string' ? d.notes.slice(0, 20000) : '',
+    priority: PRIORITIES.includes(d.priority) ? d.priority : 'normal',
+    status: STATUSES.includes(d.status) ? d.status : 'todo',
+    due: typeof d.due === 'string' && DATE_RE.test(d.due) ? d.due : null,
+    requester: cleanText(d.requester, 80),
+    project: cleanText(d.project, 80),
+    createdAt: d.createdAt || new Date().toISOString(),
+    updatedAt: d.updatedAt || d.createdAt || new Date().toISOString(),
+    doneAt: d.doneAt || null,
+  };
+}
+
+module.exports = { Vault, VaultError, generateRecoveryCode, normalizeRecoveryCode, MAX_ATTEMPTS };

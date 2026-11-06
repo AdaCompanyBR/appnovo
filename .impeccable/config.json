@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "src/renderer/index.html"
+        ],
+        "createdAt": "2026-11-06T14:16:17.870Z",
+        "reason": "agent triage: .search is a 36px pill whose input fills its full height with text vertically centered; the inset is the input's own 18px line box, verified in desktop.png"
+      }
+    ]
+  }
+}
