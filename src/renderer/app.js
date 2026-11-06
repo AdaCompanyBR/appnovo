@@ -719,6 +719,7 @@
 
   function renderDetail() {
     const d = state.selectedId && byId(state.selectedId);
+    if (ai.state && (!d || ai.state.id !== d.id)) { if (ai.state.ctl) ai.state.ctl.abort(); ai.state = null; }
     if (!d) { detailEl.hidden = true; detailEl.innerHTML = ''; return; }
     detailEl.hidden = false;
     detailEl.className = 'detail paper';
@@ -741,7 +742,12 @@
           <div class="field"><label class="field-label" for="d-req">Quem pediu</label><input class="input" id="d-req" type="text" maxlength="80" value="${esc(d.requester)}" placeholder="Nome"></div>
         </div>
         <div class="field"><label class="field-label" for="d-proj">Projeto ou cliente</label><input class="input" id="d-proj" type="text" maxlength="80" value="${esc(d.project)}" placeholder="ex.: portal, infra, cliente X"></div>
-        <div class="field"><label class="field-label" for="d-notes">Anotações</label><textarea class="d-notes" id="d-notes" placeholder="Contexto, links, passos, o que foi combinado…">${esc(d.notes)}</textarea></div>
+        <div class="field">
+          <div class="notes-head"><label class="field-label" for="d-notes">Anotações</label>${ai.available ? `<button type="button" class="ai-btn" data-dact="ai" title="Revisar ortografia, gramática e clareza com IA">${icon('sparkles', 14)}Melhorar escrita</button>` : ''}</div>
+          <textarea class="d-notes" id="d-notes" placeholder="Contexto, links, passos, o que foi combinado…">${esc(d.notes)}</textarea>
+          <div id="ai-slot">${aiBoxHtml(d)}</div>
+          ${ai.available ? `<label class="ai-auto"><input type="checkbox" id="ai-auto" ${aiAuto() ? 'checked' : ''}><span>Revisar com IA ao sair do campo</span></label>` : ''}
+        </div>
         <div class="d-actions">
           ${d.status === 'done'
             ? `<button type="button" class="btn btn-ghost" data-dact="toggle">${icon('undo-2', 15)}Reabrir</button>`
@@ -777,6 +783,10 @@
     if (act.dataset.dact === 'close') closeDetail();
     if (act.dataset.dact === 'delete') removeDemand(id);
     if (act.dataset.dact === 'toggle') toggleDone(id);
+    if (act.dataset.dact === 'ai') improveNotes('button');
+    if (act.dataset.dact === 'ai-stop' && ai.state && ai.state.ctl) ai.state.ctl.abort();
+    if (act.dataset.dact === 'ai-dismiss') { ai.state = null; paintAi(); }
+    if (act.dataset.dact === 'ai-apply') applySuggestion();
   });
 
   detailEl.addEventListener('input', (e) => {
@@ -785,11 +795,21 @@
     clearTimeout(detailTimer);
     detailTimer = setTimeout(saveDetailText, 450);
   });
+  detailEl.addEventListener('focusin', (e) => {
+    if (e.target.id === 'd-notes') ai.focusValue = e.target.value;
+  });
   detailEl.addEventListener('change', (e) => {
+    if (e.target.id === 'ai-auto') { try { localStorage.setItem(AI_AUTO_KEY, e.target.checked ? '1' : '0'); } catch { /* só nesta visita */ } ai.autoSession = e.target.checked; return; }
     if (e.target.id === 'd-due') setField(state.selectedId, { due: e.target.value || null }).then(flashSaved);
   });
   detailEl.addEventListener('focusout', (e) => {
     if (['d-title', 'd-notes', 'd-req', 'd-proj'].includes(e.target.id)) { clearTimeout(detailTimer); saveDetailText(); }
+    // Revisão automática: só quando o texto mudou enquanto você estava no campo.
+    if (e.target.id === 'd-notes' && ai.available && aiAuto() && e.target.value !== ai.focusValue
+        && e.target.value.trim() !== (ai.lastRevised[state.selectedId] || '')
+        && !(e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest('[data-dact^="ai"]'))) {
+      improveNotes('auto');
+    }
   });
   detailEl.addEventListener('keydown', (e) => {
     if (e.target.id === 'd-title' && e.key === 'Enter') { e.preventDefault(); e.target.blur(); }
@@ -807,6 +827,124 @@
     if (!patch.title) { toast('O título não pode ficar vazio.', { error: true }); return; }
     if (patch.title === d.title && patch.notes === d.notes && patch.requester === d.requester && patch.project === d.project) return;
     await setField(d.id, patch);
+    flashSaved();
+  }
+
+  /* ---------- revisão das anotações com IA (versão web) ---------- */
+
+  const AI_AUTO_KEY = 'lumo-ai-auto';
+  const ai = { sample: null, available: false, state: null, lastRevised: {}, focusValue: '', autoSession: null };
+  function aiAuto() {
+    if (ai.autoSession !== null) return ai.autoSession;
+    try { return localStorage.getItem(AI_AUTO_KEY) !== '0'; } catch { return true; }
+  }
+  if (IS_WEB && window.claude && typeof window.claude.use === 'function') {
+    window.claude.use('sample').then((fn) => {
+      ai.sample = fn;
+      ai.available = Boolean(fn);
+      if (ai.available && !detailEl.hidden && !detailEl.contains(document.activeElement)) renderDetail();
+    }, () => {});
+  }
+
+  function aiBoxHtml(d) {
+    const st = ai.state;
+    if (!st || st.id !== d.id) return '';
+    if (st.status === 'thinking' || st.status === 'streaming') {
+      return `<div class="ai-box" aria-live="polite"><div class="ai-head">${icon('sparkles', 14)}<span>Revisando…</span><button type="button" class="link" data-dact="ai-stop">Parar</button></div>${st.text ? `<div class="ai-text">${esc(st.text)}</div>` : '<div class="ai-wait"><span></span><span></span><span></span></div>'}</div>`;
+    }
+    if (st.status === 'done') {
+      return `<div class="ai-box" aria-live="polite"><div class="ai-head">${icon('sparkles', 14)}<span>Sugestão de escrita</span></div><div class="ai-text">${esc(st.text)}</div>
+        <div class="ai-actions"><button type="button" class="btn btn-primary" data-dact="ai-apply">${icon('check', 14)}Aplicar</button><button type="button" class="btn btn-ghost" data-dact="ai-dismiss">Ignorar</button></div></div>`;
+    }
+    if (st.status === 'same') {
+      return `<div class="ai-box quiet" aria-live="polite"><div class="ai-head">${icon('circle-check', 14)}<span>O texto já está bom. Nada a mudar.</span><button type="button" class="link" data-dact="ai-dismiss">Fechar</button></div></div>`;
+    }
+    return `<div class="ai-box quiet" aria-live="polite"><div class="ai-head">${icon('triangle-alert', 14)}<span>${esc(st.msg)}</span><button type="button" class="link" data-dact="ai-dismiss">Fechar</button></div></div>`;
+  }
+
+  function paintAi() {
+    const d = byId(state.selectedId);
+    const slot = $('#ai-slot');
+    if (!d || !slot) return;
+    slot.innerHTML = aiBoxHtml(d);
+    const btn = detailEl.querySelector('[data-dact="ai"]');
+    if (btn) btn.disabled = Boolean(ai.state && (ai.state.status === 'thinking' || ai.state.status === 'streaming'));
+  }
+
+  const normalize = (t) => t.replace(/\s+/g, ' ').trim();
+
+  async function improveNotes(trigger) {
+    if (!ai.sample) return;
+    const d = byId(state.selectedId);
+    if (!d) return;
+    const field = $('#d-notes');
+    const text = (field ? field.value : d.notes).trim();
+    if (text.length < 12) {
+      if (trigger === 'button') toast('Escreva um pouco mais nas anotações para revisar.');
+      return;
+    }
+    if (ai.state && ai.state.ctl) ai.state.ctl.abort();
+    const ctl = new AbortController();
+    ai.state = { id: d.id, original: text, text: '', status: 'thinking', ctl };
+    ai.lastRevised[d.id] = text;
+    paintAi();
+    const prompt = `Você revisa anotações de trabalho de um profissional de tecnologia.
+Reescreva o texto entre <anotacao> e </anotacao> com ortografia, gramática e pontuação corretas, em frases claras e diretas. Se ajudar a leitura, organize em tópicos curtos começando com "- ".
+Regras: não invente informação nem acrescente ideias; mantenha nomes, números, datas, links, comandos, siglas e termos técnicos exatamente como estão; escreva em português do Brasil e mantenha o tom; não adicione títulos, aspas nem comentários sobre a revisão.
+Responda somente com o texto revisado.
+
+Título da demanda (só para contexto): ${d.title}
+
+<anotacao>
+${text.slice(0, 12000)}
+</anotacao>`;
+    try {
+      const res = await ai.sample(prompt, {
+        modelTier: 'quick',
+        signal: ctl.signal,
+        onText: ({ text: partial }) => {
+          if (!ai.state || ai.state.ctl !== ctl) return;
+          ai.state.text = partial.replace(/<\/?anotacao>/g, '');
+          ai.state.status = 'streaming';
+          paintAi();
+        },
+      });
+      if (!ai.state || ai.state.ctl !== ctl) return;
+      const out = res.text.replace(/<\/?anotacao>/g, '').trim();
+      ai.state = { id: d.id, original: text, text: out, status: normalize(out) === normalize(text) ? 'same' : 'done' };
+    } catch (e) {
+      if (!ai.state || ai.state.ctl !== ctl) return;
+      const code = e && e.code;
+      if (code === 'cancelled') ai.state = null;
+      else if (['not_granted', 'sampling_disabled', 'not_declared', 'capability_disabled', 'capability_removed'].includes(code)) {
+        ai.available = false;
+        ai.state = null;
+        renderDetail();
+        toast('A revisão com IA não foi permitida ou não está disponível nesta conta.', { error: true });
+        return;
+      } else {
+        const msgs = {
+          rate_limited: 'Muitas revisões seguidas. Tente de novo em alguns minutos.',
+          refused: 'Não foi possível revisar este texto.',
+          session_expired: 'Sua sessão do claude.ai expirou. Entre de novo para usar a revisão.',
+          prompt_too_large: 'O texto é grande demais para revisar de uma vez.',
+        };
+        ai.state = { id: d.id, status: 'error', msg: msgs[code] || 'A revisão falhou. Tente de novo pelo botão Melhorar escrita.' };
+      }
+    }
+    paintAi();
+  }
+
+  async function applySuggestion() {
+    const st = ai.state;
+    const d = byId(state.selectedId);
+    if (!st || st.status !== 'done' || !d || st.id !== d.id) return;
+    const field = $('#d-notes');
+    if (field) field.value = st.text;
+    ai.lastRevised[d.id] = st.text.trim();
+    ai.state = null;
+    paintAi();
+    await setField(d.id, { notes: st.text }, 'anotação revisada');
     flashSaved();
   }
 
