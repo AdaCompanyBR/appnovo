@@ -358,7 +358,7 @@ Each status hue has three steps: a saturated dot color, an AA text color, and a 
 
 **The Meaning-Only Rule.** Red, amber, blue and green appear only when a demand is overdue/urgent, due today/high, waiting or done. A status color without a status behind it is a bug.
 
-**The Tinted Neutral Rule.** Every gray leans toward the accent hue (hue around 160). Stock zinc, slate or pure-gray neutrals do not belong in Lumo.
+**The Tinted Neutral Rule.** Every gray leans toward the accent hue (OKLCH hue 165-182, with the accent at 178). Stock zinc, slate or pure-gray neutrals do not belong in Lumo.
 
 ## Typography
 

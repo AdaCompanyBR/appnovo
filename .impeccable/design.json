@@ -1,1102 +1,1272 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-06T14:22:26+00:00",
-  "title": "Design System: Demandas",
+  "generatedAt": "2026-11-06T17:35:53+00:00",
+  "title": "Design System: Lumo",
   "extensions": {
     "colorMeta": {
-      "steel-ground": {
-        "role": "neutral",
-        "displayName": "Brushed Steel Ground",
-        "canonical": "#e4e7ea",
-        "cssVar": "--steel-ground",
-        "theme": "light",
-        "tonalRamp": [
-          "#0a0b0c",
-          "#242527",
-          "#404244",
-          "#5f6164",
-          "#808385",
-          "#a3a5a7",
-          "#c7c9cb",
-          "#edeff0"
-        ]
-      },
-      "steel-side": {
-        "role": "neutral",
-        "displayName": "Sidebar Steel",
-        "canonical": "#d3d8dd",
-        "cssVar": "--steel-side",
-        "theme": "light",
-        "tonalRamp": [
-          "#0a0b0d",
-          "#232528",
-          "#3f4246",
-          "#5e6266",
-          "#7f8387",
-          "#a2a5a9",
-          "#c6c9cd",
-          "#eceff1"
-        ]
-      },
-      "steel-raised": {
-        "role": "neutral",
-        "displayName": "Raised Steel",
-        "canonical": "#dce0e4",
-        "cssVar": "--steel-raised",
-        "theme": "light",
-        "tonalRamp": [
-          "#0a0b0d",
-          "#232527",
-          "#404245",
-          "#5e6265",
-          "#7f8386",
-          "#a2a5a8",
-          "#c7c9cc",
-          "#edeff1"
-        ]
-      },
-      "steel-line": {
-        "role": "neutral",
-        "displayName": "Steel Seam",
-        "canonical": "#bcc3ca",
-        "cssVar": "--steel-line",
-        "theme": "light",
-        "tonalRamp": [
-          "#090b0e",
-          "#222529",
-          "#3e4347",
-          "#5c6268",
-          "#7d8389",
-          "#a0a6ab",
-          "#c5cace",
-          "#ebeff2"
-        ]
-      },
-      "steel-ink": {
-        "role": "neutral",
-        "displayName": "Steel Ink",
-        "canonical": "#24282d",
-        "cssVar": "--steel-ink",
-        "theme": "light",
-        "tonalRamp": [
-          "#0a0b0d",
-          "#232528",
-          "#3f4247",
-          "#5d6267",
-          "#7e8388",
-          "#a1a5aa",
-          "#c6c9ce",
-          "#eceff2"
-        ]
-      },
-      "steel-ink-2": {
-        "role": "neutral",
-        "displayName": "Steel Ink 2",
-        "canonical": "#50575f",
-        "cssVar": "--steel-ink-2",
-        "theme": "light",
-        "tonalRamp": [
-          "#090b0e",
-          "#22252a",
-          "#3d4349",
-          "#5b626a",
-          "#7c838b",
-          "#a0a6ad",
-          "#c4cad0",
-          "#ebeff4"
-        ]
-      },
-      "rail-hi": {
-        "role": "neutral",
-        "displayName": "Rail Highlight",
-        "canonical": "#f6f8fa",
-        "cssVar": "--rail-hi",
-        "theme": "light",
-        "tonalRamp": [
-          "#0b0b0c",
-          "#242526",
-          "#414243",
-          "#606163",
-          "#818284",
-          "#a4a5a7",
-          "#c8c9ca",
-          "#edeeef"
-        ]
-      },
-      "rail-mid": {
-        "role": "neutral",
-        "displayName": "Rail Steel",
-        "canonical": "#aab2ba",
-        "cssVar": "--rail-mid",
-        "theme": "light",
-        "tonalRamp": [
-          "#090b0e",
-          "#222629",
-          "#3d4348",
-          "#5b6269",
-          "#7c838a",
-          "#a0a6ac",
-          "#c5cacf",
-          "#ebeff3"
-        ]
-      },
-      "paper": {
-        "role": "neutral",
-        "displayName": "Thermal Paper",
-        "canonical": "#fbfbf8",
-        "cssVar": "--paper",
-        "theme": "light",
-        "tonalRamp": [
-          "#0b0b0a",
-          "#252524",
-          "#424240",
-          "#61615f",
-          "#828280",
-          "#a5a5a3",
-          "#c9c9c7",
-          "#eeeeed"
-        ]
-      },
-      "paper-sunk": {
-        "role": "neutral",
-        "displayName": "Sunk Paper",
-        "canonical": "#f1f2ee",
-        "cssVar": "--paper-sunk",
-        "theme": "light",
-        "tonalRamp": [
-          "#0b0b0a",
-          "#252523",
-          "#424240",
-          "#61625e",
-          "#82837f",
-          "#a5a5a2",
-          "#c9c9c7",
-          "#eeefed"
-        ]
-      },
-      "paper-edge": {
-        "role": "neutral",
-        "displayName": "Paper Edge",
-        "canonical": "#d6d9d4",
-        "cssVar": "--paper-edge",
-        "theme": "light",
-        "tonalRamp": [
-          "#0b0b0a",
-          "#242623",
-          "#41433f",
-          "#60625e",
-          "#81837f",
-          "#a4a6a2",
-          "#c8cac7",
-          "#edefec"
-        ]
-      },
-      "ink": {
+      "accent": {
         "role": "primary",
-        "displayName": "Receipt Ink",
-        "canonical": "#17191c",
-        "cssVar": "--ink",
+        "displayName": "Pine Teal",
+        "canonical": "#17806f",
+        "cssVar": "--accent",
         "theme": "light",
+        "oklch": "oklch(54.0% 0.093 178)",
         "tonalRamp": [
-          "#0a0b0d",
-          "#242527",
-          "#404245",
-          "#5f6165",
-          "#808286",
-          "#a3a5a8",
-          "#c7c9cc",
-          "#edeef1"
+          "#00100b",
+          "#002e25",
+          "#004e42",
+          "#117162",
+          "#3e9383",
+          "#72b4a5",
+          "#a2d6c9",
+          "#d1f8ef"
         ]
       },
-      "ink-2": {
+      "accent-strong": {
+        "role": "primary",
+        "displayName": "Deep Pine",
+        "canonical": "#106456",
+        "cssVar": "--accent-strong",
+        "theme": "light",
+        "oklch": "oklch(45.3% 0.078 178)",
+        "tonalRamp": [
+          "#00100b",
+          "#012c25",
+          "#144c42",
+          "#2a6f61",
+          "#4e9182",
+          "#7cb2a5",
+          "#a9d4c9",
+          "#d6f7ee"
+        ]
+      },
+      "accent-soft": {
+        "role": "primary",
+        "displayName": "Teal Mist",
+        "canonical": "#e0f1ed",
+        "cssVar": "--accent-soft",
+        "theme": "light",
+        "oklch": "oklch(94.4% 0.019 180)",
+        "tonalRamp": [
+          "#070c0b",
+          "#1f2725",
+          "#3a4542",
+          "#576562",
+          "#788683",
+          "#9ca8a5",
+          "#c2ccc9",
+          "#e9f0ef"
+        ]
+      },
+      "on-accent": {
+        "role": "primary",
+        "displayName": "On Accent",
+        "canonical": "#ffffff",
+        "cssVar": "--on-accent",
+        "theme": "light",
+        "oklch": "oklch(100.0% 0.000 90)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ]
+      },
+      "bg": {
         "role": "neutral",
-        "displayName": "Ink 2",
-        "canonical": "#474d55",
-        "cssVar": "--ink-2",
+        "displayName": "Mist Ground",
+        "canonical": "#eef2f0",
+        "cssVar": "--bg",
         "theme": "light",
+        "oklch": "oklch(95.8% 0.005 165)",
         "tonalRamp": [
-          "#090b0e",
-          "#22252a",
-          "#3e4248",
-          "#5c6269",
-          "#7d838b",
-          "#a0a5ad",
-          "#c5c9d0",
-          "#ebeff4"
+          "#0a0b0b",
+          "#242525",
+          "#404341",
+          "#5f6260",
+          "#808381",
+          "#a3a6a4",
+          "#c7cac8",
+          "#edefee"
         ]
       },
-      "ink-3": {
+      "panel": {
         "role": "neutral",
-        "displayName": "Ink 3",
-        "canonical": "#646b73",
-        "cssVar": "--ink-3",
+        "displayName": "Pale Panel",
+        "canonical": "#f7f9f8",
+        "cssVar": "--panel",
         "theme": "light",
+        "oklch": "oklch(98.0% 0.002 165)",
         "tonalRamp": [
-          "#090b0e",
-          "#22252a",
-          "#3d4348",
-          "#5c6269",
-          "#7c838b",
-          "#a0a6ac",
-          "#c5cacf",
-          "#ebeff3"
+          "#0b0b0b",
+          "#242525",
+          "#414242",
+          "#606261",
+          "#818382",
+          "#a4a5a5",
+          "#c8c9c9",
+          "#eeefee"
         ]
       },
-      "fire": {
-        "role": "primary",
-        "displayName": "Fire Red",
-        "canonical": "#c42119",
-        "cssVar": "--fire",
+      "surface": {
+        "role": "neutral",
+        "displayName": "White Surface",
+        "canonical": "#ffffff",
+        "cssVar": "--surface",
         "theme": "light",
+        "oklch": "oklch(100.0% 0.000 90)",
         "tonalRamp": [
-          "#280000",
-          "#520000",
-          "#810101",
-          "#b21e16",
-          "#da493c",
-          "#f77b6b",
-          "#ffa99a",
-          "#ffd6c9"
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
         ]
       },
-      "fire-soft": {
-        "role": "primary",
-        "displayName": "Fire Soft",
-        "canonical": "#fbe2df",
-        "cssVar": "--fire-soft",
+      "surface-2": {
+        "role": "neutral",
+        "displayName": "Soft Fill",
+        "canonical": "#edf1ef",
+        "cssVar": "--surface-2",
         "theme": "light",
+        "oklch": "oklch(95.5% 0.005 165)",
         "tonalRamp": [
-          "#100908",
-          "#2d2221",
-          "#4d3e3c",
-          "#6f5c5a",
-          "#917d7a",
-          "#b2a09e",
-          "#d5c5c3",
-          "#f8ebea"
+          "#0a0b0b",
+          "#242525",
+          "#404341",
+          "#5f6260",
+          "#808381",
+          "#a3a6a4",
+          "#c7cac8",
+          "#edefee"
         ]
       },
-      "fire-ink": {
-        "role": "primary",
-        "displayName": "Fire Ink",
-        "canonical": "#9b140d",
-        "cssVar": "--fire-ink",
+      "line": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "#e1e7e4",
+        "cssVar": "--line",
         "theme": "light",
+        "oklch": "oklch(92.3% 0.008 165)",
+        "tonalRamp": [
+          "#0a0c0b",
+          "#232624",
+          "#3f4341",
+          "#5e6260",
+          "#7f8481",
+          "#a2a6a4",
+          "#c6cac8",
+          "#ecefee"
+        ]
+      },
+      "line-strong": {
+        "role": "neutral",
+        "displayName": "Strong Hairline",
+        "canonical": "#cfd8d4",
+        "cssVar": "--line-strong",
+        "theme": "light",
+        "oklch": "oklch(87.4% 0.011 168)",
+        "tonalRamp": [
+          "#090c0b",
+          "#222624",
+          "#3e4341",
+          "#5c6360",
+          "#7d8481",
+          "#a0a7a4",
+          "#c5cbc8",
+          "#ebf0ee"
+        ]
+      },
+      "text": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#13201c",
+        "cssVar": "--text",
+        "theme": "light",
+        "oklch": "oklch(23.0% 0.020 173)",
+        "tonalRamp": [
+          "#070c0b",
+          "#1f2724",
+          "#3a4541",
+          "#576560",
+          "#788681",
+          "#9ca8a4",
+          "#c2ccc8",
+          "#e9f0ee"
+        ]
+      },
+      "text-2": {
+        "role": "neutral",
+        "displayName": "Slate Ink",
+        "canonical": "#475651",
+        "cssVar": "--text-2",
+        "theme": "light",
+        "oklch": "oklch(43.9% 0.020 173)",
+        "tonalRamp": [
+          "#070c0b",
+          "#1f2724",
+          "#3a4541",
+          "#576560",
+          "#778681",
+          "#9ca8a4",
+          "#c1ccc8",
+          "#e9f1ee"
+        ]
+      },
+      "text-3": {
+        "role": "neutral",
+        "displayName": "Quiet Ink",
+        "canonical": "#66756f",
+        "cssVar": "--text-3",
+        "theme": "light",
+        "oklch": "oklch(54.8% 0.020 170)",
+        "tonalRamp": [
+          "#080c0a",
+          "#1f2724",
+          "#3a4541",
+          "#57655f",
+          "#788680",
+          "#9ca8a3",
+          "#c2ccc8",
+          "#e9f1ed"
+        ]
+      },
+      "danger": {
+        "role": "status",
+        "displayName": "Overdue Red",
+        "canonical": "#d4483f",
+        "cssVar": "--danger",
+        "theme": "light",
+        "oklch": "oklch(59.6% 0.178 27)",
         "tonalRamp": [
           "#240000",
-          "#4d0100",
-          "#791911",
-          "#a83126",
-          "#cf5648",
-          "#ec8374",
-          "#ffaea1",
-          "#ffdacf"
+          "#4d0002",
+          "#7a1513",
+          "#ab2c27",
+          "#d25248",
+          "#ee8175",
+          "#ffaea2",
+          "#ffdbd1"
         ]
       },
-      "heat": {
-        "role": "secondary",
-        "displayName": "Heat-Lamp Amber",
-        "canonical": "#8a4f00",
-        "cssVar": "--heat",
+      "danger-text": {
+        "role": "status",
+        "displayName": "Overdue Red Text",
+        "canonical": "#b0322a",
+        "cssVar": "--danger-text",
         "theme": "light",
+        "oklch": "oklch(50.8% 0.164 28)",
+        "tonalRamp": [
+          "#220000",
+          "#4b0505",
+          "#771c17",
+          "#a6342c",
+          "#cd584c",
+          "#e98578",
+          "#ffb0a5",
+          "#ffdcd3"
+        ]
+      },
+      "danger-soft": {
+        "role": "status",
+        "displayName": "Overdue Red Soft",
+        "canonical": "#fbebe9",
+        "cssVar": "--danger-soft",
+        "theme": "light",
+        "oklch": "oklch(95.2% 0.018 26)",
+        "tonalRamp": [
+          "#0e0a09",
+          "#2a2322",
+          "#493f3e",
+          "#6a5e5c",
+          "#8c7f7d",
+          "#ada2a1",
+          "#d0c7c5",
+          "#f4ecec"
+        ]
+      },
+      "warn": {
+        "role": "status",
+        "displayName": "Due-Today Amber",
+        "canonical": "#df9a33",
+        "cssVar": "--warn",
+        "theme": "light",
+        "oklch": "oklch(73.7% 0.140 72)",
         "tonalRamp": [
           "#1a0500",
-          "#3c1b00",
-          "#613600",
-          "#895215",
-          "#ad743b",
-          "#cc996b",
-          "#ebc09a",
-          "#ffe7ca"
+          "#3d1b00",
+          "#633500",
+          "#8c5200",
+          "#b17404",
+          "#ce9a55",
+          "#ecc18b",
+          "#ffe9c0"
         ]
       },
-      "heat-soft": {
-        "role": "secondary",
-        "displayName": "Heat Soft",
-        "canonical": "#ffe7bf",
-        "cssVar": "--heat-soft",
+      "warn-text": {
+        "role": "status",
+        "displayName": "Due-Today Amber Text",
+        "canonical": "#8f560c",
+        "cssVar": "--warn-text",
         "theme": "light",
+        "oklch": "oklch(50.7% 0.109 65)",
         "tonalRamp": [
-          "#110a01",
-          "#2e230f",
-          "#4f3f25",
-          "#715e3d",
-          "#937f5d",
-          "#b4a385",
-          "#d6c7af",
-          "#f9edda"
+          "#180600",
+          "#3a1d00",
+          "#603702",
+          "#885415",
+          "#ac753c",
+          "#ca9a6c",
+          "#e8c19c",
+          "#ffe8cc"
         ]
       },
-      "wait": {
-        "role": "tertiary",
-        "displayName": "Pass Blue",
-        "canonical": "#2c5a92",
-        "cssVar": "--wait",
+      "warn-soft": {
+        "role": "status",
+        "displayName": "Due-Today Amber Soft",
+        "canonical": "#fbf1e0",
+        "cssVar": "--warn-soft",
         "theme": "light",
+        "oklch": "oklch(96.1% 0.025 81)",
         "tonalRamp": [
-          "#000b20",
-          "#0b2544",
-          "#21436c",
-          "#386397",
-          "#5985bb",
-          "#82a8d8",
-          "#acccf5",
-          "#d8f1ff"
+          "#0e0b06",
+          "#29241d",
+          "#474137",
+          "#686053",
+          "#898173",
+          "#aba498",
+          "#cec8be",
+          "#f2eee6"
         ]
       },
-      "wait-soft": {
-        "role": "tertiary",
-        "displayName": "Pass Blue Soft",
-        "canonical": "#e0eaf6",
-        "cssVar": "--wait-soft",
+      "info": {
+        "role": "status",
+        "displayName": "Waiting Blue",
+        "canonical": "#4b6ac4",
+        "cssVar": "--info",
         "theme": "light",
+        "oklch": "oklch(54.7% 0.144 267)",
         "tonalRamp": [
-          "#080b0f",
-          "#21262b",
-          "#3c434a",
-          "#5a626c",
-          "#7b838d",
-          "#9ea6af",
-          "#c4cad1",
-          "#eaeff5"
+          "#020726",
+          "#12204f",
+          "#283d7c",
+          "#3f5bac",
+          "#5f7ed2",
+          "#86a3eb",
+          "#b0c8ff",
+          "#dbeeff"
         ]
       },
-      "done": {
-        "role": "tertiary",
-        "displayName": "Cleared Green",
-        "canonical": "#2b7246",
-        "cssVar": "--done",
+      "info-text": {
+        "role": "status",
+        "displayName": "Waiting Blue Text",
+        "canonical": "#3a54a2",
+        "cssVar": "--info-text",
         "theme": "light",
+        "oklch": "oklch(46.8% 0.130 267)",
+        "tonalRamp": [
+          "#030823",
+          "#14214b",
+          "#2b3e76",
+          "#435ca5",
+          "#637fca",
+          "#89a3e4",
+          "#b2c8fe",
+          "#ddeeff"
+        ]
+      },
+      "info-soft": {
+        "role": "status",
+        "displayName": "Waiting Blue Soft",
+        "canonical": "#ecf0fb",
+        "cssVar": "--info-soft",
+        "theme": "light",
+        "oklch": "oklch(95.5% 0.015 270)",
+        "tonalRamp": [
+          "#0a0b0e",
+          "#23252a",
+          "#3f4248",
+          "#5e616a",
+          "#7f828b",
+          "#a2a5ad",
+          "#c7c9cf",
+          "#eceef3"
+        ]
+      },
+      "success": {
+        "role": "status",
+        "displayName": "Done Green",
+        "canonical": "#2f9862",
+        "cssVar": "--success",
+        "theme": "light",
+        "oklch": "oklch(60.6% 0.126 157)",
         "tonalRamp": [
           "#001103",
-          "#032e16",
-          "#194e2e",
-          "#307048",
-          "#539368",
-          "#7fb48e",
-          "#aad6b6",
-          "#d6f9df"
+          "#002f14",
+          "#00502c",
+          "#077445",
+          "#3b9765",
+          "#70b78c",
+          "#a0d9b5",
+          "#d0fbdf"
         ]
       },
-      "done-soft": {
-        "role": "tertiary",
-        "displayName": "Cleared Green Soft",
-        "canonical": "#ddefe3",
-        "cssVar": "--done-soft",
+      "success-text": {
+        "role": "status",
+        "displayName": "Done Green Text",
+        "canonical": "#1e7247",
+        "cssVar": "--success-text",
         "theme": "light",
+        "oklch": "oklch(49.1% 0.105 156)",
         "tonalRamp": [
-          "#070d09",
-          "#1f2722",
-          "#3a453e",
-          "#57655c",
-          "#78877d",
-          "#9ca9a0",
-          "#c1ccc5",
-          "#e8f1eb"
+          "#001104",
+          "#002e17",
+          "#124e2f",
+          "#28714a",
+          "#4c946a",
+          "#7bb590",
+          "#a8d6b8",
+          "#d6f9e1"
         ]
       },
-      "select-bg": {
-        "role": "neutral",
-        "displayName": "Selection Amber",
-        "canonical": "#ffd27a",
-        "cssVar": "--select-bg",
+      "success-soft": {
+        "role": "status",
+        "displayName": "Done Green Soft",
+        "canonical": "#e4f3ea",
+        "cssVar": "--success-soft",
         "theme": "light",
+        "oklch": "oklch(95.0% 0.020 160)",
         "tonalRamp": [
-          "#160700",
-          "#362000",
-          "#593c00",
-          "#7f5a00",
-          "#a27b27",
-          "#c1a05f",
-          "#e1c591",
-          "#ffecc3"
+          "#080c0a",
+          "#202723",
+          "#3b453f",
+          "#59655e",
+          "#79867e",
+          "#9da8a2",
+          "#c3ccc6",
+          "#eaf0ec"
         ]
       },
-      "steel-ground-dark": {
-        "role": "neutral",
-        "displayName": "Brushed Steel Ground (dark)",
-        "canonical": "#1a1d20",
-        "cssVar": "--steel-ground",
-        "theme": "dark",
-        "tonalRamp": [
-          "#0a0b0d",
-          "#232527",
-          "#404245",
-          "#5e6265",
-          "#7f8386",
-          "#a2a5a8",
-          "#c7c9cc",
-          "#edeff1"
-        ]
-      },
-      "steel-side-dark": {
-        "role": "neutral",
-        "displayName": "Sidebar Steel (dark)",
-        "canonical": "#111315",
-        "cssVar": "--steel-side",
-        "theme": "dark",
-        "tonalRamp": [
-          "#0a0b0c",
-          "#242527",
-          "#404244",
-          "#5f6164",
-          "#808385",
-          "#a3a5a7",
-          "#c7c9cb",
-          "#edeff0"
-        ]
-      },
-      "steel-raised-dark": {
-        "role": "neutral",
-        "displayName": "Raised Steel (dark)",
-        "canonical": "#212529",
-        "cssVar": "--steel-raised",
-        "theme": "dark",
-        "tonalRamp": [
-          "#0a0b0d",
-          "#232528",
-          "#3f4246",
-          "#5d6266",
-          "#7e8387",
-          "#a1a5aa",
-          "#c6c9cd",
-          "#eceff1"
-        ]
-      },
-      "steel-line-dark": {
-        "role": "neutral",
-        "displayName": "Steel Seam (dark)",
-        "canonical": "#30363c",
-        "cssVar": "--steel-line",
-        "theme": "dark",
-        "tonalRamp": [
-          "#090b0e",
-          "#222529",
-          "#3e4347",
-          "#5c6268",
-          "#7d838a",
-          "#a0a6ab",
-          "#c5cacf",
-          "#ebeff3"
-        ]
-      },
-      "steel-ink-dark": {
-        "role": "neutral",
-        "displayName": "Steel Ink (dark)",
-        "canonical": "#e2e5e9",
-        "cssVar": "--steel-ink",
-        "theme": "dark",
-        "tonalRamp": [
-          "#0a0b0c",
-          "#242527",
-          "#404245",
-          "#5f6165",
-          "#808286",
-          "#a3a5a8",
-          "#c7c9cc",
-          "#edeef0"
-        ]
-      },
-      "steel-ink-2-dark": {
-        "role": "neutral",
-        "displayName": "Steel Ink 2 (dark)",
-        "canonical": "#9ea6af",
-        "cssVar": "--steel-ink-2",
-        "theme": "dark",
-        "tonalRamp": [
-          "#090b0e",
-          "#22252a",
-          "#3d4349",
-          "#5b626a",
-          "#7c838b",
-          "#9fa6ad",
-          "#c4cad0",
-          "#ebeff4"
-        ]
-      },
-      "rail-hi-dark": {
-        "role": "neutral",
-        "displayName": "Rail Highlight (dark)",
-        "canonical": "#6e7780",
-        "cssVar": "--rail-hi",
-        "theme": "dark",
-        "tonalRamp": [
-          "#080c0f",
-          "#21262a",
-          "#3c4349",
-          "#5a626a",
-          "#7b838c",
-          "#9fa6ad",
-          "#c4cad0",
-          "#eaeff4"
-        ]
-      },
-      "rail-mid-dark": {
-        "role": "neutral",
-        "displayName": "Rail Steel (dark)",
-        "canonical": "#3c434a",
-        "cssVar": "--rail-mid",
-        "theme": "dark",
-        "tonalRamp": [
-          "#090b0e",
-          "#21262a",
-          "#3d4348",
-          "#5b6269",
-          "#7c838b",
-          "#9fa6ac",
-          "#c4cacf",
-          "#ebeff3"
-        ]
-      },
-      "paper-dark": {
-        "role": "neutral",
-        "displayName": "Thermal Paper (dark)",
-        "canonical": "#2c2b29",
-        "cssVar": "--paper",
-        "theme": "dark",
-        "tonalRamp": [
-          "#0b0b0a",
-          "#262524",
-          "#434240",
-          "#62615f",
-          "#838280",
-          "#a6a5a3",
-          "#cac9c7",
-          "#efeeed"
-        ]
-      },
-      "paper-sunk-dark": {
-        "role": "neutral",
-        "displayName": "Sunk Paper (dark)",
-        "canonical": "#252422",
-        "cssVar": "--paper-sunk",
-        "theme": "dark",
-        "tonalRamp": [
-          "#0b0b0a",
-          "#262524",
-          "#434240",
-          "#62615f",
-          "#838280",
-          "#a6a5a3",
-          "#cac9c7",
-          "#efeeed"
-        ]
-      },
-      "paper-edge-dark": {
-        "role": "neutral",
-        "displayName": "Paper Edge (dark)",
-        "canonical": "#3d3c39",
-        "cssVar": "--paper-edge",
-        "theme": "dark",
-        "tonalRamp": [
-          "#0b0b0a",
-          "#262523",
-          "#43423f",
-          "#62615e",
-          "#83827f",
-          "#a6a5a2",
-          "#cac9c7",
-          "#efeeec"
-        ]
-      },
-      "ink-dark": {
+      "dark-accent": {
         "role": "primary",
-        "displayName": "Receipt Ink (dark)",
-        "canonical": "#eef0f2",
-        "cssVar": "--ink",
+        "displayName": "Pine Teal (dark)",
+        "canonical": "#35b39e",
+        "cssVar": "--accent",
         "theme": "dark",
+        "oklch": "oklch(69.4% 0.112 179)",
         "tonalRamp": [
-          "#0b0b0c",
-          "#242526",
-          "#414243",
-          "#606163",
-          "#818284",
-          "#a4a5a7",
-          "#c8c9ca",
-          "#edeeef"
+          "#00110c",
+          "#002f26",
+          "#005043",
+          "#007463",
+          "#1f9684",
+          "#63b7a6",
+          "#98d8ca",
+          "#cbfaef"
         ]
       },
-      "ink-2-dark": {
+      "dark-accent-strong": {
+        "role": "primary",
+        "displayName": "Deep Pine (dark)",
+        "canonical": "#67d2bf",
+        "cssVar": "--accent-strong",
+        "theme": "dark",
+        "oklch": "oklch(79.5% 0.103 180)",
+        "tonalRamp": [
+          "#00110c",
+          "#002e26",
+          "#004f44",
+          "#007264",
+          "#2f9585",
+          "#69b6a7",
+          "#9cd7cb",
+          "#cdf9f0"
+        ]
+      },
+      "dark-accent-soft": {
+        "role": "primary",
+        "displayName": "Teal Mist (dark)",
+        "canonical": "#10302a",
+        "cssVar": "--accent-soft",
+        "theme": "dark",
+        "oklch": "oklch(28.3% 0.039 179)",
+        "tonalRamp": [
+          "#040e0b",
+          "#182925",
+          "#304742",
+          "#4b6862",
+          "#6b8a83",
+          "#92aca5",
+          "#b9cfc9",
+          "#e3f3ef"
+        ]
+      },
+      "dark-on-accent": {
+        "role": "primary",
+        "displayName": "On Accent (dark)",
+        "canonical": "#052019",
+        "cssVar": "--on-accent",
+        "theme": "dark",
+        "oklch": "oklch(22.0% 0.036 173)",
+        "tonalRamp": [
+          "#050d0a",
+          "#1a2924",
+          "#334741",
+          "#4e685f",
+          "#6f8980",
+          "#94aba3",
+          "#bccec8",
+          "#e4f2ed"
+        ]
+      },
+      "dark-bg": {
         "role": "neutral",
-        "displayName": "Ink 2 (dark)",
-        "canonical": "#b7bec6",
-        "cssVar": "--ink-2",
+        "displayName": "Mist Ground (dark)",
+        "canonical": "#0d1211",
+        "cssVar": "--bg",
         "theme": "dark",
+        "oklch": "oklch(17.6% 0.008 182)",
         "tonalRamp": [
-          "#090b0e",
-          "#222529",
-          "#3e4248",
-          "#5c6268",
-          "#7d838a",
-          "#a0a6ac",
-          "#c5cacf",
-          "#ebeff3"
+          "#0a0c0b",
+          "#232625",
+          "#3f4342",
+          "#5d6361",
+          "#7e8482",
+          "#a1a6a5",
+          "#c6cac9",
+          "#ecefee"
         ]
       },
-      "ink-3-dark": {
+      "dark-panel": {
         "role": "neutral",
-        "displayName": "Ink 3 (dark)",
-        "canonical": "#939ba4",
-        "cssVar": "--ink-3",
+        "displayName": "Pale Panel (dark)",
+        "canonical": "#121817",
+        "cssVar": "--panel",
         "theme": "dark",
+        "oklch": "oklch(20.2% 0.009 184)",
         "tonalRamp": [
-          "#090b0e",
-          "#21252a",
-          "#3d4349",
-          "#5b626a",
-          "#7c838b",
-          "#9fa6ad",
-          "#c4cad0",
-          "#ebeff4"
+          "#090c0b",
+          "#222625",
+          "#3e4342",
+          "#5c6362",
+          "#7d8483",
+          "#a0a6a5",
+          "#c5cac9",
+          "#ebefef"
         ]
       },
-      "fire-dark": {
-        "role": "primary",
-        "displayName": "Fire Red (dark)",
-        "canonical": "#ff6b5e",
-        "cssVar": "--fire",
+      "dark-surface": {
+        "role": "neutral",
+        "displayName": "White Surface (dark)",
+        "canonical": "#18201e",
+        "cssVar": "--surface",
         "theme": "dark",
+        "oklch": "oklch(23.5% 0.012 178)",
         "tonalRamp": [
-          "#260000",
-          "#500000",
-          "#7d0f0f",
-          "#ad2823",
-          "#d55045",
-          "#f17f72",
-          "#ffab9f",
-          "#ffd8cd"
+          "#090c0b",
+          "#212625",
+          "#3d4442",
+          "#5b6361",
+          "#7c8582",
+          "#9fa7a5",
+          "#c4cbc9",
+          "#ebf0ee"
         ]
       },
-      "fire-soft-dark": {
-        "role": "primary",
-        "displayName": "Fire Soft (dark)",
-        "canonical": "#4a201c",
-        "cssVar": "--fire-soft",
+      "dark-surface-2": {
+        "role": "neutral",
+        "displayName": "Soft Fill (dark)",
+        "canonical": "#1f2826",
+        "cssVar": "--surface-2",
         "theme": "dark",
+        "oklch": "oklch(26.7% 0.013 180)",
         "tonalRamp": [
-          "#160605",
-          "#371d1a",
-          "#5a3733",
-          "#80544f",
-          "#a4756f",
-          "#c39994",
-          "#e3c0bb",
-          "#ffe7e3"
+          "#090c0b",
+          "#212625",
+          "#3c4442",
+          "#5a6461",
+          "#7b8582",
+          "#9fa7a5",
+          "#c4cbc9",
+          "#eaf0ee"
         ]
       },
-      "fire-ink-dark": {
-        "role": "primary",
-        "displayName": "Fire Ink (dark)",
-        "canonical": "#ff8a7f",
-        "cssVar": "--fire-ink",
+      "dark-line": {
+        "role": "neutral",
+        "displayName": "Hairline (dark)",
+        "canonical": "#25302d",
+        "cssVar": "--line",
         "theme": "dark",
+        "oklch": "oklch(29.8% 0.016 177)",
         "tonalRamp": [
-          "#210000",
-          "#480b0a",
-          "#72231f",
-          "#9f3c36",
-          "#c55f56",
-          "#e3887f",
-          "#ffb2aa",
-          "#ffddd6"
+          "#080c0b",
+          "#202725",
+          "#3b4442",
+          "#596461",
+          "#7a8582",
+          "#9da8a5",
+          "#c3cbc9",
+          "#eaf0ee"
         ]
       },
-      "heat-dark": {
-        "role": "secondary",
-        "displayName": "Heat-Lamp Amber (dark)",
-        "canonical": "#f2b14e",
-        "cssVar": "--heat",
+      "dark-line-strong": {
+        "role": "neutral",
+        "displayName": "Strong Hairline (dark)",
+        "canonical": "#33413d",
+        "cssVar": "--line-strong",
         "theme": "dark",
+        "oklch": "oklch(36.1% 0.019 176)",
         "tonalRamp": [
-          "#1a0500",
-          "#3c1c00",
-          "#623700",
-          "#8a5400",
-          "#ae7506",
-          "#cc9b54",
-          "#ebc189",
-          "#ffe9bd"
+          "#070c0b",
+          "#1f2725",
+          "#3a4542",
+          "#576561",
+          "#788682",
+          "#9ca8a5",
+          "#c2ccc9",
+          "#e9f0ee"
         ]
       },
-      "heat-soft-dark": {
-        "role": "secondary",
-        "displayName": "Heat Soft (dark)",
-        "canonical": "#3f2f19",
-        "cssVar": "--heat-soft",
+      "dark-text": {
+        "role": "neutral",
+        "displayName": "Ink (dark)",
+        "canonical": "#e6eeeb",
+        "cssVar": "--text",
         "theme": "dark",
+        "oklch": "oklch(94.2% 0.009 172)",
+        "tonalRamp": [
+          "#090c0b",
+          "#222625",
+          "#3e4341",
+          "#5d6361",
+          "#7d8482",
+          "#a1a6a4",
+          "#c6cac9",
+          "#ecefee"
+        ]
+      },
+      "dark-text-2": {
+        "role": "neutral",
+        "displayName": "Slate Ink (dark)",
+        "canonical": "#aab8b3",
+        "cssVar": "--text-2",
+        "theme": "dark",
+        "oklch": "oklch(77.0% 0.017 172)",
+        "tonalRamp": [
+          "#080c0b",
+          "#202724",
+          "#3b4441",
+          "#596460",
+          "#798681",
+          "#9da8a4",
+          "#c3cbc8",
+          "#eaf0ee"
+        ]
+      },
+      "dark-text-3": {
+        "role": "neutral",
+        "displayName": "Quiet Ink (dark)",
+        "canonical": "#86948f",
+        "cssVar": "--text-3",
+        "theme": "dark",
+        "oklch": "oklch(65.4% 0.018 172)",
+        "tonalRamp": [
+          "#080c0b",
+          "#202724",
+          "#3b4441",
+          "#586460",
+          "#798681",
+          "#9da8a4",
+          "#c3cbc8",
+          "#e9f0ee"
+        ]
+      },
+      "dark-danger": {
+        "role": "status",
+        "displayName": "Overdue Red (dark)",
+        "canonical": "#f2655c",
+        "cssVar": "--danger",
+        "theme": "dark",
+        "oklch": "oklch(68.2% 0.176 26)",
+        "tonalRamp": [
+          "#240000",
+          "#4d0004",
+          "#7a1616",
+          "#aa2d2b",
+          "#d2534b",
+          "#ed8177",
+          "#ffaea4",
+          "#ffdbd2"
+        ]
+      },
+      "dark-danger-text": {
+        "role": "status",
+        "displayName": "Overdue Red Text (dark)",
+        "canonical": "#ff8a82",
+        "cssVar": "--danger-text",
+        "theme": "dark",
+        "oklch": "oklch(76.0% 0.143 25)",
+        "tonalRamp": [
+          "#200001",
+          "#470d0d",
+          "#712422",
+          "#9f3c39",
+          "#c55f59",
+          "#e28982",
+          "#fdb3ac",
+          "#ffded9"
+        ]
+      },
+      "dark-danger-soft": {
+        "role": "status",
+        "displayName": "Overdue Red Soft (dark)",
+        "canonical": "#3a1714",
+        "cssVar": "--danger-soft",
+        "theme": "dark",
+        "oklch": "oklch(25.7% 0.056 27)",
+        "tonalRamp": [
+          "#150706",
+          "#341e1c",
+          "#573936",
+          "#7c5651",
+          "#9f7772",
+          "#bf9b97",
+          "#dfc1bd",
+          "#ffe8e5"
+        ]
+      },
+      "dark-warn": {
+        "role": "status",
+        "displayName": "Due-Today Amber (dark)",
+        "canonical": "#eeb04f",
+        "cssVar": "--warn",
+        "theme": "dark",
+        "oklch": "oklch(79.7% 0.133 76)",
+        "tonalRamp": [
+          "#190600",
+          "#3b1d00",
+          "#603800",
+          "#885500",
+          "#ac7611",
+          "#ca9c58",
+          "#e8c28d",
+          "#ffeac2"
+        ]
+      },
+      "dark-warn-text": {
+        "role": "status",
+        "displayName": "Due-Today Amber Text (dark)",
+        "canonical": "#f1b75c",
+        "cssVar": "--warn-text",
+        "theme": "dark",
+        "oklch": "oklch(81.5% 0.127 77)",
+        "tonalRamp": [
+          "#180600",
+          "#3a1e00",
+          "#5e3900",
+          "#865600",
+          "#aa771e",
+          "#c89d5c",
+          "#e6c390",
+          "#ffeac4"
+        ]
+      },
+      "dark-warn-soft": {
+        "role": "status",
+        "displayName": "Due-Today Amber Soft (dark)",
+        "canonical": "#35270f",
+        "cssVar": "--warn-soft",
+        "theme": "dark",
+        "oklch": "oklch(28.3% 0.043 79)",
         "tonalRamp": [
           "#100a03",
-          "#2d2316",
-          "#4d402e",
-          "#6f5e49",
-          "#917f69",
-          "#b2a28f",
-          "#d4c7b7",
-          "#f7ede0"
+          "#2c2416",
+          "#4b402e",
+          "#6d5f48",
+          "#8f8068",
+          "#b0a38e",
+          "#d2c8b7",
+          "#f6ede0"
         ]
       },
-      "wait-dark": {
-        "role": "tertiary",
-        "displayName": "Pass Blue (dark)",
-        "canonical": "#8fb6ec",
-        "cssVar": "--wait",
+      "dark-info": {
+        "role": "status",
+        "displayName": "Waiting Blue (dark)",
+        "canonical": "#85a0f0",
+        "cssVar": "--info",
         "theme": "dark",
+        "oklch": "oklch(71.8% 0.121 269)",
         "tonalRamp": [
-          "#010b1d",
-          "#122540",
-          "#294366",
-          "#42628f",
-          "#6284b3",
-          "#89a7d1",
-          "#b2cbee",
-          "#dcf0ff"
+          "#040822",
+          "#172249",
+          "#2e3e73",
+          "#475da0",
+          "#677ec5",
+          "#8da3e0",
+          "#b5c8fa",
+          "#dfeeff"
         ]
       },
-      "wait-soft-dark": {
-        "role": "tertiary",
-        "displayName": "Pass Blue Soft (dark)",
-        "canonical": "#1e2b3c",
-        "cssVar": "--wait-soft",
+      "dark-info-text": {
+        "role": "status",
+        "displayName": "Waiting Blue Text (dark)",
+        "canonical": "#a2b7f6",
+        "cssVar": "--info-text",
         "theme": "dark",
+        "oklch": "oklch(78.7% 0.093 270)",
         "tonalRamp": [
-          "#070b13",
-          "#1e2630",
-          "#384351",
-          "#556274",
-          "#758497",
-          "#9aa6b7",
-          "#bfcad8",
-          "#e7effb"
+          "#05091d",
+          "#1a2341",
+          "#333f68",
+          "#4e5e92",
+          "#6e80b6",
+          "#93a3d3",
+          "#bac8ef",
+          "#e3eeff"
         ]
       },
-      "done-dark": {
-        "role": "tertiary",
-        "displayName": "Cleared Green (dark)",
-        "canonical": "#72cf95",
-        "cssVar": "--done",
+      "dark-info-soft": {
+        "role": "status",
+        "displayName": "Waiting Blue Soft (dark)",
+        "canonical": "#19223d",
+        "cssVar": "--info-soft",
         "theme": "dark",
+        "oklch": "oklch(25.8% 0.053 269)",
         "tonalRamp": [
-          "#001202",
-          "#002f13",
-          "#00502a",
-          "#157343",
-          "#419664",
-          "#72b78b",
-          "#a1d9b3",
-          "#d0fbdd"
+          "#070b15",
+          "#1e2435",
+          "#394158",
+          "#56607d",
+          "#7682a0",
+          "#9aa5bf",
+          "#c0c9df",
+          "#e8eeff"
         ]
       },
-      "done-soft-dark": {
-        "role": "tertiary",
-        "displayName": "Cleared Green Soft (dark)",
-        "canonical": "#1c3325",
-        "cssVar": "--done-soft",
+      "dark-success": {
+        "role": "status",
+        "displayName": "Done Green (dark)",
+        "canonical": "#4cc187",
+        "cssVar": "--success",
         "theme": "dark",
+        "oklch": "oklch(72.9% 0.136 159)",
         "tonalRamp": [
-          "#050e08",
-          "#1b2920",
-          "#35473b",
-          "#516859",
-          "#71897a",
-          "#96ab9d",
-          "#bdcec3",
-          "#e5f3e9"
+          "#001203",
+          "#003015",
+          "#00522c",
+          "#007645",
+          "#2a9965",
+          "#67b98d",
+          "#9adab5",
+          "#ccfcdf"
         ]
       },
-      "select-bg-dark": {
-        "role": "neutral",
-        "displayName": "Selection Amber (dark)",
-        "canonical": "#7a5a1c",
-        "cssVar": "--select-bg",
+      "dark-success-text": {
+        "role": "status",
+        "displayName": "Done Green Text (dark)",
+        "canonical": "#63d29b",
+        "cssVar": "--success-text",
         "theme": "dark",
+        "oklch": "oklch(78.4% 0.130 160)",
         "tonalRamp": [
-          "#140800",
-          "#332100",
-          "#553d10",
-          "#795c25",
-          "#9c7d47",
-          "#bca174",
-          "#dcc6a1",
-          "#feeccf"
+          "#001203",
+          "#003016",
+          "#00512e",
+          "#007548",
+          "#2f9868",
+          "#69b88f",
+          "#9cdab7",
+          "#cdfbe1"
+        ]
+      },
+      "dark-success-soft": {
+        "role": "status",
+        "displayName": "Done Green Soft (dark)",
+        "canonical": "#12301f",
+        "cssVar": "--success-soft",
+        "theme": "dark",
+        "oklch": "oklch(28.0% 0.048 156)",
+        "tonalRamp": [
+          "#040e08",
+          "#19291f",
+          "#32483a",
+          "#4d6957",
+          "#6d8b78",
+          "#93ac9c",
+          "#bbcfc1",
+          "#e3f3e9"
+        ]
+      },
+      "brand-amber": {
+        "role": "brand",
+        "displayName": "Light Amber",
+        "canonical": "#ffd36e",
+        "theme": "both",
+        "oklch": "oklch(88.5% 0.129 86)",
+        "tonalRamp": [
+          "#160800",
+          "#362100",
+          "#593c00",
+          "#7f5a00",
+          "#a27c13",
+          "#c1a158",
+          "#e0c68e",
+          "#ffedc2"
+        ]
+      },
+      "brand-teal-light": {
+        "role": "brand",
+        "displayName": "Lumo Teal Light",
+        "canonical": "#1f9a86",
+        "theme": "both",
+        "oklch": "oklch(61.8% 0.106 178)",
+        "tonalRamp": [
+          "#00110b",
+          "#002f25",
+          "#005042",
+          "#007362",
+          "#2c9583",
+          "#68b6a5",
+          "#9bd8c9",
+          "#cdfaef"
         ]
       }
     },
     "typographyMeta": {
-      "display": {
-        "displayName": "Display",
-        "purpose": "Board heading on steel (Hoje, Fila)."
-      },
       "headline": {
         "displayName": "Headline",
-        "purpose": "Auth ticket headings; sheets use the same voice at 18px."
+        "purpose": "Board title (Hoje, Fila, Aguardando, Feitas)."
+      },
+      "headline-sm": {
+        "displayName": "Headline Small",
+        "purpose": "Auth card heading; sheets use 19px/700."
       },
       "title": {
         "displayName": "Title",
         "purpose": "Editable demand title in the detail panel."
       },
-      "ticket-title": {
-        "displayName": "Ticket Title",
-        "purpose": "Rail ticket titles, clamped to three lines."
+      "wordmark": {
+        "displayName": "Wordmark",
+        "purpose": "Lowercase \"lumo\" beside the logo mark only."
+      },
+      "item": {
+        "displayName": "Item",
+        "purpose": "Demand titles in rows (550) and cards (600); capture input."
       },
       "body": {
         "displayName": "Body",
-        "purpose": "Default UI text; capture input at 14.5px."
+        "purpose": "Base text, ledes, notes (1.6 in notes and AI text)."
       },
-      "group-label": {
-        "displayName": "Group Label",
-        "purpose": "Board section titles, fire or heat when the section is."
+      "control": {
+        "displayName": "Control",
+        "purpose": "Buttons (600); menu items and project filters at 500."
       },
       "label": {
         "displayName": "Label",
-        "purpose": "Field labels, small buttons, chips."
+        "purpose": "Field labels, tags and chips (550), AI pill."
       },
-      "number": {
-        "displayName": "Number",
-        "purpose": "Ages, counts, dates, ticket heads. Tabular mono."
-      },
-      "number-strong": {
-        "displayName": "Number Strong",
-        "purpose": "Ticket sequence numbers (Nº 0031)."
-      },
-      "keycap": {
-        "displayName": "Keycap",
-        "purpose": "Keyboard shortcuts."
+      "meta": {
+        "displayName": "Meta",
+        "purpose": "Sequence numbers, count badges, card headers, section titles."
       }
     },
     "shadows": [
       {
-        "name": "ticket",
-        "value": "0 1px 0 rgb(20 24 28 / 0.04), 0 2px 6px -2px rgb(20 24 28 / 0.14)",
-        "darkValue": "0 1px 0 rgb(0 0 0 / 0.3), 0 2px 6px -2px rgb(0 0 0 / 0.5)",
-        "purpose": "Resting paper: rows, rail tickets, capture bar, active nav, segmented selection."
+        "name": "sh-1 rest",
+        "value": "0 1px 2px rgb(19 32 28 / 0.05)",
+        "dark": "0 1px 2px rgb(0 0 0 / 0.3)",
+        "purpose": "Cards, row containers, capture field, active view item, theme toggle."
       },
       {
-        "name": "lift",
-        "value": "0 2px 0 rgb(20 24 28 / 0.05), 0 10px 24px -10px rgb(20 24 28 / 0.32)",
-        "darkValue": "0 2px 0 rgb(0 0 0 / 0.35), 0 12px 28px -10px rgb(0 0 0 / 0.7)",
-        "purpose": "Picked-up or floating paper: hover, detail panel, auth ticket, menus, toasts, sheets."
+        "name": "sh-2 lift",
+        "value": "0 1px 2px rgb(19 32 28 / 0.05), 0 8px 22px -12px rgb(19 32 28 / 0.18)",
+        "dark": "0 1px 2px rgb(0 0 0 / 0.3), 0 8px 24px -10px rgb(0 0 0 / 0.6)",
+        "purpose": "In-progress card hover; detail panel."
       },
       {
-        "name": "rail-bar",
-        "value": "0 2px 4px -1px rgb(0 0 0 / 0.25)",
-        "purpose": "The steel rail bar only."
+        "name": "sh-3 float",
+        "value": "0 2px 6px rgb(19 32 28 / 0.06), 0 20px 50px -18px rgb(19 32 28 / 0.28)",
+        "dark": "0 2px 6px rgb(0 0 0 / 0.35), 0 20px 48px -16px rgb(0 0 0 / 0.75)",
+        "purpose": "Account menu, projects popover, toasts, sheets, auth card."
       },
       {
-        "name": "focus-halo",
-        "value": "0 0 0 3px color-mix(in srgb, var(--ink) 12%, transparent)",
-        "purpose": "Focused inputs, capture bar and notes, paired with an ink stroke."
+        "name": "ring",
+        "value": "0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent)",
+        "purpose": "Focus ring on inputs, capture, search, selected card; arrive animation start."
+      },
+      {
+        "name": "focus-outline",
+        "value": "outline: 2px solid var(--accent); outline-offset: 2px",
+        "purpose": "Default :focus-visible."
       }
     ],
     "motion": [
       {
-        "name": "ease-out",
-        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
-        "purpose": "The single easing for all transitions and keyframes."
+        "name": "ease",
+        "value": "cubic-bezier(0.22, 1, 0.36, 1)",
+        "purpose": "The only curve; soft ease-out for every transition and animation."
       },
       {
-        "name": "state-fast",
-        "value": "150ms",
-        "purpose": "Colour, border, focus halo, keycap fade."
+        "name": "press",
+        "value": "120ms",
+        "purpose": "Button press scale to 0.98."
       },
       {
         "name": "state",
         "value": "160ms",
-        "purpose": "Row lift, capture preview strip, menu pop, toast leave."
+        "purpose": "Color, border, shadow and opacity changes; toast leave."
       },
       {
-        "name": "state-slow",
-        "value": "180-200ms",
-        "purpose": "Toast and sheet pop, rail ticket swing, capture slot width, strength bars."
-      },
-      {
-        "name": "share-bar",
-        "value": "240ms",
-        "purpose": "Sidebar view share bar width."
-      },
-      {
-        "name": "print",
-        "value": "280ms",
-        "purpose": "New ticket prints in: clip-path inset(0 0 100% 0) to inset(0), translateY(-6px) to none."
-      },
-      {
-        "name": "tear",
-        "value": "260ms",
-        "purpose": "Signature: done tears the ticket off. 35%: translateY(-3px) rotate(-0.8deg); 100%: translateY(-22px) rotate(-3deg), opacity 0, blur(1px)."
+        "name": "pop-menu",
+        "value": "180ms",
+        "purpose": "Menu pop in: fade, 4px rise, 0.98 scale."
       },
       {
         "name": "pop",
-        "value": "from { opacity: 0; transform: translateY(4px) scale(0.98) }",
-        "purpose": "Menus (160ms), toasts and sheets (180ms) entering."
+        "value": "200ms",
+        "purpose": "Toasts, sheets, AI box; card lift, checkbox fill, search width, strength bars."
+      },
+      {
+        "name": "finish",
+        "value": "260ms",
+        "purpose": "Completed row or card fades and slides 14px right at 0.985 scale."
+      },
+      {
+        "name": "arrive",
+        "value": "320ms",
+        "purpose": "New demand drops in from 6px above at 0.99 scale with the accent ring fading."
       },
       {
         "name": "reduced-motion",
-        "value": "1ms",
-        "purpose": "prefers-reduced-motion collapses all animation and transition durations."
+        "value": "@media (prefers-reduced-motion: reduce) -> 1ms",
+        "purpose": "All animations and transitions collapse to 1ms."
       }
     ],
     "breakpoints": [
       {
         "name": "detail-narrow",
-        "value": "1180px",
-        "purpose": "Detail panel 380px to 340px."
+        "value": "max-width: 1180px",
+        "purpose": "Detail panel 344px, tighter row gaps."
+      },
+      {
+        "name": "rail",
+        "value": "max-width: 980px",
+        "purpose": "Sidebar becomes a 68px icon rail; projects popover; search collapses; detail overlays."
       },
       {
         "name": "compact",
-        "value": "980px",
-        "purpose": "Sidebar collapses to a 64px icon rail; detail panel floats; search collapses."
+        "value": "max-width: 560px",
+        "purpose": "Group hints hidden."
       },
       {
-        "name": "row-container-md",
-        "value": "760px (container)",
-        "purpose": "Project tags hide in rows."
+        "name": "touch",
+        "value": "hover: none",
+        "purpose": "Card actions always visible, in flow."
       },
       {
-        "name": "row-container-sm",
-        "value": "680px (container)",
-        "purpose": "All row tags hide."
+        "name": "board@880",
+        "value": "@container (max-width: 880px)",
+        "purpose": "Rows drop the project tag."
+      },
+      {
+        "name": "board@700",
+        "value": "@container (max-width: 700px)",
+        "purpose": "Rows drop all tags."
       }
-    ]
+    ],
+    "theming": {
+      "attribute": "data-theme on <html>: \"dark\" forces dark, \"light\" forces light, absent follows prefers-color-scheme.",
+      "storageKey": "lumo-theme",
+      "toggle": "38px theme button with Lucide moon (light) / sun (dark); flips the effective theme, persists it, tells the desktop shell, repaints when the host page changes data-theme."
+    },
+    "brand": {
+      "mark": "Rounded teal square (rx = 1/4 side), thick white rounded L, amber light dot top right. Flat in app (src/renderer/assets/mark.svg); gradient #1f9a86 to #106456 with amber glow in build/icon.svg.",
+      "wordmark": "\"lumo\", lowercase, Figtree 720, 18px, -0.035em, Ink.",
+      "files": [
+        "build/icon.svg",
+        "build/lumo-logo.png",
+        "build/lumo-logo-escuro.png",
+        "src/renderer/assets/mark.svg"
+      ],
+      "markSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\"><rect x=\"24\" y=\"24\" width=\"464\" height=\"464\" rx=\"116\" fill=\"#17806f\"/><path d=\"M188 150 V 340 H 330\" fill=\"none\" stroke=\"#fff\" stroke-width=\"56\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><circle cx=\"346\" cy=\"166\" r=\"34\" fill=\"#ffd36e\"/></svg>"
+    },
+    "iconography": "Lucide (ISC), inline SVG, stroke 1.6, round caps and joins, currentColor; 16px default, 12-14px in chips and small buttons, 18px in navigation and the theme toggle."
   },
   "components": [
     {
       "name": "Primary Button",
       "kind": "button",
       "refersTo": "button-primary",
-      "description": "Receipt-ink action (Concluir, Entrar). Hover mixes fire into the ink; press sinks 1px.",
-      "html": "<button class=\"ds-btn-primary\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M18 6 7 17l-5-5\"/><path d=\"m22 10-7.5 7.5L13 16\"/></svg>Concluir</button>",
-      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 36px; padding: 0 14px; border-radius: 6px; border: 1px solid transparent; font: 560 14px/1.45 var(--font-ui, \"Archivo\", \"Segoe UI Variable Text\", \"Segoe UI\", system-ui, sans-serif); cursor: pointer; transition: background-color 150ms var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)), border-color 150ms var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)), transform 120ms var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)); background: var(--ink, #17191c); color: var(--paper, #fbfbf8); } .ds-btn-primary:hover { background: color-mix(in srgb, var(--ink, #17191c) 86%, var(--fire, #c42119)); } .ds-btn-primary:active { transform: translateY(1px); } .ds-btn-primary:focus-visible { outline: 2px solid var(--ink, #17191c); outline-offset: 2px; }"
+      "description": "The one primary action on a surface: create, complete, apply.",
+      "html": "<div class=\"ds-btns\"><button class=\"ds-btn ds-btn-primary\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M18 6 7 17l-5-5\"/><path d=\"m22 10-7.5 7.5L13 16\"/></svg>Concluir</button></div>",
+      "css": ".ds-btns{--accent:#17806f;--accent-strong:#106456;--accent-soft:#e0f1ed;--on-accent:#fff;--bg:#eef2f0;--panel:#f7f9f8;--surface:#fff;--surface-2:#edf1ef;--line:#e1e7e4;--line-strong:#cfd8d4;--text:#13201c;--text-2:#475651;--text-3:#66756f;--hover:rgb(19 32 28 / .045);--danger:#d4483f;--danger-text:#b0322a;--danger-soft:#fbebe9;--warn:#df9a33;--warn-text:#8f560c;--warn-soft:#fbf1e0;--info-text:#3a54a2;--info-soft:#ecf0fb;--sh-1:0 1px 2px rgb(19 32 28 / .05);--sh-2:0 1px 2px rgb(19 32 28 / .05),0 8px 22px -12px rgb(19 32 28 / .18);--sh-3:0 2px 6px rgb(19 32 28 / .06),0 20px 50px -18px rgb(19 32 28 / .28);--ring:0 0 0 3px color-mix(in srgb,#17806f 22%,transparent);--ease:cubic-bezier(.22,1,.36,1);font-family:Figtree,\"Segoe UI Variable Text\",\"Segoe UI\",system-ui,sans-serif;font-variant-numeric:tabular-nums;}.ds-btn{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 14px;border-radius:10px;border:1px solid transparent;font-weight:600;font-size:13.5px;transition:background-color 160ms var(--ease),transform 120ms var(--ease);cursor:pointer}.ds-btn:active{transform:scale(.98)}.ds-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}.ds-btn-primary{background:var(--accent);color:var(--on-accent);box-shadow:0 1px 2px color-mix(in srgb,var(--accent) 35%,transparent)}.ds-btn-primary:hover{background:var(--accent-strong)}"
     },
     {
       "name": "Ghost Button",
       "kind": "button",
       "refersTo": "button-ghost",
-      "description": "Secondary action on paper: paper-edge stroke, sunk-paper hover.",
-      "html": "<button class=\"ds-btn-ghost\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect x=\"14\" y=\"3\" width=\"5\" height=\"18\" rx=\"1\"/><rect x=\"5\" y=\"3\" width=\"5\" height=\"18\" rx=\"1\"/></svg>Pausar</button>",
-      "css": ".ds-btn-ghost { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 36px; padding: 0 14px; border-radius: 6px; border: 1px solid transparent; font: 560 14px/1.45 var(--font-ui, \"Archivo\", \"Segoe UI Variable Text\", \"Segoe UI\", system-ui, sans-serif); cursor: pointer; transition: background-color 150ms var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)), border-color 150ms var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)), transform 120ms var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)); background: transparent; color: var(--ink-2, #474d55); border-color: var(--paper-edge, #d6d9d4); } .ds-btn-ghost:hover { background: var(--paper-sunk, #f1f2ee); color: var(--ink, #17191c); } .ds-btn-ghost:active { transform: translateY(1px); } .ds-btn-ghost:focus-visible { outline: 2px solid var(--ink, #17191c); outline-offset: 2px; }"
+      "description": "Secondary actions: cancel, ignore, pause.",
+      "html": "<div class=\"ds-btns\"><button class=\"ds-btn ds-btn-ghost\">Ignorar</button></div>",
+      "css": ".ds-btns{--accent:#17806f;--accent-strong:#106456;--accent-soft:#e0f1ed;--on-accent:#fff;--bg:#eef2f0;--panel:#f7f9f8;--surface:#fff;--surface-2:#edf1ef;--line:#e1e7e4;--line-strong:#cfd8d4;--text:#13201c;--text-2:#475651;--text-3:#66756f;--hover:rgb(19 32 28 / .045);--danger:#d4483f;--danger-text:#b0322a;--danger-soft:#fbebe9;--warn:#df9a33;--warn-text:#8f560c;--warn-soft:#fbf1e0;--info-text:#3a54a2;--info-soft:#ecf0fb;--sh-1:0 1px 2px rgb(19 32 28 / .05);--sh-2:0 1px 2px rgb(19 32 28 / .05),0 8px 22px -12px rgb(19 32 28 / .18);--sh-3:0 2px 6px rgb(19 32 28 / .06),0 20px 50px -18px rgb(19 32 28 / .28);--ring:0 0 0 3px color-mix(in srgb,#17806f 22%,transparent);--ease:cubic-bezier(.22,1,.36,1);font-family:Figtree,\"Segoe UI Variable Text\",\"Segoe UI\",system-ui,sans-serif;font-variant-numeric:tabular-nums;}.ds-btn{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 14px;border-radius:10px;border:1px solid transparent;font-weight:600;font-size:13.5px;transition:background-color 160ms var(--ease),transform 120ms var(--ease);cursor:pointer}.ds-btn:active{transform:scale(.98)}.ds-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}.ds-btn-ghost{background:var(--surface);color:var(--text-2);border-color:var(--line)}.ds-btn-ghost:hover{background:var(--surface-2);color:var(--text)}"
     },
     {
-      "name": "Capture Bar",
+      "name": "Capture Field with Token Chips",
       "kind": "input",
-      "refersTo": "capture-bar",
-      "description": "The printer slot: one-line capture with a slot mark that turns fire on focus and an Enter keycap.",
-      "html": "<form class=\"ds-capture\" onsubmit=\"return false\"><span class=\"ds-capture-slot\"></span><input class=\"ds-capture-input\" placeholder=\"Nova demanda… ex.: Revisar PR !urgente @carla #pagamentos amanhã\"><kbd class=\"ds-capture-kbd\">Enter</kbd></form>",
-      "css": ".ds-capture { display: flex; align-items: center; height: 40px; width: 520px; max-width: 100%; background: var(--paper, #fbfbf8); border: 1px solid var(--paper-edge, #d6d9d4); border-radius: 6px; box-shadow: var(--shadow-ticket, 0 1px 0 rgb(20 24 28 / 0.04), 0 2px 6px -2px rgb(20 24 28 / 0.14)); transition: border-color 150ms var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)), box-shadow 150ms var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)); font-family: var(--font-ui, \"Archivo\", \"Segoe UI Variable Text\", \"Segoe UI\", system-ui, sans-serif); } .ds-capture:focus-within { border-color: var(--ink, #17191c); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ink, #17191c) 12%, transparent), var(--shadow-ticket, 0 1px 0 rgb(20 24 28 / 0.04), 0 2px 6px -2px rgb(20 24 28 / 0.14)); } .ds-capture-slot { width: 12px; height: 2px; margin: 0 2px 0 14px; background: var(--ink-3, #646b73); border-radius: 1px; flex: none; transition: background-color 150ms, width 200ms var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)); } .ds-capture:focus-within .ds-capture-slot { background: var(--fire, #c42119); width: 16px; } .ds-capture-input { flex: 1; min-width: 0; height: 100%; padding: 0 10px; border: 0; background: transparent; color: var(--ink, #17191c); font: 400 14.5px/1.45 var(--font-ui, \"Archivo\", \"Segoe UI Variable Text\", \"Segoe UI\", system-ui, sans-serif); caret-color: var(--fire, #c42119); } .ds-capture-input:focus { outline: none; } .ds-capture-input::placeholder { color: var(--ink-3, #646b73); } .ds-capture-kbd { margin-right: 8px; font: 500 11px/1 var(--font-num, \"JetBrains Mono\", \"Cascadia Mono\", Consolas, monospace); color: var(--ink-3, #646b73); background: var(--paper-sunk, #f1f2ee); border: 1px solid var(--paper-edge, #d6d9d4); border-bottom-width: 2px; border-radius: 4px; padding: 3px 5px; opacity: 0; transition: opacity 150ms; } .ds-capture:focus-within .ds-capture-kbd { opacity: 1; }"
+      "refersTo": "capture-field",
+      "description": "One-line capture with a plus glyph, Enter hint on focus and live token chips below.",
+      "html": "<div class=\"ds-cap-wrap\"><label class=\"ds-capture\"><span class=\"ds-cap-plus\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14\"/><path d=\"M12 5v14\"/></svg></span><input class=\"ds-cap-input\" value=\"Revisar PR do checkout !urgente @carla amanhã\"><kbd class=\"ds-kbd\">Enter</kbd></label><div class=\"ds-cap-preview\"><span class=\"ds-tag ds-fire\">Urgente</span><span class=\"ds-tag\"><svg width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2\"/><circle cx=\"12\" cy=\"7\" r=\"4\"/></svg>Carla</span><span class=\"ds-tag\"><svg width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M8 2v3\"/><path d=\"M16 2v3\"/><rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"2\"/><path d=\"M3 9h18\"/></svg>Amanhã</span></div></div>",
+      "css": ".ds-cap-wrap{--accent:#17806f;--accent-strong:#106456;--accent-soft:#e0f1ed;--on-accent:#fff;--bg:#eef2f0;--panel:#f7f9f8;--surface:#fff;--surface-2:#edf1ef;--line:#e1e7e4;--line-strong:#cfd8d4;--text:#13201c;--text-2:#475651;--text-3:#66756f;--hover:rgb(19 32 28 / .045);--danger:#d4483f;--danger-text:#b0322a;--danger-soft:#fbebe9;--warn:#df9a33;--warn-text:#8f560c;--warn-soft:#fbf1e0;--info-text:#3a54a2;--info-soft:#ecf0fb;--sh-1:0 1px 2px rgb(19 32 28 / .05);--sh-2:0 1px 2px rgb(19 32 28 / .05),0 8px 22px -12px rgb(19 32 28 / .18);--sh-3:0 2px 6px rgb(19 32 28 / .06),0 20px 50px -18px rgb(19 32 28 / .28);--ring:0 0 0 3px color-mix(in srgb,#17806f 22%,transparent);--ease:cubic-bezier(.22,1,.36,1);font-family:Figtree,\"Segoe UI Variable Text\",\"Segoe UI\",system-ui,sans-serif;font-variant-numeric:tabular-nums;}.ds-cap-wrap{background:var(--bg);padding:12px;color:var(--text)}.ds-capture{display:flex;align-items:center;height:42px;background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--sh-1);transition:border-color 160ms var(--ease),box-shadow 160ms var(--ease)}.ds-capture:focus-within{border-color:var(--accent);box-shadow:var(--ring),var(--sh-1)}.ds-cap-plus{margin-left:13px;color:var(--text-3);display:grid;transition:color 160ms var(--ease)}.ds-capture:focus-within .ds-cap-plus{color:var(--accent)}.ds-cap-input{flex:1;min-width:0;height:100%;border:0;background:transparent;padding:0 10px;font:inherit;font-size:14.5px;color:var(--text);outline:none;caret-color:var(--accent)}.ds-kbd{margin-right:10px;font:500 11px/1 inherit;color:var(--text-3);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:3px 6px;opacity:0;transition:opacity 160ms}.ds-capture:focus-within .ds-kbd{opacity:1}.ds-cap-preview{display:flex;gap:6px;padding:8px 0 0 14px}.ds-tag{display:inline-flex;align-items:center;gap:5px;height:24px;padding:0 9px;border-radius:12px;background:var(--surface-2);color:var(--text-2);font-size:12.5px;font-weight:550}.ds-tag svg{color:var(--text-3)}.ds-fire{background:var(--danger-soft);color:var(--danger-text)}"
     },
     {
-      "name": "Text Field",
-      "kind": "input",
-      "refersTo": "input",
-      "description": "Paper field with label above; ink stroke and 3px ink halo on focus, fire stroke when invalid.",
-      "html": "<label class=\"ds-field\"><span class=\"ds-field-label\">Quem pediu</span><input class=\"ds-input\" placeholder=\"Nome\"></label>",
-      "css": ".ds-field { display: grid; gap: 6px; width: 280px; font-family: var(--font-ui, \"Archivo\", \"Segoe UI Variable Text\", \"Segoe UI\", system-ui, sans-serif); } .ds-field-label { font-size: 12.5px; font-weight: 560; color: var(--ink-2, #474d55); } .ds-input { height: 40px; padding: 0 12px; background: var(--paper, #fbfbf8); border: 1px solid var(--paper-edge, #d6d9d4); border-radius: 6px; color: var(--ink, #17191c); font: 400 14px/1.45 var(--font-ui, \"Archivo\", \"Segoe UI Variable Text\", \"Segoe UI\", system-ui, sans-serif); transition: border-color 150ms var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)), box-shadow 150ms var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)); } .ds-input::placeholder { color: var(--ink-3, #646b73); } .ds-input:hover { border-color: color-mix(in srgb, var(--ink, #17191c) 30%, var(--paper-edge, #d6d9d4)); } .ds-input:focus { outline: none; border-color: var(--ink, #17191c); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ink, #17191c) 12%, transparent); }"
-    },
-    {
-      "name": "Sidebar View",
+      "name": "Sidebar Views",
       "kind": "nav",
-      "refersTo": "nav-view",
-      "description": "Views on steel with mono counts and a share bar; the current view becomes a paper slip.",
-      "html": "<nav class=\"ds-views\"><button class=\"ds-view\" aria-current=\"page\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4\"/></svg><span>Hoje</span><span class=\"ds-count ds-hot\">7</span><span class=\"ds-share ds-share-hot\" style=\"--share:.7\"></span></button><button class=\"ds-view\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><polyline points=\"22 12 16 12 14 15 10 15 8 12 2 12\"/><path d=\"M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z\"/></svg><span>Fila</span><span class=\"ds-count\">9</span><span class=\"ds-share\" style=\"--share:.75\"></span></button></nav>",
-      "css": ".ds-views { display: grid; gap: 2px; width: 236px; padding: 10px; background: var(--steel-side, #d3d8dd); font-family: var(--font-ui, \"Archivo\", \"Segoe UI Variable Text\", \"Segoe UI\", system-ui, sans-serif); } .ds-view { position: relative; display: grid; grid-template-columns: 18px 1fr auto; align-items: center; gap: 10px; height: 36px; padding: 0 10px; border: 0; border-radius: 6px; background: transparent; color: var(--steel-ink-2, #50575f); text-align: left; font: 520 14px/1.45 var(--font-ui, \"Archivo\", \"Segoe UI Variable Text\", \"Segoe UI\", system-ui, sans-serif); cursor: pointer; transition: background-color 150ms var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)), color 150ms var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)); } .ds-view:hover { background: color-mix(in srgb, var(--steel-ink, #24282d) 7%, transparent); color: var(--steel-ink, #24282d); } .ds-view:focus-visible { outline: 2px solid var(--steel-ink, #24282d); outline-offset: 2px; } .ds-view[aria-current=page] { background: var(--paper, #fbfbf8); color: var(--ink, #17191c); box-shadow: var(--shadow-ticket, 0 1px 0 rgb(20 24 28 / 0.04), 0 2px 6px -2px rgb(20 24 28 / 0.14)); } .ds-count { font: 500 12px/1 var(--font-num, \"JetBrains Mono\", \"Cascadia Mono\", Consolas, monospace); font-variant-numeric: tabular-nums; color: var(--steel-ink-2, #50575f); text-align: right; } .ds-count.ds-hot { color: var(--fire, #c42119); font-weight: 600; } .ds-share { position: absolute; left: 38px; right: 10px; bottom: 4px; height: 2px; border-radius: 1px; background: color-mix(in srgb, var(--steel-ink, #24282d) 9%, transparent); overflow: hidden; } .ds-share::after { content: ''; position: absolute; inset: 0 auto 0 0; width: calc(var(--share, 0) * 100%); background: color-mix(in srgb, var(--steel-ink-2, #50575f) 70%, transparent); transition: width 240ms var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)); } .ds-share-hot::after { background: var(--fire, #c42119); }"
+      "refersTo": "view-item",
+      "description": "Views with icons and count badges; current view raised to a white pill with a teal icon; hot badge for overdue.",
+      "html": "<nav class=\"ds-views\"><a class=\"ds-view\" aria-current=\"page\" href=\"#\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"4\"/><path d=\"M12 2v2\"/><path d=\"M12 20v2\"/><path d=\"m4.93 4.93 1.41 1.41\"/><path d=\"m17.66 17.66 1.41 1.41\"/><path d=\"M2 12h2\"/><path d=\"M20 12h2\"/><path d=\"m6.34 17.66-1.41 1.41\"/><path d=\"m19.07 4.93-1.41 1.41\"/></svg><span>Hoje</span><span class=\"ds-count ds-hot\">7</span></a><a class=\"ds-view\" href=\"#\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M13 5h8\"/><path d=\"M13 12h8\"/><path d=\"M13 19h8\"/><path d=\"m3 17 2 2 4-4\"/><rect x=\"3\" y=\"4\" width=\"6\" height=\"6\" rx=\"1\"/></svg><span>Fila</span><span class=\"ds-count\">9</span></a><a class=\"ds-view\" href=\"#\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M12 6v6h4\"/></svg><span>Aguardando</span><span class=\"ds-count\">2</span></a></nav>",
+      "css": ".ds-views{--accent:#17806f;--accent-strong:#106456;--accent-soft:#e0f1ed;--on-accent:#fff;--bg:#eef2f0;--panel:#f7f9f8;--surface:#fff;--surface-2:#edf1ef;--line:#e1e7e4;--line-strong:#cfd8d4;--text:#13201c;--text-2:#475651;--text-3:#66756f;--hover:rgb(19 32 28 / .045);--danger:#d4483f;--danger-text:#b0322a;--danger-soft:#fbebe9;--warn:#df9a33;--warn-text:#8f560c;--warn-soft:#fbf1e0;--info-text:#3a54a2;--info-soft:#ecf0fb;--sh-1:0 1px 2px rgb(19 32 28 / .05);--sh-2:0 1px 2px rgb(19 32 28 / .05),0 8px 22px -12px rgb(19 32 28 / .18);--sh-3:0 2px 6px rgb(19 32 28 / .06),0 20px 50px -18px rgb(19 32 28 / .28);--ring:0 0 0 3px color-mix(in srgb,#17806f 22%,transparent);--ease:cubic-bezier(.22,1,.36,1);font-family:Figtree,\"Segoe UI Variable Text\",\"Segoe UI\",system-ui,sans-serif;font-variant-numeric:tabular-nums;}.ds-views{display:grid;gap:2px;width:224px;padding:12px;background:var(--bg)}.ds-view{display:grid;grid-template-columns:18px 1fr auto;align-items:center;gap:12px;height:38px;padding:0 12px;border-radius:10px;color:var(--text-2);text-decoration:none;font-size:14px;font-weight:550;transition:background-color 160ms var(--ease),color 160ms var(--ease)}.ds-view svg{color:var(--text-3)}.ds-view:hover{background:var(--hover);color:var(--text)}.ds-view:focus-visible{outline:2px solid var(--accent);outline-offset:2px}.ds-view[aria-current=page]{background:var(--surface);color:var(--text);box-shadow:var(--sh-1),0 0 0 1px var(--line)}.ds-view[aria-current=page] svg{color:var(--accent)}.ds-count{min-width:22px;height:20px;padding:0 6px;border-radius:10px;display:inline-grid;place-items:center;font-size:12px;font-weight:600;color:var(--text-3)}.ds-hot{background:var(--danger-soft);color:var(--danger-text)}"
     },
     {
-      "name": "Tags",
+      "name": "Status Tags",
       "kind": "chip",
       "refersTo": "tag",
-      "description": "22px tags with Lucide icons; status variants use soft fills by heat.",
-      "html": "<div class=\"ds-tags\"><span class=\"ds-tag ds-tag-fire\">Urgente</span><span class=\"ds-tag ds-tag-heat\"><svg width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M8 2v3\"/><path d=\"M16 2v3\"/><rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"2\"/><path d=\"M3 9h18\"/></svg>Hoje</span><span class=\"ds-tag ds-tag-wait\">Aguardando</span><span class=\"ds-tag\">#&nbsp;infra</span></div>",
-      "css": ".ds-tags { display: flex; gap: 4px; flex-wrap: wrap; } .ds-tag { display: inline-flex; align-items: center; gap: 4px; height: 22px; padding: 0 7px; border-radius: 4px; background: var(--paper-sunk, #f1f2ee); color: var(--ink-2, #474d55); font: 500 12px/1 var(--font-ui, \"Archivo\", \"Segoe UI Variable Text\", \"Segoe UI\", system-ui, sans-serif); white-space: nowrap; } .ds-tag-fire { background: var(--fire-soft, #fbe2df); color: var(--fire-ink, #9b140d); } .ds-tag-heat { background: var(--heat-soft, #ffe7bf); color: var(--heat, #8a4f00); } .ds-tag-wait { background: var(--wait-soft, #e0eaf6); color: var(--wait, #2c5a92); }"
+      "description": "Neutral and meaning-only status chips.",
+      "html": "<div class=\"ds-tags\"><span class=\"ds-tag\"><svg width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2\"/><circle cx=\"12\" cy=\"7\" r=\"4\"/></svg>Paula</span><span class=\"ds-tag ds-fire\"><svg width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M8 2v3\"/><path d=\"M16 2v3\"/><rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"2\"/><path d=\"M3 9h18\"/></svg>2 dias atrás</span><span class=\"ds-tag ds-heat\"><svg width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M8 2v3\"/><path d=\"M16 2v3\"/><rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"2\"/><path d=\"M3 9h18\"/></svg>Hoje</span><span class=\"ds-tag ds-wait\">Aguardando</span><span class=\"ds-tag ds-done\">Feita</span></div>",
+      "css": ".ds-tags{--accent:#17806f;--accent-strong:#106456;--accent-soft:#e0f1ed;--on-accent:#fff;--bg:#eef2f0;--panel:#f7f9f8;--surface:#fff;--surface-2:#edf1ef;--line:#e1e7e4;--line-strong:#cfd8d4;--text:#13201c;--text-2:#475651;--text-3:#66756f;--hover:rgb(19 32 28 / .045);--danger:#d4483f;--danger-text:#b0322a;--danger-soft:#fbebe9;--warn:#df9a33;--warn-text:#8f560c;--warn-soft:#fbf1e0;--info-text:#3a54a2;--info-soft:#ecf0fb;--sh-1:0 1px 2px rgb(19 32 28 / .05);--sh-2:0 1px 2px rgb(19 32 28 / .05),0 8px 22px -12px rgb(19 32 28 / .18);--sh-3:0 2px 6px rgb(19 32 28 / .06),0 20px 50px -18px rgb(19 32 28 / .28);--ring:0 0 0 3px color-mix(in srgb,#17806f 22%,transparent);--ease:cubic-bezier(.22,1,.36,1);font-family:Figtree,\"Segoe UI Variable Text\",\"Segoe UI\",system-ui,sans-serif;font-variant-numeric:tabular-nums;}.ds-tags{display:flex;flex-wrap:wrap;gap:6px;padding:12px;background:var(--surface)}.ds-tag{display:inline-flex;align-items:center;gap:5px;height:24px;padding:0 9px;border-radius:12px;background:var(--surface-2);color:var(--text-2);font-size:12.5px;font-weight:550;white-space:nowrap}.ds-tag svg{color:var(--text-3)}.ds-fire{background:var(--danger-soft);color:var(--danger-text)}.ds-heat{background:var(--warn-soft);color:var(--warn-text)}.ds-wait{background:var(--info-soft);color:var(--info-text)}.ds-done{background:#e4f3ea;color:#1e7247}.ds-fire svg,.ds-heat svg{color:currentColor}"
     },
     {
-      "name": "Ticket Row",
+      "name": "In-Progress Card",
       "kind": "card",
-      "refersTo": "ticket-row",
-      "description": "Dense 48px paper strip: tick, priority square + mono number, title, due tag, mono age.",
-      "html": "<div class=\"ds-row\" tabindex=\"0\"><button class=\"ds-tick\" aria-label=\"Concluir\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"10\"/></svg></button><span class=\"ds-seq\"><span class=\"ds-pri\"></span>0033</span><span class=\"ds-title\">Renovar certificado TLS do gateway interno</span><span class=\"ds-due\"><svg width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M8 2v3\"/><path d=\"M16 2v3\"/><rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"2\"/><path d=\"M3 9h18\"/></svg>2 dias atrás</span><span class=\"ds-age\">9d</span></div>",
-      "css": ".ds-row { display: grid; grid-template-columns: 30px 58px minmax(0,1fr) auto auto; align-items: center; gap: 10px; min-height: 48px; width: 640px; max-width: 100%; padding: 6px 14px 6px 8px; background: var(--paper, #fbfbf8); color: var(--ink, #17191c); border: 1px solid var(--paper-edge, #d6d9d4); border-radius: 3px; box-shadow: var(--shadow-ticket, 0 1px 0 rgb(20 24 28 / 0.04), 0 2px 6px -2px rgb(20 24 28 / 0.14)); cursor: pointer; font: 400 14px/1.45 var(--font-ui, \"Archivo\", \"Segoe UI Variable Text\", \"Segoe UI\", system-ui, sans-serif); transition: box-shadow 160ms var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)); } .ds-row:hover { box-shadow: var(--shadow-lift, 0 2px 0 rgb(20 24 28 / 0.05), 0 10px 24px -10px rgb(20 24 28 / 0.32)); } .ds-row:focus-visible { outline: 2px solid var(--ink, #17191c); outline-offset: 1px; } .ds-tick { width: 30px; height: 30px; display: grid; place-items: center; border: 0; border-radius: 50%; background: transparent; color: var(--ink-3, #646b73); padding: 0; cursor: pointer; } .ds-tick:hover { color: var(--done, #2b7246); background: var(--done-soft, #ddefe3); } .ds-seq { display: flex; align-items: center; gap: 6px; font: 600 12px/1 var(--font-num, \"JetBrains Mono\", \"Cascadia Mono\", Consolas, monospace); font-variant-numeric: tabular-nums; color: var(--fire, #c42119); } .ds-pri { width: 8px; height: 8px; border-radius: 2px; background: var(--fire, #c42119); } .ds-title { font-weight: 540; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .ds-due { display: inline-flex; align-items: center; gap: 4px; height: 22px; padding: 0 7px; border-radius: 4px; background: var(--fire-soft, #fbe2df); color: var(--fire-ink, #9b140d); font: 500 12px/1 var(--font-ui, \"Archivo\", \"Segoe UI Variable Text\", \"Segoe UI\", system-ui, sans-serif); } .ds-age { font: 500 12px/1 var(--font-num, \"JetBrains Mono\", \"Cascadia Mono\", Consolas, monospace); color: var(--fire, #c42119); min-width: 6ch; text-align: right; }"
+      "refersTo": "progress-card",
+      "description": "Em andamento card: teal dot, two-line title, meta chips; hover lifts and reveals Concluir and pause.",
+      "html": "<div class=\"ds-card-wrap\"><div class=\"ds-card\" tabindex=\"0\"><div class=\"ds-c-head\"><span class=\"ds-seq\">#31</span><span class=\"ds-age\">5h</span></div><div class=\"ds-c-title\">Corrigir timeout no endpoint /pedidos em produção</div><div class=\"ds-c-meta\"><span class=\"ds-tag ds-fire\">Urgente</span><span class=\"ds-tag ds-heat\">Hoje</span></div><div class=\"ds-c-actions\"><button class=\"ds-mini ds-primary\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M18 6 7 17l-5-5\"/><path d=\"m22 10-7.5 7.5L13 16\"/></svg>Concluir</button><button class=\"ds-mini ds-ghost\" aria-label=\"Pausar\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect x=\"14\" y=\"3\" width=\"5\" height=\"18\" rx=\"1\"/><rect x=\"5\" y=\"3\" width=\"5\" height=\"18\" rx=\"1\"/></svg></button></div></div></div>",
+      "css": ".ds-card-wrap{--accent:#17806f;--accent-strong:#106456;--accent-soft:#e0f1ed;--on-accent:#fff;--bg:#eef2f0;--panel:#f7f9f8;--surface:#fff;--surface-2:#edf1ef;--line:#e1e7e4;--line-strong:#cfd8d4;--text:#13201c;--text-2:#475651;--text-3:#66756f;--hover:rgb(19 32 28 / .045);--danger:#d4483f;--danger-text:#b0322a;--danger-soft:#fbebe9;--warn:#df9a33;--warn-text:#8f560c;--warn-soft:#fbf1e0;--info-text:#3a54a2;--info-soft:#ecf0fb;--sh-1:0 1px 2px rgb(19 32 28 / .05);--sh-2:0 1px 2px rgb(19 32 28 / .05),0 8px 22px -12px rgb(19 32 28 / .18);--sh-3:0 2px 6px rgb(19 32 28 / .06),0 20px 50px -18px rgb(19 32 28 / .28);--ring:0 0 0 3px color-mix(in srgb,#17806f 22%,transparent);--ease:cubic-bezier(.22,1,.36,1);font-family:Figtree,\"Segoe UI Variable Text\",\"Segoe UI\",system-ui,sans-serif;font-variant-numeric:tabular-nums;}.ds-card-wrap{padding:16px;background:var(--panel)}.ds-card{position:relative;width:260px;padding:13px 14px 14px;display:flex;flex-direction:column;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--sh-1);color:var(--text);transition:box-shadow 200ms var(--ease),transform 200ms var(--ease),border-color 200ms var(--ease);cursor:pointer}.ds-card:hover{box-shadow:var(--sh-2);transform:translateY(-1px)}.ds-card:focus-visible{outline:none;border-color:var(--accent);box-shadow:var(--ring)}.ds-c-head{display:flex;justify-content:space-between;font-size:12px;font-weight:500;color:var(--text-3)}.ds-seq{display:inline-flex;align-items:center;gap:8px;font-weight:600}.ds-seq::before{content:\"\";width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}.ds-card:hover .ds-age,.ds-card:focus-visible .ds-age{visibility:hidden}.ds-c-title{font-size:14.5px;font-weight:600;line-height:1.4}.ds-c-meta{display:flex;gap:6px}.ds-tag{display:inline-flex;align-items:center;height:24px;padding:0 9px;border-radius:12px;font-size:12.5px;font-weight:550}.ds-fire{background:var(--danger-soft);color:var(--danger-text)}.ds-heat{background:var(--warn-soft);color:var(--warn-text)}.ds-c-actions{position:absolute;top:8px;right:8px;display:flex;gap:4px;opacity:0;transition:opacity 160ms var(--ease)}.ds-card:hover .ds-c-actions,.ds-card:focus-within .ds-c-actions{opacity:1}.ds-mini{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 10px;border-radius:8px;border:1px solid transparent;font:inherit;font-size:12.5px;font-weight:600;cursor:pointer}.ds-primary{background:var(--accent);color:var(--on-accent)}.ds-primary:hover{background:var(--accent-strong)}.ds-ghost{width:28px;padding:0;justify-content:center;background:var(--surface);color:var(--text-2);border-color:var(--line)}.ds-ghost:hover{background:var(--surface-2)}"
     },
     {
-      "name": "Rail Ticket",
+      "name": "Grouped Rows with Round Checkbox",
       "kind": "custom",
-      "refersTo": "rail-ticket",
-      "description": "Signature: a perforated thermal-paper ticket hanging from the steel rail; swings on hover, tears off when done.",
-      "html": "<div class=\"ds-rail\"><div class=\"ds-rail-ticket\" tabindex=\"0\"><div class=\"ds-t-head\"><span class=\"ds-t-seq\">Nº 0031</span><span>5h</span></div><div class=\"ds-t-title\">Corrigir timeout no endpoint /pedidos em produção</div><div class=\"ds-tags\"><span class=\"ds-tag ds-tag-fire\">Urgente</span><span class=\"ds-tag ds-tag-heat\"><svg width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M8 2v3\"/><path d=\"M16 2v3\"/><rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"2\"/><path d=\"M3 9h18\"/></svg>Hoje</span></div><div class=\"ds-t-actions\"><button class=\"ds-t-btn ds-t-primary\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M18 6 7 17l-5-5\"/><path d=\"m22 10-7.5 7.5L13 16\"/></svg>Concluir</button><button class=\"ds-t-btn ds-t-ghost\" aria-label=\"Pausar\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect x=\"14\" y=\"3\" width=\"5\" height=\"18\" rx=\"1\"/><rect x=\"5\" y=\"3\" width=\"5\" height=\"18\" rx=\"1\"/></svg></button></div></div></div>",
-      "css": ".ds-rail { position: relative; padding: 6px 8px 14px; width: 280px; background: var(--steel-ground, #e4e7ea); } .ds-rail::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 12px; z-index: 2; border-radius: 6px; background: var(--rail-mid, #aab2ba); border-top: 1px solid var(--rail-hi, #f6f8fa); box-shadow: 0 2px 4px -1px rgb(0 0 0 / 0.25); } .ds-rail-ticket { width: 228px; margin-top: -2px; padding: 20px 14px 18px; display: flex; flex-direction: column; gap: 8px; background: var(--paper, #fbfbf8); color: var(--ink, #17191c); border: 1px solid var(--paper-edge, #d6d9d4); border-radius: 3px; box-shadow: var(--shadow-ticket, 0 1px 0 rgb(20 24 28 / 0.04), 0 2px 6px -2px rgb(20 24 28 / 0.14)); transform-origin: 50% 0; transition: transform 200ms var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)), box-shadow 200ms var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)); cursor: pointer; font-family: var(--font-ui, \"Archivo\", \"Segoe UI Variable Text\", \"Segoe UI\", system-ui, sans-serif); -webkit-mask: radial-gradient(circle 3.5px at 5px 100%, transparent 97%, #000 100%) 0 100% / 10px 8px repeat-x, linear-gradient(#000, #000) 0 0 / 100% calc(100% - 8px) no-repeat; mask: radial-gradient(circle 3.5px at 5px 100%, transparent 97%, #000 100%) 0 100% / 10px 8px repeat-x, linear-gradient(#000, #000) 0 0 / 100% calc(100% - 8px) no-repeat; } .ds-rail-ticket:hover { transform: rotate(-0.6deg) translateY(1px); box-shadow: var(--shadow-lift, 0 2px 0 rgb(20 24 28 / 0.05), 0 10px 24px -10px rgb(20 24 28 / 0.32)); } .ds-rail-ticket:focus-visible { outline: 2px solid var(--ink, #17191c); outline-offset: 2px; } .ds-t-head { display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 8px; border-bottom: 1px dashed var(--paper-edge, #d6d9d4); font: 500 11.5px/1 var(--font-num, \"JetBrains Mono\", \"Cascadia Mono\", Consolas, monospace); color: var(--ink-3, #646b73); } .ds-t-seq { color: var(--ink, #17191c); font-weight: 600; } .ds-t-title { font: 600 14px/1.35 var(--font-ui, \"Archivo\", \"Segoe UI Variable Text\", \"Segoe UI\", system-ui, sans-serif); } .ds-tags { display: flex; gap: 4px; flex-wrap: wrap; } .ds-tag { display: inline-flex; align-items: center; gap: 4px; height: 22px; padding: 0 7px; border-radius: 4px; font: 500 12px/1 var(--font-ui, \"Archivo\", \"Segoe UI Variable Text\", \"Segoe UI\", system-ui, sans-serif); } .ds-tag-fire { background: var(--fire-soft, #fbe2df); color: var(--fire-ink, #9b140d); } .ds-tag-heat { background: var(--heat-soft, #ffe7bf); color: var(--heat, #8a4f00); } .ds-t-actions { display: flex; gap: 6px; margin-top: 4px; } .ds-t-btn { display: inline-flex; align-items: center; gap: 8px; height: 28px; padding: 0 10px; border-radius: 6px; border: 1px solid transparent; font: 560 12.5px/1 var(--font-ui, \"Archivo\", \"Segoe UI Variable Text\", \"Segoe UI\", system-ui, sans-serif); cursor: pointer; transition: background-color 150ms var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)); } .ds-t-primary { background: var(--ink, #17191c); color: var(--paper, #fbfbf8); } .ds-t-primary:hover { background: color-mix(in srgb, var(--ink, #17191c) 86%, var(--fire, #c42119)); } .ds-t-ghost { background: transparent; color: var(--ink-2, #474d55); border-color: var(--paper-edge, #d6d9d4); } .ds-t-ghost:hover { background: var(--paper-sunk, #f1f2ee); }"
+      "refersTo": "rows-container",
+      "description": "A group title with count, one rounded container, hairline-divided rows, round checkbox that fills teal.",
+      "html": "<div class=\"ds-group\"><div class=\"ds-gtitle\">Atrasadas <span class=\"ds-gcount\">2</span></div><div class=\"ds-rows\"><div class=\"ds-row\"><button class=\"ds-tick\" role=\"checkbox\" aria-checked=\"false\" aria-label=\"Concluir\"><svg width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M20 6 9 17l-5-5\"/></svg></button><span class=\"ds-rseq\"><i class=\"ds-pri ds-urg\"></i>#33</span><span class=\"ds-rtitle\">Renovar certificado TLS do gateway</span><span class=\"ds-age\">9d</span></div><div class=\"ds-row\" aria-selected=\"true\"><button class=\"ds-tick\" role=\"checkbox\" aria-checked=\"true\" aria-label=\"Concluída\"><svg width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M20 6 9 17l-5-5\"/></svg></button><span class=\"ds-rseq\"><i class=\"ds-pri ds-high\"></i>#34</span><span class=\"ds-rtitle\">Enviar estimativa do módulo</span><span class=\"ds-age\">4d</span></div></div></div>",
+      "css": ".ds-group{--accent:#17806f;--accent-strong:#106456;--accent-soft:#e0f1ed;--on-accent:#fff;--bg:#eef2f0;--panel:#f7f9f8;--surface:#fff;--surface-2:#edf1ef;--line:#e1e7e4;--line-strong:#cfd8d4;--text:#13201c;--text-2:#475651;--text-3:#66756f;--hover:rgb(19 32 28 / .045);--danger:#d4483f;--danger-text:#b0322a;--danger-soft:#fbebe9;--warn:#df9a33;--warn-text:#8f560c;--warn-soft:#fbf1e0;--info-text:#3a54a2;--info-soft:#ecf0fb;--sh-1:0 1px 2px rgb(19 32 28 / .05);--sh-2:0 1px 2px rgb(19 32 28 / .05),0 8px 22px -12px rgb(19 32 28 / .18);--sh-3:0 2px 6px rgb(19 32 28 / .06),0 20px 50px -18px rgb(19 32 28 / .28);--ring:0 0 0 3px color-mix(in srgb,#17806f 22%,transparent);--ease:cubic-bezier(.22,1,.36,1);font-family:Figtree,\"Segoe UI Variable Text\",\"Segoe UI\",system-ui,sans-serif;font-variant-numeric:tabular-nums;}.ds-group{padding:16px;background:var(--panel);color:var(--text)}.ds-gtitle{display:flex;align-items:center;gap:8px;margin:0 0 10px 2px;font-size:13px;font-weight:650;color:var(--danger-text)}.ds-gcount{min-width:20px;height:20px;padding:0 6px;border-radius:10px;display:inline-grid;place-items:center;background:var(--danger-soft);font-size:11.5px}.ds-rows{display:grid;background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--sh-1);overflow:hidden}.ds-row{display:grid;grid-template-columns:28px 44px minmax(0,1fr) auto;align-items:center;gap:10px;min-height:44px;padding:5px 16px 5px 12px;transition:background-color 160ms var(--ease);cursor:pointer}.ds-row+.ds-row{border-top:1px solid var(--line)}.ds-row:hover{background:var(--hover)}.ds-row[aria-selected=true]{background:var(--accent-soft);box-shadow:inset 2px 0 0 var(--accent)}.ds-tick{position:relative;width:28px;height:28px;display:grid;place-items:center;border:0;border-radius:50%;background:transparent;padding:0;color:transparent;cursor:pointer}.ds-tick::before{content:\"\";position:absolute;inset:5px;border-radius:50%;border:1.6px solid var(--line-strong);background:var(--surface);transition:border-color 160ms var(--ease),background-color 200ms var(--ease)}.ds-tick svg{position:relative}.ds-tick:hover::before{border-color:var(--accent)}.ds-tick:hover{color:color-mix(in srgb,var(--accent) 70%,transparent)}.ds-tick:focus-visible{outline:2px solid var(--accent);outline-offset:2px}.ds-tick[aria-checked=true]::before{border-color:var(--accent);background:var(--accent)}.ds-tick[aria-checked=true]{color:var(--on-accent)}.ds-rseq{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:var(--text-3)}.ds-pri{width:7px;height:7px;border-radius:50%}.ds-urg{background:var(--danger);box-shadow:0 0 0 3px var(--danger-soft)}.ds-high{background:var(--warn);box-shadow:0 0 0 3px var(--warn-soft)}.ds-rtitle{font-size:14.5px;font-weight:550;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ds-age{font-size:12.5px;font-weight:500;color:var(--text-3)}"
     },
     {
-      "name": "Segmented Control",
+      "name": "AI Writing Suggestion",
       "kind": "custom",
-      "refersTo": "segmented",
-      "description": "Status/priority picker; the selected segment is a raised paper slip in the option's heat colour.",
-      "html": "<div class=\"ds-seg\" role=\"radiogroup\"><button role=\"radio\" aria-checked=\"true\" data-v=\"urgente\"><span class=\"ds-pri\"></span>Urgente</button><button role=\"radio\" aria-checked=\"false\">Alta</button><button role=\"radio\" aria-checked=\"false\">Normal</button><button role=\"radio\" aria-checked=\"false\">Baixa</button></div>",
-      "css": ".ds-seg { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 2px; padding: 2px; width: 330px; border-radius: 6px; background: var(--paper-sunk, #f1f2ee); border: 1px solid var(--paper-edge, #d6d9d4); font-family: var(--font-ui, \"Archivo\", \"Segoe UI Variable Text\", \"Segoe UI\", system-ui, sans-serif); } .ds-seg button { height: 30px; border: 0; border-radius: 4px; background: transparent; color: var(--ink-2, #474d55); font: 540 12.5px/1 var(--font-ui, \"Archivo\", \"Segoe UI Variable Text\", \"Segoe UI\", system-ui, sans-serif); display: inline-flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; } .ds-seg button:hover { color: var(--ink, #17191c); } .ds-seg button:focus-visible { outline: 2px solid var(--ink, #17191c); outline-offset: 2px; } .ds-seg button[aria-checked=true] { background: var(--paper, #fbfbf8); color: var(--ink, #17191c); box-shadow: var(--shadow-ticket, 0 1px 0 rgb(20 24 28 / 0.04), 0 2px 6px -2px rgb(20 24 28 / 0.14)); } .ds-seg button[aria-checked=true][data-v=urgente] { color: var(--fire-ink, #9b140d); } .ds-pri { width: 7px; height: 7px; border-radius: 2px; background: var(--fire, #c42119); }"
+      "refersTo": "ai-box",
+      "description": "\"Melhorar escrita\" pill beside the notes label and the teal suggestion box with Aplicar / Ignorar.",
+      "html": "<div class=\"ds-ai-wrap\"><div class=\"ds-notes-head\"><span class=\"ds-label\">Anotações</span><button class=\"ds-ai-btn\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z\"/><path d=\"M20 2v4\"/><path d=\"M22 4h-4\"/><circle cx=\"4\" cy=\"20\" r=\"2\"/></svg>Melhorar escrita</button></div><div class=\"ds-ai-box\"><div class=\"ds-ai-head\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z\"/><path d=\"M20 2v4\"/><path d=\"M22 4h-4\"/><circle cx=\"4\" cy=\"20\" r=\"2\"/></svg><span>Sugestão de escrita</span></div><div class=\"ds-ai-text\">Combinar com a Carla o horário da janela de manutenção antes de renovar o certificado.</div><div class=\"ds-ai-actions\"><button class=\"ds-b ds-bp\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M20 6 9 17l-5-5\"/></svg>Aplicar</button><button class=\"ds-b ds-bg\">Ignorar</button></div></div></div>",
+      "css": ".ds-ai-wrap{--accent:#17806f;--accent-strong:#106456;--accent-soft:#e0f1ed;--on-accent:#fff;--bg:#eef2f0;--panel:#f7f9f8;--surface:#fff;--surface-2:#edf1ef;--line:#e1e7e4;--line-strong:#cfd8d4;--text:#13201c;--text-2:#475651;--text-3:#66756f;--hover:rgb(19 32 28 / .045);--danger:#d4483f;--danger-text:#b0322a;--danger-soft:#fbebe9;--warn:#df9a33;--warn-text:#8f560c;--warn-soft:#fbf1e0;--info-text:#3a54a2;--info-soft:#ecf0fb;--sh-1:0 1px 2px rgb(19 32 28 / .05);--sh-2:0 1px 2px rgb(19 32 28 / .05),0 8px 22px -12px rgb(19 32 28 / .18);--sh-3:0 2px 6px rgb(19 32 28 / .06),0 20px 50px -18px rgb(19 32 28 / .28);--ring:0 0 0 3px color-mix(in srgb,#17806f 22%,transparent);--ease:cubic-bezier(.22,1,.36,1);font-family:Figtree,\"Segoe UI Variable Text\",\"Segoe UI\",system-ui,sans-serif;font-variant-numeric:tabular-nums;}.ds-ai-wrap{width:340px;padding:16px;background:var(--surface);color:var(--text)}.ds-notes-head{display:flex;align-items:center;justify-content:space-between}.ds-label{font-size:12.5px;font-weight:600;color:var(--text-2)}.ds-ai-btn{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 10px;border:0;border-radius:13px;background:var(--accent-soft);color:var(--accent-strong);font:inherit;font-size:12.5px;font-weight:600;cursor:pointer;transition:background-color 160ms var(--ease)}.ds-ai-btn:hover{background:color-mix(in srgb,var(--accent) 18%,var(--accent-soft))}.ds-ai-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}.ds-ai-box{margin-top:8px;padding:12px 14px;border:1px solid color-mix(in srgb,var(--accent) 30%,var(--line));border-radius:10px;background:var(--accent-soft)}.ds-ai-head{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:650;color:var(--accent-strong)}.ds-ai-text{margin-top:8px;font-size:13.5px;line-height:1.6}.ds-ai-actions{display:flex;gap:8px;margin-top:12px}.ds-b{display:inline-flex;align-items:center;gap:8px;height:32px;padding:0 12px;border-radius:10px;border:1px solid transparent;font:inherit;font-size:13px;font-weight:600;cursor:pointer}.ds-bp{background:var(--accent);color:var(--on-accent)}.ds-bp:hover{background:var(--accent-strong)}.ds-bg{background:var(--surface);color:var(--text-2);border-color:var(--line)}.ds-bg:hover{background:var(--surface-2)}"
+    },
+    {
+      "name": "Account Menu",
+      "kind": "custom",
+      "refersTo": "menu",
+      "description": "Floating menu with icon rows, keyboard hints and inset hairline separators.",
+      "html": "<div class=\"ds-menu-wrap\"><div class=\"ds-menu\" role=\"menu\"><div class=\"ds-meta\">guilherme</div><button role=\"menuitem\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z\"/><circle cx=\"16.5\" cy=\"7.5\" r=\".5\" fill=\"currentColor\"/></svg>Trocar senha</button><hr><button role=\"menuitem\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect width=\"18\" height=\"11\" x=\"3\" y=\"11\" rx=\"2\" ry=\"2\"/><path d=\"M7 11V7a5 5 0 0 1 10 0v4\"/></svg>Bloquear<kbd>Ctrl L</kbd></button></div></div>",
+      "css": ".ds-menu-wrap{--accent:#17806f;--accent-strong:#106456;--accent-soft:#e0f1ed;--on-accent:#fff;--bg:#eef2f0;--panel:#f7f9f8;--surface:#fff;--surface-2:#edf1ef;--line:#e1e7e4;--line-strong:#cfd8d4;--text:#13201c;--text-2:#475651;--text-3:#66756f;--hover:rgb(19 32 28 / .045);--danger:#d4483f;--danger-text:#b0322a;--danger-soft:#fbebe9;--warn:#df9a33;--warn-text:#8f560c;--warn-soft:#fbf1e0;--info-text:#3a54a2;--info-soft:#ecf0fb;--sh-1:0 1px 2px rgb(19 32 28 / .05);--sh-2:0 1px 2px rgb(19 32 28 / .05),0 8px 22px -12px rgb(19 32 28 / .18);--sh-3:0 2px 6px rgb(19 32 28 / .06),0 20px 50px -18px rgb(19 32 28 / .28);--ring:0 0 0 3px color-mix(in srgb,#17806f 22%,transparent);--ease:cubic-bezier(.22,1,.36,1);font-family:Figtree,\"Segoe UI Variable Text\",\"Segoe UI\",system-ui,sans-serif;font-variant-numeric:tabular-nums;}.ds-menu-wrap{padding:16px;background:var(--bg)}.ds-menu{width:max-content;min-width:220px;padding:6px;background:var(--surface);color:var(--text);border:1px solid var(--line);border-radius:14px;box-shadow:var(--sh-3)}.ds-menu button{display:flex;align-items:center;gap:12px;width:100%;min-height:36px;padding:0 14px 0 10px;border:0;border-radius:8px;background:transparent;font:inherit;font-size:13.5px;font-weight:500;color:var(--text);text-align:left;cursor:pointer}.ds-menu button svg{color:var(--text-3)}.ds-menu button:hover,.ds-menu button:focus-visible{background:var(--hover);outline:none}.ds-menu hr{border:0;border-top:1px solid var(--line);margin:6px 8px}.ds-meta{padding:8px 10px 4px;font-size:11.5px;color:var(--text-3)}.ds-menu kbd{margin-left:auto;font:500 11px/1 inherit;color:var(--text-3);border:1px solid var(--line);border-radius:6px;padding:3px 6px}"
     },
     {
       "name": "Toast",
       "kind": "custom",
       "refersTo": "toast",
-      "description": "Dark receipt slip with mono ticket number and an undo action.",
-      "html": "<div class=\"ds-toast\"><span class=\"ds-num\">Nº 0033</span> concluída<button>Desfazer <span class=\"ds-num\">Ctrl Z</span></button></div>",
-      "css": ".ds-toast { display: inline-flex; align-items: center; gap: 12px; min-height: 40px; padding: 6px 6px 6px 14px; background: var(--ink, #17191c); color: var(--paper, #fbfbf8); border-radius: 6px; box-shadow: var(--shadow-lift, 0 2px 0 rgb(20 24 28 / 0.05), 0 10px 24px -10px rgb(20 24 28 / 0.32)); font: 400 13px/1.45 var(--font-ui, \"Archivo\", \"Segoe UI Variable Text\", \"Segoe UI\", system-ui, sans-serif); } .ds-num { font-family: var(--font-num, \"JetBrains Mono\", \"Cascadia Mono\", Consolas, monospace); font-variant-numeric: tabular-nums; opacity: 0.75; } .ds-toast button { height: 28px; padding: 0 10px; border-radius: 4px; border: 0; background: color-mix(in srgb, var(--paper, #fbfbf8) 16%, transparent); color: inherit; font: 600 12.5px/1 var(--font-ui, \"Archivo\", \"Segoe UI Variable Text\", \"Segoe UI\", system-ui, sans-serif); cursor: pointer; } .ds-toast button:hover { background: color-mix(in srgb, var(--paper, #fbfbf8) 26%, transparent); } .ds-toast button:focus-visible { outline: 2px solid var(--paper, #fbfbf8); outline-offset: 2px; }"
+      "description": "Inverted bottom-center notice with sequence number and Desfazer.",
+      "html": "<div class=\"ds-toast-wrap\"><div class=\"ds-toast\"><span><span class=\"ds-n\">#38</span> anotada em Fila</span><button>Ver</button><button>Desfazer <span class=\"ds-n\">Ctrl Z</span></button></div></div>",
+      "css": ".ds-toast-wrap{--accent:#17806f;--accent-strong:#106456;--accent-soft:#e0f1ed;--on-accent:#fff;--bg:#eef2f0;--panel:#f7f9f8;--surface:#fff;--surface-2:#edf1ef;--line:#e1e7e4;--line-strong:#cfd8d4;--text:#13201c;--text-2:#475651;--text-3:#66756f;--hover:rgb(19 32 28 / .045);--danger:#d4483f;--danger-text:#b0322a;--danger-soft:#fbebe9;--warn:#df9a33;--warn-text:#8f560c;--warn-soft:#fbf1e0;--info-text:#3a54a2;--info-soft:#ecf0fb;--sh-1:0 1px 2px rgb(19 32 28 / .05);--sh-2:0 1px 2px rgb(19 32 28 / .05),0 8px 22px -12px rgb(19 32 28 / .18);--sh-3:0 2px 6px rgb(19 32 28 / .06),0 20px 50px -18px rgb(19 32 28 / .28);--ring:0 0 0 3px color-mix(in srgb,#17806f 22%,transparent);--ease:cubic-bezier(.22,1,.36,1);font-family:Figtree,\"Segoe UI Variable Text\",\"Segoe UI\",system-ui,sans-serif;font-variant-numeric:tabular-nums;}.ds-toast-wrap{padding:16px;background:var(--bg)}.ds-toast{display:inline-flex;align-items:center;gap:12px;min-height:42px;padding:6px 6px 6px 16px;background:var(--text);color:var(--bg);border-radius:14px;box-shadow:var(--sh-3);font-size:13.5px;font-weight:500}.ds-n{opacity:.7}.ds-toast button{height:30px;padding:0 12px;border:0;border-radius:8px;background:color-mix(in srgb,var(--bg) 16%,transparent);color:inherit;font:inherit;font-size:12.5px;font-weight:650;cursor:pointer}.ds-toast button:hover{background:color-mix(in srgb,var(--bg) 26%,transparent)}.ds-toast button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}"
+    },
+    {
+      "name": "Auth Card with Masked Username",
+      "kind": "card",
+      "refersTo": "auth-card",
+      "description": "Logo and wordmark, heading, masked username with reveal, block primary button.",
+      "html": "<div class=\"ds-auth\"><div class=\"ds-acard\"><div class=\"ds-ahead\"><svg width=\"22\" height=\"22\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\"><rect x=\"24\" y=\"24\" width=\"464\" height=\"464\" rx=\"116\" fill=\"#17806f\"/><path d=\"M188 150 V 340 H 330\" fill=\"none\" stroke=\"#fff\" stroke-width=\"56\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><circle cx=\"346\" cy=\"166\" r=\"34\" fill=\"#ffd36e\"/></svg><span class=\"ds-word\">lumo</span></div><h1>Entrar</h1><label class=\"ds-flabel\">Usuário</label><div class=\"ds-iw\"><input class=\"ds-input ds-masked\" value=\"guilherme\"><button class=\"ds-reveal\" aria-label=\"Mostrar usuário\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0\"/><circle cx=\"12\" cy=\"12\" r=\"3\"/></svg></button></div><button class=\"ds-block\">Entrar</button></div></div>",
+      "css": ".ds-auth{--accent:#17806f;--accent-strong:#106456;--accent-soft:#e0f1ed;--on-accent:#fff;--bg:#eef2f0;--panel:#f7f9f8;--surface:#fff;--surface-2:#edf1ef;--line:#e1e7e4;--line-strong:#cfd8d4;--text:#13201c;--text-2:#475651;--text-3:#66756f;--hover:rgb(19 32 28 / .045);--danger:#d4483f;--danger-text:#b0322a;--danger-soft:#fbebe9;--warn:#df9a33;--warn-text:#8f560c;--warn-soft:#fbf1e0;--info-text:#3a54a2;--info-soft:#ecf0fb;--sh-1:0 1px 2px rgb(19 32 28 / .05);--sh-2:0 1px 2px rgb(19 32 28 / .05),0 8px 22px -12px rgb(19 32 28 / .18);--sh-3:0 2px 6px rgb(19 32 28 / .06),0 20px 50px -18px rgb(19 32 28 / .28);--ring:0 0 0 3px color-mix(in srgb,#17806f 22%,transparent);--ease:cubic-bezier(.22,1,.36,1);font-family:Figtree,\"Segoe UI Variable Text\",\"Segoe UI\",system-ui,sans-serif;font-variant-numeric:tabular-nums;}.ds-auth{padding:24px;background:var(--bg);color:var(--text)}.ds-acard{width:min(360px,100%);padding:32px 32px 28px;background:var(--surface);border:1px solid var(--line);border-radius:18px;box-shadow:var(--sh-3)}.ds-ahead{display:flex;align-items:center;gap:10px;margin-bottom:26px}.ds-word{font-weight:720;font-size:18px;letter-spacing:-.035em}.ds-acard h1{margin:0 0 20px;font-size:22px;line-height:1.25;font-weight:700;letter-spacing:-.02em}.ds-flabel{display:block;margin-bottom:6px;font-size:12.5px;font-weight:600;color:var(--text-2)}.ds-iw{position:relative}.ds-input{width:100%;box-sizing:border-box;height:40px;padding:0 42px 0 12px;background:var(--surface);border:1px solid var(--line-strong);border-radius:10px;font:inherit;color:var(--text);transition:border-color 160ms var(--ease),box-shadow 160ms var(--ease)}.ds-input:focus{outline:none;border-color:var(--accent);box-shadow:var(--ring)}.ds-masked{-webkit-text-security:disc;letter-spacing:.08em}.ds-reveal{position:absolute;right:5px;top:5px;width:30px;height:30px;display:grid;place-items:center;border:0;border-radius:8px;background:transparent;color:var(--text-3);cursor:pointer}.ds-reveal:hover{color:var(--text);background:var(--hover)}.ds-block{margin-top:24px;width:100%;height:42px;border:0;border-radius:10px;background:var(--accent);color:var(--on-accent);font:inherit;font-size:14px;font-weight:600;cursor:pointer}.ds-block:hover{background:var(--accent-strong)}.ds-block:focus-visible{outline:2px solid var(--accent);outline-offset:2px}"
+    },
+    {
+      "name": "Theme Toggle",
+      "kind": "button",
+      "refersTo": "theme-toggle",
+      "description": "38px square button; moon in light, sun in dark; flips data-theme.",
+      "html": "<div class=\"ds-tt-wrap\"><button class=\"ds-tt\" aria-label=\"Usar tema escuro\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401\"/></svg></button></div>",
+      "css": ".ds-tt-wrap{--accent:#17806f;--accent-strong:#106456;--accent-soft:#e0f1ed;--on-accent:#fff;--bg:#eef2f0;--panel:#f7f9f8;--surface:#fff;--surface-2:#edf1ef;--line:#e1e7e4;--line-strong:#cfd8d4;--text:#13201c;--text-2:#475651;--text-3:#66756f;--hover:rgb(19 32 28 / .045);--danger:#d4483f;--danger-text:#b0322a;--danger-soft:#fbebe9;--warn:#df9a33;--warn-text:#8f560c;--warn-soft:#fbf1e0;--info-text:#3a54a2;--info-soft:#ecf0fb;--sh-1:0 1px 2px rgb(19 32 28 / .05);--sh-2:0 1px 2px rgb(19 32 28 / .05),0 8px 22px -12px rgb(19 32 28 / .18);--sh-3:0 2px 6px rgb(19 32 28 / .06),0 20px 50px -18px rgb(19 32 28 / .28);--ring:0 0 0 3px color-mix(in srgb,#17806f 22%,transparent);--ease:cubic-bezier(.22,1,.36,1);font-family:Figtree,\"Segoe UI Variable Text\",\"Segoe UI\",system-ui,sans-serif;font-variant-numeric:tabular-nums;}.ds-tt-wrap{padding:16px;background:var(--bg)}.ds-tt{width:38px;height:38px;display:grid;place-items:center;padding:0;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--text-2);box-shadow:var(--sh-1);cursor:pointer;transition:color 160ms var(--ease),border-color 160ms var(--ease)}.ds-tt:hover{color:var(--text);border-color:var(--line-strong)}.ds-tt:focus-visible{outline:2px solid var(--accent);outline-offset:2px}"
     }
   ],
   "narrative": {
-    "northStar": "The Kitchen Pass",
-    "overview": "**Creative North Star: \"The Kitchen Pass\"**\n\nDemands arrive like orders at a kitchen pass. Each one prints as a numbered ticket on thermal paper with its age running, hangs on a steel rail while it is being worked, and gets torn off when done. The application shell is the kitchen's brushed steel: a cool grey ground and a darker sidebar that never carry content of their own. Everything that *is* a demand, or is written onto one, is paper: off-white, near-black receipt ink, a 3px corner, a faint ticket shadow.\n\nThe density is that of an expediter's station: 48px rows, 6px between them, every row readable at a glance from the sequence number, title, due tag and elapsed age. Colour is rationed by heat. Fire red means urgent or overdue, heat-lamp amber means due today or aging, and everything else stays ink on paper or ink on steel. Numbers that measure something (ticket numbers, ages, counts, dates, keycaps) are set in JetBrains Mono; everything a person reads as language is Archivo.\n\nThe dark theme is the same kitchen after hours: blackened steel shell, tickets as dim warm paper (#2c2b29), inks lifted, fire and heat brightened so they still read as alarms.",
+    "northStar": "The Quiet Desk",
+    "overview": "**Creative North Star: \"The Quiet Desk\"**\n\nLumo is a clean, minimalist workspace that recedes so the demands and their state carry the screen. A tinted, almost-white ground holds white surfaces drawn with 1px hairlines, softly rounded corners and shallow two-layer shadows. One pine-teal accent marks what the user can act on, what is selected, what has focus and what is in progress; red, amber, blue and green appear only where they mean something (overdue, due today or high, waiting, done). Everything else is a teal-leaning gray.\n\nDensity is calm-dense: a 1280x820 window holds the sidebar, the capture field, the in-progress cards and the overdue / due-today / urgent groups without scrolling. Groups are single rounded containers with hairline-divided rows, not stacks of floating cards. Type is Figtree alone, with tabular numerals everywhere so counts, sequence numbers and ages align. Icons are Lucide line icons at a 1.6 stroke, inline SVG in `currentColor`.\n\nMotion is short and purposeful: completing a demand fills the round checkbox with the accent and the row slides out (260ms); a new demand arrives with a soft accent ring (320ms); everything else is a 160-200ms state change on one ease-out curve. Lumo ships a light and a dark theme with an explicit toggle; both are complete token sets.",
     "keyCharacteristics": [
-      "Two materials, steel and paper, each with its own ink set.",
-      "Numbered tickets with perforated (scalloped) edges where paper is torn from the printer.",
-      "A steel rail that holds in-progress tickets; done tears the ticket off.",
-      "Heat-coded colour: fire for burning, heat for warming, nothing else shouts.",
-      "Monospaced measurement, grotesk language.",
-      "Keyboard-first: keycaps are first-class, visible elements."
+      "Tinted neutral ground (pine-teal leaning grays), white surfaces, 1px hairlines.",
+      "One accent: pine teal for action, selection, focus and in-progress.",
+      "Status color reserved for meaning: red overdue/urgent, amber due-today/high, blue waiting, green done.",
+      "Figtree only, tabular numerals on by default.",
+      "Four radii (8/10/14/18px) plus full pills and circles for chips, badges and checkboxes.",
+      "Soft two-layer shadows, hairline first.",
+      "Light and dark themes, user-selectable, following the system until chosen."
     ],
     "rules": [
       {
-        "name": "The Two Inks Rule",
-        "body": "Paper carries receipt ink (ink, ink-2, ink-3); steel carries steel ink (steel-ink, steel-ink-2). A control that changes material changes ink with it: the search field is steel at rest and becomes paper with receipt ink on focus.",
+        "name": "The One Teal Rule",
+        "body": "Pine teal is the only accent. It marks primary action, selection, focus, in-progress and completion; it never decorates a heading, a divider or an empty area.",
         "section": "colors"
       },
       {
-        "name": "The Heat Rule",
-        "body": "Fire marks what is burning (urgent, overdue), heat marks what is warming (due today, high priority, aging). Neither is ever a decorative accent, a brand colour, or a large surface; they appear as small marks, text, and soft tag fills.",
+        "name": "The Meaning-Only Rule",
+        "body": "Red, amber, blue and green appear only when a demand is overdue/urgent, due today/high, waiting or done. A status color without a status behind it is a bug.",
         "section": "colors"
       },
       {
-        "name": "The Status Fill Rule",
-        "body": "Wait blue and done green appear only as tag fills, segmented selections and tick states. They never colour a ticket, a row, or a section.",
+        "name": "The Tinted Neutral Rule",
+        "body": "Every gray leans toward the accent hue (OKLCH hue 165-182, with the accent at 178). Stock zinc, slate or pure-gray neutrals do not belong in Lumo.",
         "section": "colors"
       },
       {
-        "name": "The Measurement Is Mono Rule",
-        "body": "Ticket numbers, elapsed ages, counts, dates, times and keycaps are JetBrains Mono with tabular figures. Words, including status and priority names, are never mono.",
+        "name": "The One Family Rule",
+        "body": "Figtree sets everything, including keyboard hints and codes. Hierarchy comes from weight and a 1-2px size step, not from a second family.",
         "section": "typography"
       },
       {
-        "name": "The Honest Age Rule",
-        "body": "Every open ticket shows its elapsed age (5h, 1d, 40min) right-aligned in mono; it warms to heat and then fire as it ages.",
+        "name": "The Tabular Rule",
+        "body": "`font-variant-numeric: tabular-nums` is set on the document; counts, sequence numbers (#31), ages (5h, 2d) and dates line up in columns.",
         "section": "typography"
       },
       {
-        "name": "The Paper Weight Rule",
-        "body": "Only paper casts shadows, and only the two paper shadows exist. Hover lifts paper from Ticket to Lift; it never changes the paper colour.",
+        "name": "The Hairline-First Rule",
+        "body": "Separate with a 1px hairline and a value step before reaching for shadow. Rows inside a container are divided by hairlines, never by gaps and per-row shadows.",
         "section": "elevation"
+      },
+      {
+        "name": "The Float-Only-When-Floating Rule",
+        "body": "The Float shadow belongs to things above the page (menus, toasts, sheets, the auth card). Content at rest takes Rest; Lift is a response to hover or to the detail panel's open state.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Four Radii Rule",
+        "body": "Corners come from 8/10/14/18px, pills and circles. Nesting steps down: an 18px panel holds 14px containers, which hold 10px and 8px controls.",
+        "section": "shapes"
       }
     ],
     "dos": [
-      "**Do** put every demand, field and floating surface on paper (paper fill, paper-edge stroke, 3px or 6px corner, ticket shadow) and leave the shell as flat steel.",
-      "**Do** switch ink with material: receipt ink on paper, steel ink on steel, including focus outlines.",
-      "**Do** set ticket numbers, ages, counts, dates and keycaps in JetBrains Mono with tabular figures, and prefix ticket numbers \"Nº\" on tickets, toasts and the detail head.",
-      "**Do** separate sections inside a ticket with a 1px dashed paper-edge tear line, and perforate the edge a ticket was torn from.",
-      "**Do** mark completion with the tear (260ms) and creation with the print (280ms), both on the shared ease-out curve.",
-      "**Do** colour urgency by heat: fire for urgent and overdue, heat for due today, high priority and aging.",
-      "**Do** show the keyboard shortcut as a keycap wherever an action has one."
+      "Do use Pine Teal for the one primary action on a surface, the selection, focus and in-progress state, and nothing else.",
+      "Do pair every status fill with its own text step (`danger-soft` with `danger-text`, and so on) so chips stay AA in both themes.",
+      "Do group lists as one rounded container (14px) with 1px hairline rows.",
+      "Do set every value from tokens so both themes stay complete: a new color needs a light and a dark value under `:root` and `[data-theme=\"dark\"]`.",
+      "Do use Lucide icons as inline SVG at a 1.6 stroke in `currentColor`, 16px by default, 12-14px inside chips and small buttons, 18px in navigation.",
+      "Do keep numbers tabular and keyboard hints visible next to the actions they trigger.",
+      "Do honor reduced motion and keep the finish (260ms) and arrive (320ms) moments as the only expressive motion."
     ],
     "donts": [
-      "**Don't** use fire or heat as a brand accent, button fill or large surface; they are alarms.",
-      "**Don't** colour a ticket or row background by status; status lives in tags, marks, ages and group titles.",
-      "**Don't** add shadows to steel or invent a third paper shadow; paper is Ticket at rest and Lift when picked up.",
-      "**Don't** set words (status names, labels, headings) in mono, or numbers that measure in Archivo.",
-      "**Don't** round a ticket (row, rail ticket, detail panel, auth ticket) beyond 3px; the near-square corner is part of the material. Fields, menus, sheets and toasts take 6px."
+      "Don't use red, amber, blue or green for decoration, categories or emphasis; they mean overdue/urgent, due-today/high, waiting and done.",
+      "Don't introduce untinted grays, a second accent, or the logo's amber as a UI color.",
+      "Don't add a second typeface or monospace for codes and shortcuts; Figtree sets everything.",
+      "Don't use radii outside 8/10/14/18px, pills and circles for new surfaces.",
+      "Don't put the Float shadow on content at rest or stack per-row shadows inside a group container.",
+      "Don't write the wordmark capitalized or recolor the logo mark."
     ]
   }
 }
