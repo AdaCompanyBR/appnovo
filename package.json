@@ -30,7 +30,12 @@
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
-      "shortcutName": "Demandas"
+      "shortcutName": "Demandas",
+      "artifactName": "Demandas-instalador-${version}.exe"
+    },
+    "publish": null,
+    "portable": {
+      "artifactName": "Demandas-portatil-${version}.exe"
     }
   },
   "devDependencies": {
