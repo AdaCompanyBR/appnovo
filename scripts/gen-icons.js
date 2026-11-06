@@ -1,5 +1,5 @@
 const fs = require('fs');
-const names = ['flame','inbox','hourglass','check-check','search','plus','lock','log-out','key-round','download','folder-open','x','trash-2','calendar','user','hash','circle','circle-check','play','pause','keyboard','copy','eye','eye-off','undo-2','triangle-alert','clock','settings','corner-down-left','life-buoy','refresh-cw','sun','list-todo','clock-3','circle-check-big','flag','check','folder','at-sign','circle-dashed','calendar-days','arrow-right','sparkles'];
+const names = ['flame','inbox','hourglass','check-check','search','plus','lock','log-out','key-round','download','folder-open','x','trash-2','calendar','user','hash','circle','circle-check','play','pause','keyboard','copy','eye','eye-off','undo-2','triangle-alert','clock','settings','corner-down-left','life-buoy','refresh-cw','sun','list-todo','clock-3','circle-check-big','flag','check','folder','at-sign','circle-dashed','calendar-days','arrow-right','sparkles','moon'];
 const out = {};
 for (const n of names) {
   const svg = fs.readFileSync(`node_modules/lucide-static/icons/${n}.svg`, 'utf8');

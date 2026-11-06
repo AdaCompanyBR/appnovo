@@ -157,6 +157,10 @@ function registerIpc() {
     dataDir: vault.dir,
   }));
   handle('app:open-data-dir', () => shell.openPath(vault.dir));
+  handle('app:set-theme', (theme) => {
+    nativeTheme.themeSource = ['light', 'dark'].includes(theme) ? theme : 'system';
+    return true;
+  });
   handle('app:copy', (text) => { clipboard.writeText(String(text || '').slice(0, 200)); return true; });
 }
 

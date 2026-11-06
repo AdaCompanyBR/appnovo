@@ -14,10 +14,6 @@ css = css.replace('url("assets/mark.svg")', `url("${dataUri('src/renderer/assets
 css = css.replace('url("assets/plus.svg")', `url("${dataUri('src/renderer/assets/plus.svg')}")`);
 css = css.replace('url("assets/calendar.svg")', `url("${dataUri('src/renderer/assets/calendar.svg')}")`);
 css = css.replace('--titlebar-controls: 150px;', '--titlebar-controls: 20px;');
-// O claude.ai também escolhe o tema por data-theme; repete o bloco escuro para ele.
-const dark = /@media \(prefers-color-scheme: dark\) {\s*:root:not\(\[data-theme="light"\]\) {([\s\S]*?)\n  }\n}/.exec(css);
-if (!dark) throw new Error('bloco do tema escuro não encontrado');
-css = css.replace(dark[0], `${dark[0]}\n:root[data-theme="dark"] {${dark[1]}\n}`);
 css += `
 /* ---------- versão web: telas estreitas ---------- */
 @media (max-width: 560px) {

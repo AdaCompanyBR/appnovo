@@ -1243,10 +1243,39 @@
 
   /* ---------- tema ---------- */
 
-  const dark = matchMedia('(prefers-color-scheme: dark)');
-  const applyTheme = () => { document.documentElement.dataset.dark = dark.matches ? '1' : '0'; };
-  dark.addEventListener('change', applyTheme);
-  applyTheme();
+  const THEME_KEY = 'lumo-theme';
+  const systemDark = matchMedia('(prefers-color-scheme: dark)');
+  function savedTheme() { try { return localStorage.getItem(THEME_KEY); } catch { return null; } }
+  function effectiveTheme() {
+    const t = document.documentElement.dataset.theme;
+    return t === 'dark' || t === 'light' ? t : (systemDark.matches ? 'dark' : 'light');
+  }
+  function paintThemeButtons() {
+    const dark = effectiveTheme() === 'dark';
+    document.documentElement.dataset.dark = dark ? '1' : '0';
+    for (const b of document.querySelectorAll('[data-theme-toggle]')) {
+      b.innerHTML = icon(dark ? 'sun' : 'moon', 18);
+      const label = dark ? 'Usar tema claro' : 'Usar tema escuro';
+      b.setAttribute('aria-label', label);
+      b.title = label;
+    }
+  }
+  function applyTheme(theme) {
+    if (theme === 'dark' || theme === 'light') document.documentElement.dataset.theme = theme;
+    else delete document.documentElement.dataset.theme;
+    if (api.app.setTheme) api.app.setTheme(theme || 'system');
+    paintThemeButtons();
+  }
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('[data-theme-toggle]')) return;
+    const next = effectiveTheme() === 'dark' ? 'light' : 'dark';
+    try { localStorage.setItem(THEME_KEY, next); } catch { /* sem armazenamento: vale só nesta visita */ }
+    applyTheme(next);
+  });
+  systemDark.addEventListener('change', paintThemeButtons);
+  // O claude.ai também pode trocar o tema da página; os botões acompanham.
+  new MutationObserver(paintThemeButtons).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  applyTheme(savedTheme());
 
   /* ---------- início ---------- */
 

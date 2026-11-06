@@ -22,7 +22,7 @@ contextBridge.exposeInMainWorld('api', {
     restore: call('demands:restore'),
   },
   data: { export: call('data:export') },
-  app: { info: call('app:info'), openDataDir: call('app:open-data-dir'), copy: call('app:copy') },
+  app: { info: call('app:info'), openDataDir: call('app:open-data-dir'), copy: call('app:copy'), setTheme: call('app:set-theme') },
   on: (event, fn) => {
     const allowed = ['app:focus-capture', 'app:locked'];
     if (!allowed.includes(event)) return () => {};
