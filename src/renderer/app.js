@@ -958,7 +958,7 @@
     renderPreview();
     try {
       const created = await call(api.demands.create(input));
-      state.demands.push(created);
+      replaceLocal(created); // pode já ter chegado pelo aviso de mudança ao vivo
       state.justCreated = created.id;
       if (state.search) { state.search = ''; searchInput.value = ''; }
       renderSidebar();
