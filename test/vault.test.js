@@ -138,3 +138,23 @@ test('blocos de notas: criar, editar, excluir e persistir cifrado', async () => 
   assert.match(notes[0].body, /Retorno até sexta/);
   assert.equal(notes[0].ws, 'comexport');
 });
+
+test('imagens dos blocos: salvar cifrado, ler, apagar e limpar as sem uso', async () => {
+  const dir = tmpDir();
+  const v = new Vault(dir);
+  await v.register('ana', 'senha-boa-1');
+  const png = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
+  const { id } = v.putImage(png);
+  assert.match(id, /^[a-f0-9-]{36}$/);
+  const files = fs.readdirSync(path.join(dir, 'imagens'), { recursive: true }).map(String);
+  assert.ok(files.some((f) => f.endsWith(`${id}.enc`)));
+  const raw = fs.readFileSync(path.join(dir, 'imagens', v.session.accountId, `${id}.enc`), 'utf8');
+  assert.ok(!raw.includes('iVBORw0KGgo'), 'imagem não pode ficar em texto puro');
+  assert.equal(v.getImage(id), png);
+  const note = v.createNote({ title: 'Com imagem', doc: [{ insert: 'antes\n' }, { insert: { lumoimg: { id } } }, { insert: '\n' }] });
+  assert.deepEqual(note.doc[1], { insert: { lumoimg: { id } } });
+  assert.throws(() => v.putImage('data:text/html;base64,PGI+'), { code: 'bad_image' });
+  assert.equal(v.collectImages([id]).removed, 0);
+  v.deleteImage(id);
+  assert.throws(() => v.getImage(id), { code: 'not_found' });
+});

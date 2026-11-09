@@ -390,6 +390,9 @@
       state.demands = [];
     }
     try { state.notes = await call(api.notes.list()); } catch { state.notes = []; }
+    // Remove imagens que nenhum bloco usa mais (em segundo plano).
+    const usedImages = state.notes.flatMap((n) => (n.doc || []).filter((op) => op.insert && op.insert.lumoimg).map((op) => op.insert.lumoimg.id));
+    api.images.collect(usedImages).catch(() => {});
     state.noteId = null;
     await loadWorkspaces();
     renderAll();
@@ -612,7 +615,81 @@
     const Size = window.Quill.import('attributors/style/size');
     Size.whitelist = NOTE_SIZES;
     window.Quill.register(Size, true);
+    // Imagem do Lumo: o conteúdo guarda só o id; os bytes ficam cifrados à parte.
+    const BaseImage = window.Quill.import('formats/image');
+    class LumoImage extends BaseImage {
+      static create(value) {
+        const node = super.create(BLANK_IMG);
+        node.setAttribute('alt', 'Imagem');
+        node.dataset.id = value && value.id ? value.id : '';
+        node.classList.add('lumo-img', 'loading');
+        if (node.dataset.id) loadImageInto(node, node.dataset.id);
+        return node;
+      }
+      static value(node) { return { id: node.dataset.id }; }
+      static formats() { return {}; }
+    }
+    LumoImage.blotName = 'lumoimg';
+    LumoImage.className = 'lumo-img';
+    window.Quill.register(LumoImage, true);
     quillReady = true;
+    return true;
+  }
+
+  const BLANK_IMG = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+  const imageUrls = new Map();
+  async function loadImageInto(node, id) {
+    try {
+      if (!imageUrls.has(id)) imageUrls.set(id, await call(api.images.get(id)));
+      node.src = imageUrls.get(id);
+      node.classList.remove('loading');
+    } catch {
+      node.classList.remove('loading');
+      node.classList.add('missing');
+      node.setAttribute('alt', 'Imagem indisponível');
+    }
+  }
+
+  // Reduz para no máximo 1600 px e converte para WebP, para não pesar no armazenamento.
+  async function shrinkImage(file) {
+    if (file.type === 'image/gif') return readAsDataUrl(file); // mantém a animação
+    const bitmap = await createImageBitmap(file);
+    const scale = Math.min(1, 1600 / Math.max(bitmap.width, bitmap.height));
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.max(1, Math.round(bitmap.width * scale));
+    canvas.height = Math.max(1, Math.round(bitmap.height * scale));
+    canvas.getContext('2d').drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+    bitmap.close && bitmap.close();
+    const blob = await new Promise((r) => canvas.toBlob(r, 'image/webp', 0.86));
+    return readAsDataUrl(blob && blob.size < file.size ? blob : file);
+  }
+
+  function readAsDataUrl(blob) {
+    return new Promise((resolve, reject) => {
+      const fr = new FileReader();
+      fr.onload = () => resolve(String(fr.result));
+      fr.onerror = () => reject(fr.error);
+      fr.readAsDataURL(blob);
+    });
+  }
+
+  async function insertImages(q, files, index) {
+    const images = [...files].filter((f) => /^image\/(png|jpeg|webp|gif)$/.test(f.type));
+    if (!images.length) return false;
+    let at = typeof index === 'number' ? index : (q.getSelection(true) || { index: q.getLength() }).index;
+    for (const file of images) {
+      try {
+        const dataUrl = await shrinkImage(file);
+        const { id } = await call(api.images.put(dataUrl));
+        imageUrls.set(id, dataUrl);
+        q.insertEmbed(at, 'lumoimg', { id }, 'user');
+        q.insertText(at + 1, '\n', 'user');
+        at += 2;
+        q.setSelection(at, 0, 'silent');
+      } catch (err) {
+        toast(err.message || 'Não foi possível colar a imagem.', { error: true });
+      }
+    }
     return true;
   }
 
@@ -633,7 +710,7 @@
     const q = new window.Quill(host, {
       theme: 'snow',
       placeholder: 'Escreva aqui. Tudo é salvo sozinho enquanto você digita.',
-      formats: ['font', 'size', 'bold', 'italic', 'underline', 'strike', 'color', 'background', 'header', 'list', 'indent', 'align', 'blockquote', 'code-block', 'link', 'script'],
+      formats: ['font', 'size', 'bold', 'italic', 'underline', 'strike', 'color', 'background', 'header', 'list', 'indent', 'align', 'blockquote', 'code-block', 'link', 'script', 'lumoimg'],
       modules: {
         toolbar: [
           [{ font: [false, ...NOTE_FONTS.slice(1)] }, { size: [false, ...NOTE_SIZES.filter((x) => x !== '16px')] }],
@@ -647,6 +724,8 @@
           ['clean'],
         ],
         clipboard: { matchVisual: false },
+        // Arrastar arquivos de imagem para o bloco.
+        uploader: { mimetypes: ['image/png', 'image/jpeg', 'image/webp', 'image/gif'], handler(range, files) { insertImages(this.quill, files, range && range.index); } },
         history: { delay: 800, maxStack: 200, userOnly: true },
       },
     });
@@ -672,6 +751,14 @@
       noteTimer = setTimeout(saveNote, 700);
     });
     q.root.addEventListener('blur', () => saveNote());
+    // Ctrl+V com imagem copiada (print, imagem de outro app ou do navegador).
+    q.root.addEventListener('paste', (e) => {
+      const files = [...((e.clipboardData && e.clipboardData.files) || [])].filter((f) => f.type.startsWith('image/'));
+      if (!files.length) return;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      insertImages(q, files);
+    }, true);
     noteQuill = q;
   }
 
@@ -722,6 +809,7 @@
     $('#note-del-ok').addEventListener('click', async () => {
       try {
         await call(api.notes.remove(n.id));
+        for (const op of n.doc || []) if (op.insert && op.insert.lumoimg) api.images.remove(op.insert.lumoimg.id);
         state.notes = state.notes.filter((x) => x.id !== n.id);
         sheet.close();
         state.noteId = null;

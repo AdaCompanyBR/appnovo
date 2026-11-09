@@ -91,11 +91,16 @@
 
   const importDek = (raw) => subtle.importKey('raw', raw, 'AES-GCM', false, ['encrypt', 'decrypt']);
 
+  const IMAGE_ID_RE = /^[a-f0-9-]{36}$/;
+  function isImageEmbed(v) {
+    return Boolean(v && typeof v === 'object' && v.lumoimg && typeof v.lumoimg.id === 'string' && IMAGE_ID_RE.test(v.lumoimg.id));
+  }
+
   function sanitizeDoc(doc) {
     // Conteúdo formatado do editor (Delta do Quill): só texto e atributos simples.
     if (!Array.isArray(doc)) return null;
-    const ops = doc.filter((op) => op && typeof op.insert === 'string').map((op) => {
-      const out = { insert: op.insert };
+    const ops = doc.filter((op) => op && (typeof op.insert === 'string' || isImageEmbed(op.insert))).map((op) => {
+      const out = { insert: typeof op.insert === 'string' ? op.insert : { lumoimg: { id: String(op.insert.lumoimg.id) } } };
       if (op.attributes && typeof op.attributes === 'object') {
         const attrs = {};
         for (const [k, v] of Object.entries(op.attributes)) {
@@ -162,7 +167,8 @@
         const uid = user ? await user.id() : null;
         if (!db || !uid) throw new VaultError('unavailable', 'Não foi possível acessar o armazenamento. Entre na sua conta do claude.ai e abra a página de novo.');
         const accountRef = db.doc(`data/users/${uid}/account`);
-        return { db, downloads, accountRef, demandsCol: accountRef.collection('demands'), settingsRef: db.doc(`data/users/${uid}/settings`), notesCol: accountRef.collection('notes') };
+        return { db, downloads, accountRef, demandsCol: accountRef.collection('demands'), settingsRef: db.doc(`data/users/${uid}/settings`), notesCol: accountRef.collection('notes'),
+          imgMetaCol: accountRef.collection('imgmeta'), imgDataCol: accountRef.collection('imgdata') };
       })();
       ready.catch(() => { ready = null; });
     }
@@ -187,6 +193,7 @@
 
   /* ---------- sessão ---------- */
 
+  const imageCache = new Map();
   const session = { username: null, dek: null, cache: new Map(), notes: new Map(), unsub: null, lastUsername: '' };
   const listeners = { 'app:locked': new Set(), 'app:focus-capture': new Set(), 'app:data': new Set() };
   const emit = (ev) => listeners[ev].forEach((fn) => { try { fn(); } catch (e) { console.error(e); } });
@@ -205,6 +212,7 @@
     session.dek = null;
     session.cache = new Map();
     session.notes = new Map();
+    imageCache.clear();
     session.username = null;
     clearTimeout(idleTimer);
   }
@@ -456,6 +464,71 @@
       return before;
     },
 
+    // Imagens: o conteúdo cifrado é dividido em partes (cada registro tem limite de tamanho).
+    async 'images:put'(dataUrl) {
+      requireSession();
+      const m = /^data:(image\/(?:png|jpeg|webp|gif));base64,([A-Za-z0-9+/=]+)$/.exec(String(dataUrl || ''));
+      if (!m) throw new VaultError('bad_image', 'Formato de imagem não suportado. Use PNG, JPG, WebP ou GIF.');
+      const bytes = unb64(m[2]);
+      if (bytes.length > 6 * 1024 * 1024) throw new VaultError('too_large', 'A imagem é grande demais (máximo 6 MB).');
+      const { imgMetaCol, imgDataCol } = await backend();
+      const id = crypto.randomUUID();
+      const box = await seal(session.dek, bytes);
+      const CHUNK = 180000;
+      const parts = [];
+      for (let i = 0; i < box.ct.length; i += CHUNK) parts.push(box.ct.slice(i, i + CHUNK));
+      for (let i = 0; i < parts.length; i++) await dbCall(() => imgDataCol.doc(`${id}.${i}`).set({ c: parts[i] }));
+      await dbCall(() => imgMetaCol.doc(id).set({ mime: m[1], iv: box.iv, n: parts.length, createdAt: new Date().toISOString() }));
+      imageCache.set(id, dataUrl);
+      return { id };
+    },
+
+    async 'images:get'(id) {
+      requireSession();
+      id = String(id);
+      if (imageCache.has(id)) return imageCache.get(id);
+      const { imgMetaCol, imgDataCol } = await backend();
+      const meta = await dbCall(() => imgMetaCol.doc(id).get());
+      if (!meta.exists) throw new VaultError('not_found', 'Imagem não encontrada.');
+      const { mime, iv, n } = meta.data();
+      const parts = [];
+      for (let i = 0; i < n; i++) {
+        const snap = await dbCall(() => imgDataCol.doc(`${id}.${i}`).get());
+        if (!snap.exists) throw new VaultError('not_found', 'Imagem incompleta.');
+        parts.push(snap.data().c);
+      }
+      const bytes = await open(session.dek, { iv, ct: parts.join('') });
+      const url = `data:${mime};base64,${b64(bytes)}`;
+      imageCache.set(id, url);
+      return url;
+    },
+
+    async 'images:delete'(id) {
+      requireSession();
+      id = String(id);
+      const { imgMetaCol, imgDataCol } = await backend();
+      const meta = await dbCall(() => imgMetaCol.doc(id).get());
+      const n = meta.exists ? meta.data().n : 0;
+      await dbCall(() => imgMetaCol.doc(id).delete());
+      for (let i = 0; i < n; i++) await dbCall(() => imgDataCol.doc(`${id}.${i}`).delete());
+      imageCache.delete(id);
+      return true;
+    },
+
+    async 'images:collect'(keepIds) {
+      requireSession();
+      const keep = new Set((keepIds || []).map(String));
+      const { imgMetaCol } = await backend();
+      const snap = await dbCall(() => imgMetaCol.get());
+      let removed = 0;
+      for (const doc of snap.docs) {
+        if (keep.has(doc.id)) continue;
+        const created = Date.parse((doc.data() || {}).createdAt || 0);
+        if (Date.now() - created > 24 * 3600 * 1000) { await ops['images:delete'](doc.id); removed++; }
+      }
+      return { removed };
+    },
+
     async 'settings:get'() {
       requireSession();
       const { settingsRef } = await backend();
@@ -513,6 +586,7 @@
       remove: call('demands:delete'), restore: call('demands:restore'),
     },
     notes: { list: call('notes:list'), create: call('notes:create'), update: call('notes:update'), remove: call('notes:delete') },
+    images: { put: call('images:put'), get: call('images:get'), remove: call('images:delete'), collect: call('images:collect') },
     settings: { get: call('settings:get'), set: call('settings:set') },
     data: { export: call('data:export') },
     app: {

@@ -430,6 +430,55 @@ class Vault {
     return removed;
   }
 
+  /* ---------- imagens dos blocos de notas ---------- */
+
+  _imageDir() {
+    this._requireSession();
+    const dir = path.join(this.dir, 'imagens', this.session.accountId);
+    fs.mkdirSync(dir, { recursive: true });
+    return dir;
+  }
+
+  putImage(dataUrl) {
+    const m = /^data:(image\/(?:png|jpeg|webp|gif));base64,([A-Za-z0-9+/=]+)$/.exec(String(dataUrl || ''));
+    if (!m) throw new VaultError('bad_image', 'Formato de imagem não suportado. Use PNG, JPG, WebP ou GIF.');
+    const bytes = Buffer.from(m[2], 'base64');
+    if (bytes.length > MAX_IMAGE_BYTES) throw new VaultError('too_large', 'A imagem é grande demais (máximo 6 MB).');
+    const id = crypto.randomUUID();
+    const box = seal(this.session.dek, bytes);
+    writeAtomic(path.join(this._imageDir(), `${id}.enc`), JSON.stringify({ mime: m[1], createdAt: new Date().toISOString(), box }));
+    return { id };
+  }
+
+  getImage(id) {
+    if (!IMAGE_ID_RE.test(String(id))) throw new VaultError('not_found', 'Imagem não encontrada.');
+    const file = path.join(this._imageDir(), `${id}.enc`);
+    if (!fs.existsSync(file)) throw new VaultError('not_found', 'Imagem não encontrada.');
+    const rec = JSON.parse(fs.readFileSync(file, 'utf8'));
+    return `data:${rec.mime};base64,${open(this.session.dek, rec.box).toString('base64')}`;
+  }
+
+  deleteImage(id) {
+    if (!IMAGE_ID_RE.test(String(id))) return false;
+    const file = path.join(this._imageDir(), `${id}.enc`);
+    if (fs.existsSync(file)) fs.unlinkSync(file);
+    return true;
+  }
+
+  // Apaga imagens que nenhum bloco usa mais (com mais de um dia, para não apagar algo recém-colado).
+  collectImages(keepIds) {
+    const keep = new Set((keepIds || []).map(String));
+    const dir = this._imageDir();
+    let removed = 0;
+    for (const f of fs.readdirSync(dir)) {
+      const id = f.replace(/\.enc$/, '');
+      if (keep.has(id)) continue;
+      const age = Date.now() - fs.statSync(path.join(dir, f)).mtimeMs;
+      if (age > 24 * 3600 * 1000) { fs.unlinkSync(path.join(dir, f)); removed++; }
+    }
+    return { removed };
+  }
+
   getSettings() {
     this._requireSession();
     return this.session.data.settings || {};
@@ -457,12 +506,18 @@ class Vault {
 }
 
 const NOTE_MAX = 100000;
+const MAX_IMAGE_BYTES = 6 * 1024 * 1024;
+
+const IMAGE_ID_RE = /^[a-f0-9-]{36}$/;
+function isImageEmbed(v) {
+  return Boolean(v && typeof v === 'object' && v.lumoimg && typeof v.lumoimg.id === 'string' && IMAGE_ID_RE.test(v.lumoimg.id));
+}
 
 function sanitizeDoc(doc) {
   // Conteúdo formatado do editor (Delta do Quill): só texto e atributos simples.
   if (!Array.isArray(doc)) return null;
-  const ops = doc.filter((op) => op && typeof op.insert === 'string').map((op) => {
-    const out = { insert: op.insert };
+  const ops = doc.filter((op) => op && (typeof op.insert === 'string' || isImageEmbed(op.insert))).map((op) => {
+    const out = { insert: typeof op.insert === 'string' ? op.insert : { lumoimg: { id: String(op.insert.lumoimg.id) } } };
     if (op.attributes && typeof op.attributes === 'object') {
       const attrs = {};
       for (const [k, v] of Object.entries(op.attributes)) {

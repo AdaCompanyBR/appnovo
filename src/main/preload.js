@@ -22,6 +22,7 @@ contextBridge.exposeInMainWorld('api', {
     restore: call('demands:restore'),
   },
   notes: { list: call('notes:list'), create: call('notes:create'), update: call('notes:update'), remove: call('notes:delete') },
+  images: { put: call('images:put'), get: call('images:get'), remove: call('images:delete'), collect: call('images:collect') },
   settings: { get: call('settings:get'), set: call('settings:set') },
   data: { export: call('data:export') },
   app: { info: call('app:info'), openDataDir: call('app:open-data-dir'), copy: call('app:copy'), setTheme: call('app:set-theme') },

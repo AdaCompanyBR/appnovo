@@ -140,6 +140,10 @@ function registerIpc() {
   handle('notes:create', (input) => vault.createNote(input || {}));
   handle('notes:update', (id, patch) => vault.updateNote(String(id), patch || {}));
   handle('notes:delete', (id) => vault.deleteNote(String(id)));
+  handle('images:put', (dataUrl) => vault.putImage(dataUrl));
+  handle('images:get', (id) => vault.getImage(String(id)));
+  handle('images:delete', (id) => vault.deleteImage(String(id)));
+  handle('images:collect', (ids) => vault.collectImages(Array.isArray(ids) ? ids : []));
   handle('settings:get', () => vault.getSettings());
   handle('settings:set', (settings) => vault.setSettings(settings));
 
