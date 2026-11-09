@@ -621,12 +621,18 @@
       static create(value) {
         const node = super.create(BLANK_IMG);
         node.setAttribute('alt', 'Imagem');
+        node.setAttribute('draggable', 'false');
         node.dataset.id = value && value.id ? value.id : '';
+        if (value && value.w) { node.dataset.w = String(value.w); node.style.width = `${value.w}px`; }
         node.classList.add('lumo-img', 'loading');
         if (node.dataset.id) loadImageInto(node, node.dataset.id);
         return node;
       }
-      static value(node) { return { id: node.dataset.id }; }
+      static value(node) {
+        const v = { id: node.dataset.id };
+        if (node.dataset.w) v.w = Number(node.dataset.w);
+        return v;
+      }
       static formats() { return {}; }
     }
     LumoImage.blotName = 'lumoimg';
@@ -759,7 +765,173 @@
       e.stopImmediatePropagation();
       insertImages(q, files);
     }, true);
+    attachImageTools(q);
     noteQuill = q;
+  }
+
+  /* --- selecionar, redimensionar e mover imagens no bloco --- */
+
+  let imageToolsCtl = null;
+  function attachImageTools(q) {
+    if (imageToolsCtl) imageToolsCtl.abort();
+    imageToolsCtl = new AbortController();
+    const sig = { signal: imageToolsCtl.signal };
+    const box = q.container; // .ql-container (posicionado)
+    const frame = document.createElement('div');
+    frame.className = 'img-frame';
+    frame.hidden = true;
+    frame.innerHTML = '<span class="img-handle" data-h="nw"></span><span class="img-handle" data-h="ne"></span><span class="img-handle" data-h="sw"></span><span class="img-handle" data-h="se"></span><span class="img-size num"></span>';
+    const marker = document.createElement('div');
+    marker.className = 'img-drop';
+    marker.hidden = true;
+    box.append(frame, marker);
+    let selected = null;
+
+    const place = () => {
+      if (!selected || !selected.isConnected) { unselect(); return; }
+      const r = selected.getBoundingClientRect();
+      const c = box.getBoundingClientRect();
+      frame.style.left = `${r.left - c.left}px`;
+      frame.style.top = `${r.top - c.top}px`;
+      frame.style.width = `${r.width}px`;
+      frame.style.height = `${r.height}px`;
+    };
+    function select(img) {
+      selected = img;
+      frame.hidden = false;
+      frame.querySelector('.img-size').textContent = `${Math.round(img.getBoundingClientRect().width)} px`;
+      place();
+    }
+    function unselect() { selected = null; frame.hidden = true; }
+    const blotIndex = (img) => { const b = window.Quill.find(img); return b ? q.getIndex(b) : -1; };
+    const reselect = (id, at) => requestAnimationFrame(() => {
+      const leaf = q.getLeaf(at + 1)[0];
+      const img = leaf && leaf.domNode && leaf.domNode.tagName === 'IMG' ? leaf.domNode : q.root.querySelector(`img.lumo-img[data-id="${id}"]`);
+      if (img) select(img);
+    });
+
+    // Clique na imagem: seleciona. Clique fora: desmarca.
+    q.root.addEventListener('mousedown', (e) => {
+      const img = e.target.closest && e.target.closest('img.lumo-img');
+      if (!img) { unselect(); return; }
+      e.preventDefault();
+      select(img);
+      startMove(e, img);
+    }, sig);
+    q.root.addEventListener('dragstart', (e) => { if (e.target.tagName === 'IMG') e.preventDefault(); }, sig);
+    q.on('text-change', () => { if (selected) requestAnimationFrame(place); });
+    window.addEventListener('resize', place, sig);
+    boardEl.addEventListener('scroll', place, { ...sig, passive: true });
+    document.addEventListener('mousedown', (e) => { if (selected && !box.contains(e.target)) unselect(); }, sig);
+    // Delete/Backspace apaga a imagem selecionada; Esc desmarca.
+    q.root.addEventListener('keydown', (e) => {
+      if (!selected) return;
+      if (e.key === 'Delete' || e.key === 'Backspace') {
+        e.preventDefault(); e.stopImmediatePropagation();
+        const at = blotIndex(selected);
+        unselect();
+        if (at >= 0) { q.deleteText(at, 1, 'user'); q.setSelection(at, 0, 'silent'); }
+      } else if (e.key === 'Escape') { e.stopPropagation(); unselect(); }
+      else if (!e.ctrlKey && !e.metaKey && e.key.length === 1) unselect();
+    }, { ...sig, capture: true });
+
+    // Redimensionar pelas alças (mantém a proporção).
+    frame.addEventListener('mousedown', (e) => {
+      const h = e.target.closest('.img-handle');
+      if (!h || !selected) return;
+      e.preventDefault(); e.stopPropagation();
+      const img = selected;
+      const startX = e.clientX;
+      const startW = img.getBoundingClientRect().width;
+      const maxW = q.root.clientWidth - 48;
+      const dir = h.dataset.h.includes('e') ? 1 : -1;
+      frame.classList.add('resizing');
+      const move = (ev) => {
+        const w = Math.round(Math.max(60, Math.min(maxW, startW + dir * (ev.clientX - startX))));
+        img.style.width = `${w}px`;
+        frame.querySelector('.img-size').textContent = `${w} px`;
+        place();
+      };
+      const up = () => {
+        document.removeEventListener('mousemove', move);
+        document.removeEventListener('mouseup', up);
+        frame.classList.remove('resizing');
+        const w = Math.round(img.getBoundingClientRect().width);
+        const at = blotIndex(img);
+        if (at < 0) return;
+        const id = img.dataset.id;
+        q.updateContents(new (window.Quill.import('delta'))().retain(at).delete(1).insert({ lumoimg: { id, w } }), 'user');
+        reselect(id, at);
+      };
+      document.addEventListener('mousemove', move);
+      document.addEventListener('mouseup', up);
+    }, sig);
+
+    // Posição no texto (índice do editor) a partir de um ponto do documento.
+    function indexFromRange(range) {
+      const node = range.startContainer;
+      const offset = range.startOffset;
+      if (node.nodeType === 3) {
+        const blot = window.Quill.find(node, true);
+        return blot ? q.getIndex(blot) + offset : null;
+      }
+      const child = node.childNodes[offset];
+      if (child) {
+        const blot = window.Quill.find(child, true);
+        return blot ? q.getIndex(blot) : null;
+      }
+      const blot = window.Quill.find(node, true);
+      return blot ? q.getIndex(blot) + Math.max(0, blot.length() - 1) : null;
+    }
+
+    // Segurar e arrastar a imagem para outro ponto do texto.
+    function startMove(e, img) {
+      const sx = e.clientX; const sy = e.clientY;
+      let dragging = false;
+      let target = null;
+      const move = (ev) => {
+        if (!dragging && Math.hypot(ev.clientX - sx, ev.clientY - sy) < 6) return;
+        if (!dragging) { dragging = true; img.classList.add('moving'); frame.hidden = true; document.body.classList.add('img-dragging'); }
+        const range = document.caretRangeFromPoint ? document.caretRangeFromPoint(ev.clientX, ev.clientY) : null;
+        if (!range || !q.root.contains(range.startContainer)) { marker.hidden = true; target = null; return; }
+        let rect = range.getBoundingClientRect();
+        if (!rect || (!rect.height && !rect.width)) {
+          const el = range.startContainer.nodeType === 1 ? range.startContainer : range.startContainer.parentElement;
+          rect = el.getBoundingClientRect();
+        }
+        const c = box.getBoundingClientRect();
+        marker.style.left = `${rect.left - c.left}px`;
+        marker.style.top = `${rect.top - c.top}px`;
+        marker.style.height = `${Math.max(18, rect.height)}px`;
+        marker.hidden = false;
+        target = range;
+      };
+      const up = () => {
+        document.removeEventListener('mousemove', move);
+        document.removeEventListener('mouseup', up);
+        marker.hidden = true;
+        img.classList.remove('moving');
+        document.body.classList.remove('img-dragging');
+        if (!dragging) return;
+        if (!target) { select(img); return; }
+        const from = blotIndex(img);
+        let to = indexFromRange(target);
+        if (from < 0 || to === null) { select(img); return; }
+        if (to === from || to === from + 1) { select(img); return; }
+        const value = { id: img.dataset.id };
+        if (img.dataset.w) value.w = Number(img.dataset.w);
+        // Se a imagem estava sozinha na linha, leva a linha junto (não sobra linha em branco).
+        const alone = (from === 0 || q.getText(from - 1, 1) === '\n') && q.getText(from + 1, 1) === '\n';
+        const removed = alone && to !== from + 2 ? 2 : 1;
+        q.deleteText(from, removed, 'user');
+        if (to > from) to -= removed;
+        q.insertEmbed(to, 'lumoimg', value, 'user');
+        q.setSelection(to + 1, 0, 'silent');
+        reselect(value.id, to);
+      };
+      document.addEventListener('mousemove', move);
+      document.addEventListener('mouseup', up);
+    }
   }
 
   let noteTimer = null;

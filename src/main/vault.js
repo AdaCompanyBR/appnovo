@@ -509,6 +509,14 @@ const NOTE_MAX = 100000;
 const MAX_IMAGE_BYTES = 6 * 1024 * 1024;
 
 const IMAGE_ID_RE = /^[a-f0-9-]{36}$/;
+function imageValue(v) {
+  // id da imagem e, se a pessoa redimensionou, a largura em pixels.
+  const out = { id: String(v.id) };
+  const w = Math.round(Number(v.w));
+  if (Number.isFinite(w) && w >= 40 && w <= 4000) out.w = w;
+  return out;
+}
+
 function isImageEmbed(v) {
   return Boolean(v && typeof v === 'object' && v.lumoimg && typeof v.lumoimg.id === 'string' && IMAGE_ID_RE.test(v.lumoimg.id));
 }
@@ -517,7 +525,7 @@ function sanitizeDoc(doc) {
   // Conteúdo formatado do editor (Delta do Quill): só texto e atributos simples.
   if (!Array.isArray(doc)) return null;
   const ops = doc.filter((op) => op && (typeof op.insert === 'string' || isImageEmbed(op.insert))).map((op) => {
-    const out = { insert: typeof op.insert === 'string' ? op.insert : { lumoimg: { id: String(op.insert.lumoimg.id) } } };
+    const out = { insert: typeof op.insert === 'string' ? op.insert : { lumoimg: imageValue(op.insert.lumoimg) } };
     if (op.attributes && typeof op.attributes === 'object') {
       const attrs = {};
       for (const [k, v] of Object.entries(op.attributes)) {
