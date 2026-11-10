@@ -85,6 +85,7 @@
   const state = {
     username: '',
     demands: [],
+    expanded: new Set(),
     view: 'hoje',
     project: null,
     requester: null,
@@ -115,8 +116,10 @@
   }
 
   const inWs = (d) => (d.ws || state.legacyWs) === state.ws;
-  function scoped(list) {
-    return list.filter((d) => inWs(d) &&
+  const childrenOf = (id) => state.demands.filter((x) => x.parentId === id).sort((a, b) => a.seq - b.seq);
+  const isChild = (d) => Boolean(d.parentId && byId(d.parentId));
+  function scoped(list, { withChildren = false } = {}) {
+    return list.filter((d) => inWs(d) && (withChildren || !isChild(d)) &&
       (!state.project || d.project.toLowerCase() === state.project.toLowerCase()) &&
       (!state.requester || d.requester.toLowerCase() === state.requester.toLowerCase()));
   }
@@ -385,6 +388,7 @@
     accountBtn.setAttribute('aria-label', `Conta ${state.username}`);
     try {
       state.demands = await call(api.demands.list());
+      await migrateEpicTasks();
     } catch (err) {
       toast(err.message, { error: true });
       state.demands = [];
@@ -1040,7 +1044,7 @@
     const list = scoped(state.demands);
     if (state.search) {
       const q = state.search.toLowerCase();
-      const hits = list.filter((d) => [d.title, d.notes, d.project, d.requester, seqLabel(d.seq), ...(d.tasks || []).map((t) => t.title)].some((f) => f && f.toLowerCase().includes(q)));
+      const hits = scoped(state.demands, { withChildren: true }).filter((d) => [d.title, d.notes, d.project, d.requester, seqLabel(d.seq)].some((f) => f && f.toLowerCase().includes(q)));
       hits.sort((a, b) => (isOpen(b) - isOpen(a)) || sortOpen(a, b));
       return { title: 'Busca', rail: null, groups: [{ id: 'search', title: `Resultados para “${state.search}”`, items: hits }] };
     }
@@ -1129,8 +1133,8 @@
   }
 
   function epicCounts(d) {
-    const tasks = d.tasks || [];
-    return { total: tasks.length, done: tasks.filter((t) => t.done).length };
+    const kids = childrenOf(d.id);
+    return { total: kids.length, done: kids.filter((k) => k.status === 'done').length };
   }
   function epicTag(d) {
     if (!d.epic) return '';
@@ -1164,17 +1168,23 @@
     return `<span class="r-age num ${cls}" title="Chegou em ${fullDate(d.createdAt)}">${a.text}</span>`;
   }
 
-  function rowHtml(d, group) {
+  function rowHtml(d, group, child = false) {
     const done = d.status === 'done';
-    return `
-      <div class="row paper ${done ? 'is-done' : ''} ${state.justCreated === d.id ? 'printing' : ''}" role="option" data-id="${d.id}" data-p="${d.priority}" aria-selected="${state.selectedId === d.id}">
+    const kids = !child && d.epic ? childrenOf(d.id) : [];
+    const open = kids.length && state.expanded.has(d.id);
+    const expandBtn = !child && d.epic
+      ? `<button type="button" class="r-expand" data-act="expand" aria-expanded="${Boolean(open)}" ${kids.length ? '' : 'disabled'} title="${open ? 'Recolher' : 'Mostrar'} tarefas do épico" aria-label="${open ? 'Recolher' : 'Mostrar'} tarefas do épico">${icon('chevron-right', 14)}</button>`
+      : '';
+    const row = `
+      <div class="row paper ${done ? 'is-done' : ''} ${child ? 'child' : ''} ${state.justCreated === d.id ? 'printing' : ''}" role="option" data-id="${d.id}" data-p="${d.priority}" aria-selected="${state.selectedId === d.id}">
         <button type="button" class="tick" role="checkbox" aria-checked="${done}" data-act="toggle" aria-label="${done ? 'Reabrir' : 'Concluir'} demanda ${seqLabel(d.seq)}">${icon('check', 12)}</button>
         <span class="r-seq"><span class="pri" data-p="${d.priority}" title="Prioridade ${PRIORITY_LABEL[d.priority]}"></span>${seqLabel(d.seq)}</span>
-        <span class="r-main"><span class="r-title">${esc(d.title)}</span>${epicTag(d)}${state.view !== 'aguardando' && group !== 'doing' && (d.status === 'doing' || d.status === 'waiting') ? statusTag(d) : ''}</span>
+        <span class="r-main">${expandBtn}${child ? `<span class="r-branch" aria-hidden="true"></span>` : ''}<span class="r-title">${esc(d.title)}</span>${epicTag(d)}${state.view !== 'aguardando' && group !== 'doing' && (d.status === 'doing' || d.status === 'waiting') ? statusTag(d) : ''}</span>
         <span class="r-tags">${tagsHtml(d, { status: false })}</span>
         <span class="r-due">${dueHtml(d)}</span>
         ${ageHtml(d)}
       </div>`;
+    return open ? row + kids.map((k) => rowHtml(k, group, true)).join('') : row;
   }
 
   function railTicketHtml(d) {
@@ -1245,9 +1255,10 @@
     else if (nothing) html += emptyHtml('hoje');
 
 
-    state.order = order;
     if (state.selectedId && !byId(state.selectedId)) state.selectedId = null;
     boardEl.innerHTML = html;
+    // A ordem de navegação inclui as tarefas visíveis dos épicos expandidos.
+    state.order = [...new Set([...boardEl.querySelectorAll('[data-id]')].map((el) => el.dataset.id))];
     state.justCreated = null;
   }
 
@@ -1263,6 +1274,12 @@
     const id = item.dataset.id;
     const act = e.target.closest('[data-act]');
     if (act && act.dataset.act === 'toggle') { e.stopPropagation(); toggleDone(id); return; }
+    if (act && act.dataset.act === 'expand') {
+      e.stopPropagation();
+      if (state.expanded.has(id)) state.expanded.delete(id); else state.expanded.add(id);
+      renderBoard();
+      return;
+    }
     if (act && act.dataset.act === 'pause') { e.stopPropagation(); setField(id, { status: 'todo' }, 'Voltou para a fila'); return; }
     select(id, { open: true });
   });
@@ -1301,7 +1318,7 @@
     detailEl.className = 'detail paper';
     detailEl.innerHTML = `
       <div class="d-head">
-        <span class="seq">${seqLabel(d.seq)}</span>${d.epic ? `<span class="epic-badge">${icon('layers', 12)}Épico</span>` : ''}<span>· criada há ${age(d.createdAt).text}</span>
+        ${isChild(d) ? `<button type="button" class="d-back" data-dact="parent" title="Voltar ao épico">${icon('arrow-left', 14)}Épico ${seqLabel(byId(d.parentId).seq)}</button>` : ''}<span class="seq">${seqLabel(d.seq)}</span>${d.epic && !isChild(d) ? `<span class="epic-badge">${icon('layers', 12)}Épico</span>` : ''}<span>· criada há ${age(d.createdAt).text}</span>
         <span class="spacer"></span><span class="saved" id="saved" aria-live="polite"></span>
         <button type="button" class="icon-btn danger" data-dact="delete" title="Excluir (Delete)" aria-label="Excluir demanda">${icon('trash-2')}</button>
         <button type="button" class="icon-btn" data-dact="close" title="Fechar (Esc)" aria-label="Fechar painel">${icon('x')}</button>
@@ -1343,21 +1360,28 @@
   /* ---------- épico: tarefas dentro da demanda ---------- */
 
   function epicHtml(d) {
+    if (isChild(d)) return '';
     if (!d.epic) {
       return `<button type="button" class="epic-make" data-dact="epic-on">${icon('layers', 16)}<span><b>Transformar em épico</b><small>Agrupe várias tarefas desta mesma demanda</small></span></button>`;
     }
     const c = epicCounts(d);
+    const kids = childrenOf(d.id);
     return `
       <div class="field epic">
         <div class="notes-head"><span class="field-label epic-label">${icon('layers', 14)}Tarefas do épico</span><span class="epic-count num">${c.total ? `${c.done} de ${c.total}` : 'nenhuma ainda'}</span></div>
         ${c.total ? '<div class="epic-bar" aria-hidden="true"><span></span></div>' : ''}
         <div class="epic-list" role="list">
-          ${(d.tasks || []).map((t) => `
-            <div class="epic-task ${t.done ? 'done' : ''}" role="listitem" data-task="${esc(t.id)}">
-              <button type="button" class="tick" role="checkbox" aria-checked="${t.done}" data-tact="toggle" aria-label="${t.done ? 'Reabrir' : 'Concluir'} tarefa">${icon('check', 12)}</button>
-              <input class="epic-title" value="${esc(t.title)}" maxlength="300" aria-label="Tarefa" autocomplete="off">
-              <button type="button" class="icon-btn epic-del" data-tact="remove" title="Remover tarefa" aria-label="Remover tarefa">${icon('x', 14)}</button>
-            </div>`).join('')}
+          ${kids.map((k) => {
+            const done = k.status === 'done';
+            const info = dueInfo(k);
+            return `
+            <div class="epic-task ${done ? 'done' : ''}" role="listitem" data-task="${esc(k.id)}">
+              <button type="button" class="tick" role="checkbox" aria-checked="${done}" data-tact="toggle" aria-label="${done ? 'Reabrir' : 'Concluir'} tarefa">${icon('check', 12)}</button>
+              <button type="button" class="epic-open" data-tact="open" title="Abrir tarefa"><span class="epic-open-title">${esc(k.title)}</span>
+                <span class="epic-open-meta">${k.status === 'doing' ? '<span class="tag">Fazendo</span>' : k.status === 'waiting' ? '<span class="tag wait">Aguardando</span>' : ''}${info ? `<span class="tag ${info.tone}">${esc(info.label)}</span>` : ''}${k.requester ? `<span class="tag">${esc(k.requester)}</span>` : ''}${icon('chevron-right', 14)}</span></button>
+              <button type="button" class="icon-btn epic-del" data-tact="remove" title="Excluir tarefa" aria-label="Excluir tarefa">${icon('x', 14)}</button>
+            </div>`;
+          }).join('')}
         </div>
         <form class="epic-add" id="epic-add" novalidate>
           <span class="epic-plus" aria-hidden="true">${icon('plus', 15)}</span>
@@ -1378,19 +1402,59 @@
     if (focusNew) { const f = $('#epic-new'); if (f) f.focus(); }
   }
 
-  async function saveTasks(tasks, focusNew) {
-    const d = byId(state.selectedId);
-    if (!d) return;
-    const updated = await setField(d.id, { epic: true, tasks });
-    if (updated) { paintEpic(focusNew); flashSaved(); }
+  async function addChild(epic, title) {
+    try {
+      const created = await call(api.demands.create({
+        title, parentId: epic.id, ws: epic.ws || state.ws, requester: epic.requester, project: epic.project, status: 'todo', priority: 'normal',
+      }));
+      replaceLocal(created);
+      state.expanded.add(epic.id);
+      renderSidebar();
+      renderBoard();
+      paintEpic(true);
+    } catch (err) { toast(err.message, { error: true }); }
   }
 
-  function taskAction(taskId, action) {
-    const d = byId(state.selectedId);
+  async function taskAction(childId, action) {
+    const k = byId(childId);
+    if (!k) return;
+    if (action === 'open') { openDemand(childId); return; }
+    if (action === 'toggle') { await setField(childId, { status: k.status === 'done' ? 'todo' : 'done' }); paintEpic(false); return; }
+    if (action === 'remove') {
+      try {
+        const removed = await call(api.demands.remove(childId));
+        state.demands = state.demands.filter((x) => x.id !== childId);
+        renderSidebar(); renderBoard(); paintEpic(false);
+        pushUndo('tarefa excluída', () => call(api.demands.restore(removed)).then(replaceLocal));
+        toast(`Tarefa ${seqLabel(removed.seq)} excluída`, { undo: true });
+      } catch (err) { toast(err.message, { error: true }); }
+    }
+  }
+
+  // Abre uma demanda (ou tarefa de épico) no painel, expandindo o épico na lista se preciso.
+  function openDemand(id) {
+    const d = byId(id);
     if (!d) return;
-    const tasks = d.tasks || [];
-    if (action === 'toggle') saveTasks(tasks.map((t) => (t.id === taskId ? { ...t, done: !t.done, doneAt: t.done ? null : new Date().toISOString() } : t)));
-    if (action === 'remove') saveTasks(tasks.filter((t) => t.id !== taskId));
+    if (isChild(d)) state.expanded.add(d.parentId);
+    state.selectedId = id;
+    renderBoard();
+    select(id, { open: true, scroll: true });
+  }
+
+  // Tarefas antigas guardadas dentro do épico viram demandas filhas (uma vez só).
+  async function migrateEpicTasks() {
+    for (const d of state.demands.filter((x) => Array.isArray(x.tasks) && x.tasks.length)) {
+      try {
+        for (const t of d.tasks) {
+          const created = await call(api.demands.create({
+            title: t.title, parentId: d.id, ws: d.ws, requester: d.requester, project: d.project,
+            status: t.done ? 'done' : 'todo', priority: 'normal',
+          }));
+          replaceLocal(created);
+        }
+        replaceLocal(await call(api.demands.update(d.id, { tasks: [], epic: true })));
+      } catch (err) { console.error(err); }
+    }
   }
 
   function autosize(t) { if (!t) return; t.style.height = 'auto'; t.style.height = `${t.scrollHeight}px`; }
@@ -1417,6 +1481,7 @@
     if (act.dataset.dact === 'delete') removeDemand(id);
     if (act.dataset.dact === 'toggle') toggleDone(id);
     if (act.dataset.dact === 'ai') improveNotes('button');
+    if (act.dataset.dact === 'parent') { const d = byId(id); if (d && d.parentId) openDemand(d.parentId); }
     if (act.dataset.dact === 'epic-on') setField(id, { epic: true }).then(() => { renderDetail(); const f = $('#epic-new'); if (f) f.focus(); });
     if (act.dataset.dact === 'epic-off') setField(id, { epic: false, tasks: [] }).then(renderDetail);
     if (act.dataset.dact === 'ai-stop' && ai.state && ai.state.ctl) ai.state.ctl.abort();
@@ -1433,20 +1498,8 @@
     const d = byId(state.selectedId);
     if (!d) return;
     input.value = '';
-    saveTasks([...(d.tasks || []), { id: `t${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`, title, done: false }], true);
+    addChild(d, title);
   });
-  detailEl.addEventListener('change', (e) => {
-    const row = e.target.closest && e.target.closest('[data-task]');
-    if (!row || !e.target.classList.contains('epic-title')) return;
-    const d = byId(state.selectedId);
-    if (!d) return;
-    const title = e.target.value.trim();
-    const t = (d.tasks || []).find((x) => x.id === row.dataset.task);
-    if (!t) return;
-    if (!title) { e.target.value = t.title; return; }
-    if (title !== t.title) saveTasks(d.tasks.map((x) => (x.id === t.id ? { ...x, title } : x)));
-  });
-
   detailEl.addEventListener('input', (e) => {
     if (e.target.id === 'd-title') autosize(e.target);
     if (SUGGEST_FIELDS[e.target.id]) showSuggestions(e.target);
@@ -1763,7 +1816,7 @@ ${text.slice(0, 12000)}
       renderSidebar();
       renderBoard();
       renderDetail();
-      const pending = finishing && updated.epic ? (updated.tasks || []).filter((t) => !t.done).length : 0;
+      const pending = finishing && updated.epic ? childrenOf(updated.id).filter((k) => k.status !== 'done').length : 0;
       const label = finishing ? (pending ? `concluída · ${pending} ${pending === 1 ? 'tarefa do épico ficou aberta' : 'tarefas do épico ficaram abertas'}` : 'concluída') : 'reaberta';
       pushUndo(label, () => call(api.demands.update(id, snapshot)).then(replaceLocal));
       toast(`<span class="num">${seqLabel(updated.seq)}</span> ${label}`, { undo: true, html: true });
@@ -1778,13 +1831,20 @@ ${text.slice(0, 12000)}
     if (!d) return;
     await tearOff(id);
     try {
+      const kids = childrenOf(id);
       const removed = await call(api.demands.remove(id));
-      state.demands = state.demands.filter((x) => x.id !== id);
+      const removedKids = [];
+      for (const k of kids) removedKids.push(await call(api.demands.remove(k.id)));
+      const gone = new Set([id, ...kids.map((k) => k.id)]);
+      state.demands = state.demands.filter((x) => !gone.has(x.id));
       const i = state.order.indexOf(id);
-      state.selectedId = !detailEl.hidden ? (state.order[i + 1] || state.order[i - 1] || null) : null;
+      state.selectedId = !detailEl.hidden ? (state.order.filter((x) => !gone.has(x))[i] || null) : null;
       renderAll();
-      pushUndo('excluída', () => call(api.demands.restore(removed)).then(replaceLocal));
-      toast(`<span class="num">${seqLabel(removed.seq)}</span> excluída`, { undo: true, html: true });
+      pushUndo('excluída', async () => {
+        replaceLocal(await call(api.demands.restore(removed)));
+        for (const k of removedKids) replaceLocal(await call(api.demands.restore(k)));
+      });
+      toast(`<span class="num">${seqLabel(removed.seq)}</span> excluída${kids.length ? ` com ${kids.length} ${kids.length === 1 ? 'tarefa' : 'tarefas'}` : ''}`, { undo: true, html: true });
     } catch (err) {
       toast(err.message, { error: true });
     }

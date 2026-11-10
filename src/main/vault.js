@@ -589,6 +589,7 @@ function sanitizeDemand(d) {
     doneAt: d.doneAt || null,
     epic: Boolean(d.epic) || (Array.isArray(d.tasks) && d.tasks.length > 0),
     tasks: sanitizeTasks(d.tasks),
+    parentId: typeof d.parentId === 'string' && d.parentId && d.parentId !== String(d.id) ? d.parentId.slice(0, 64) : null,
   };
 }
 

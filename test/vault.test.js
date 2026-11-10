@@ -173,3 +173,14 @@ test('épico guarda as tarefas dentro da própria demanda', async () => {
   await v.login('ana', 'senha-boa-1');
   assert.equal(v.listDemands()[0].tasks.length, 2);
 });
+
+test('tarefas do épico como demandas filhas (parentId)', async () => {
+  const v = new Vault(tmpDir());
+  await v.register('ana', 'senha-boa-1');
+  const epic = v.createDemand({ title: 'Épico', epic: true });
+  const child = v.createDemand({ title: 'Tarefa filha', parentId: epic.id, priority: 'alta', due: '2026-11-20' });
+  assert.equal(child.parentId, epic.id);
+  assert.equal(child.priority, 'alta');
+  const self = v.updateDemand(epic.id, { parentId: epic.id });
+  assert.equal(self.parentId, null, 'uma demanda não pode ser filha dela mesma');
+});
