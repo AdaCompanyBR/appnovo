@@ -561,6 +561,17 @@ function cleanText(v, max) {
   return typeof v === 'string' ? v.replace(/\u0000/g, '').trim().slice(0, max) : '';
 }
 
+// Tarefas de um épico: ficam dentro da própria demanda.
+function sanitizeTasks(list) {
+  if (!Array.isArray(list)) return [];
+  return list.slice(0, 200).filter((t) => t && typeof t.title === 'string' && t.title.trim()).map((t) => ({
+    id: String(t.id || '').slice(0, 64) || Math.random().toString(36).slice(2),
+    title: t.title.replace(/\u0000/g, '').trim().slice(0, 300),
+    done: Boolean(t.done),
+    doneAt: t.done ? (t.doneAt || new Date().toISOString()) : null,
+  }));
+}
+
 function sanitizeDemand(d) {
   return {
     id: String(d.id),
@@ -576,6 +587,8 @@ function sanitizeDemand(d) {
     createdAt: d.createdAt || new Date().toISOString(),
     updatedAt: d.updatedAt || d.createdAt || new Date().toISOString(),
     doneAt: d.doneAt || null,
+    epic: Boolean(d.epic) || (Array.isArray(d.tasks) && d.tasks.length > 0),
+    tasks: sanitizeTasks(d.tasks),
   };
 }
 

@@ -158,3 +158,18 @@ test('imagens dos blocos: salvar cifrado, ler, apagar e limpar as sem uso', asyn
   v.deleteImage(id);
   assert.throws(() => v.getImage(id), { code: 'not_found' });
 });
+
+test('épico guarda as tarefas dentro da própria demanda', async () => {
+  const v = new Vault(tmpDir());
+  await v.register('ana', 'senha-boa-1');
+  const d = v.createDemand({ title: 'Tela de Regimes Especiais' });
+  assert.equal(d.epic, false);
+  const e = v.updateDemand(d.id, { epic: true, tasks: [{ id: 't1', title: 'Levantar requisitos', done: true }, { id: 't2', title: '  Protótipo  ' }, { id: 't3', title: '   ' }] });
+  assert.equal(e.epic, true);
+  assert.equal(e.tasks.length, 2);
+  assert.equal(e.tasks[1].title, 'Protótipo');
+  assert.ok(e.tasks[0].doneAt);
+  v.logout();
+  await v.login('ana', 'senha-boa-1');
+  assert.equal(v.listDemands()[0].tasks.length, 2);
+});

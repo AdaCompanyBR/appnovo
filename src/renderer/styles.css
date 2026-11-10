@@ -1075,3 +1075,51 @@ body.img-dragging, body.img-dragging * { cursor: grabbing !important; }
   background: var(--accent); border-radius: 2px;
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent);
 }
+
+/* ---------- épico ---------- */
+.tag.epic { background: var(--accent-soft); color: var(--accent-strong); }
+.tag.epic .icon { color: currentColor; }
+.tag.epic.done { background: var(--success-soft); color: var(--success-text); }
+.epic-badge {
+  display: inline-flex; align-items: center; gap: 4px; height: 20px; padding: 0 8px; margin-left: 2px;
+  border-radius: 10px; background: var(--accent-soft); color: var(--accent-strong); font-size: 11.5px; font-weight: 650;
+}
+.epic-badge .icon { color: currentColor; }
+.epic-make {
+  display: flex; align-items: center; gap: 12px; width: 100%; padding: 10px 12px; text-align: left;
+  border: 1.5px dashed var(--line-strong); border-radius: var(--r-md); background: transparent; color: var(--text-2);
+  transition: border-color 160ms var(--ease), background-color 160ms var(--ease), color 160ms var(--ease);
+}
+.epic-make:hover { border-color: var(--accent); background: var(--accent-soft); color: var(--accent-strong); }
+.epic-make .icon { color: var(--accent); flex: none; }
+.epic-make span { display: grid; gap: 1px; }
+.epic-make b { font-size: 13.5px; font-weight: 650; }
+.epic-make small { font-size: 12px; color: var(--text-3); }
+.epic-label { display: inline-flex; align-items: center; gap: 6px; }
+.epic-label .icon { color: var(--accent); }
+.epic-count { font-size: 12.5px; font-weight: 600; color: var(--text-3); }
+.epic-bar { height: 6px; border-radius: 3px; background: var(--surface-2); overflow: hidden; }
+.epic-bar span { display: block; height: 100%; width: 0; border-radius: 3px; background: var(--accent); transition: width 260ms var(--ease); }
+.epic-list { display: grid; border: 1px solid var(--line); border-radius: var(--r-md); overflow: hidden; background: var(--surface); }
+.epic-list:empty { display: none; }
+.epic-task { display: grid; grid-template-columns: 28px minmax(0, 1fr) 28px; align-items: center; gap: 6px; padding: 3px 4px 3px 6px; }
+.epic-task + .epic-task { border-top: 1px solid var(--line); }
+.epic-task:hover { background: var(--hover); }
+.epic-title {
+  width: 100%; min-width: 0; height: 32px; padding: 0 6px; border: 1px solid transparent; border-radius: 6px;
+  background: transparent; color: var(--text); font-size: 13.5px;
+}
+.epic-title:focus { outline: none; border-color: var(--accent); background: var(--surface); }
+.epic-task.done .epic-title { color: var(--text-3); text-decoration: line-through; }
+.epic-del { width: 28px; height: 28px; opacity: 0; }
+.epic-task:hover .epic-del, .epic-del:focus-visible { opacity: 1; }
+.epic-add {
+  display: flex; align-items: center; gap: 6px; height: 38px; padding: 0 10px;
+  border: 1px solid var(--line-strong); border-radius: var(--r-md); background: var(--surface);
+}
+.epic-add:focus-within { border-color: var(--accent); box-shadow: var(--ring); }
+.epic-plus { color: var(--text-3); display: grid; }
+.epic-add input { flex: 1; min-width: 0; height: 100%; border: 0; background: transparent; color: var(--text); font-size: 13.5px; }
+.epic-add input:focus { outline: none; }
+.epic-off { justify-self: start; font-size: 12.5px; }
+.field.epic { gap: 8px; }

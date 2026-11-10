@@ -1040,7 +1040,7 @@
     const list = scoped(state.demands);
     if (state.search) {
       const q = state.search.toLowerCase();
-      const hits = list.filter((d) => [d.title, d.notes, d.project, d.requester, seqLabel(d.seq)].some((f) => f && f.toLowerCase().includes(q)));
+      const hits = list.filter((d) => [d.title, d.notes, d.project, d.requester, seqLabel(d.seq), ...(d.tasks || []).map((t) => t.title)].some((f) => f && f.toLowerCase().includes(q)));
       hits.sort((a, b) => (isOpen(b) - isOpen(a)) || sortOpen(a, b));
       return { title: 'Busca', rail: null, groups: [{ id: 'search', title: `Resultados para “${state.search}”`, items: hits }] };
     }
@@ -1127,6 +1127,17 @@
     return out.join('');
   }
 
+  function epicCounts(d) {
+    const tasks = d.tasks || [];
+    return { total: tasks.length, done: tasks.filter((t) => t.done).length };
+  }
+  function epicTag(d) {
+    if (!d.epic) return '';
+    const c = epicCounts(d);
+    const all = c.total && c.done === c.total;
+    return `<span class="tag epic ${all ? 'done' : ''}" title="Épico: ${c.done} de ${c.total} tarefas concluídas">${icon('layers', 12)}${c.total ? `${c.done}/${c.total}` : 'Épico'}</span>`;
+  }
+
   function statusTag(d) {
     return d.status === 'waiting'
       ? `<span class="tag wait">${icon('hourglass', 12)}Aguardando</span>`
@@ -1158,7 +1169,7 @@
       <div class="row paper ${done ? 'is-done' : ''} ${state.justCreated === d.id ? 'printing' : ''}" role="option" data-id="${d.id}" data-p="${d.priority}" aria-selected="${state.selectedId === d.id}">
         <button type="button" class="tick" role="checkbox" aria-checked="${done}" data-act="toggle" aria-label="${done ? 'Reabrir' : 'Concluir'} demanda ${seqLabel(d.seq)}">${icon('check', 12)}</button>
         <span class="r-seq"><span class="pri" data-p="${d.priority}" title="Prioridade ${PRIORITY_LABEL[d.priority]}"></span>${seqLabel(d.seq)}</span>
-        <span class="r-main"><span class="r-title">${esc(d.title)}</span>${state.view !== 'aguardando' && (d.status === 'doing' || d.status === 'waiting') ? statusTag(d) : ''}</span>
+        <span class="r-main"><span class="r-title">${esc(d.title)}</span>${epicTag(d)}${state.view !== 'aguardando' && (d.status === 'doing' || d.status === 'waiting') ? statusTag(d) : ''}</span>
         <span class="r-tags">${tagsHtml(d, { status: false })}</span>
         <span class="r-due">${dueHtml(d)}</span>
         ${ageHtml(d)}
@@ -1171,7 +1182,7 @@
       <div class="rail-ticket paper ${state.justCreated === d.id ? 'printing' : ''}" role="option" data-id="${d.id}" data-p="${d.priority}" aria-selected="${state.selectedId === d.id}">
         <div class="t-head"><span class="seq">${seqLabel(d.seq)}</span><span title="Chegou em ${fullDate(d.createdAt)}">${a.text}</span></div>
         <div class="t-title">${esc(d.title)}</div>
-        <div class="t-meta">${d.priority !== 'normal' ? `<span class="tag ${d.priority === 'urgente' ? 'fire' : d.priority === 'alta' ? 'heat' : ''}">${PRIORITY_LABEL[d.priority]}</span>` : ''}${dueHtml(d)}${tagsHtml(d, { status: false })}</div>
+        <div class="t-meta">${epicTag(d)}${d.priority !== 'normal' ? `<span class="tag ${d.priority === 'urgente' ? 'fire' : d.priority === 'alta' ? 'heat' : ''}">${PRIORITY_LABEL[d.priority]}</span>` : ''}${dueHtml(d)}${tagsHtml(d, { status: false })}</div>
         <div class="t-actions">
           <button type="button" class="btn btn-primary" data-act="toggle">${icon('check-check', 14)}Concluir</button>
           <button type="button" class="btn btn-ghost" data-act="pause" title="Voltar para a fila (F)">${icon('pause', 14)}</button>
@@ -1289,7 +1300,7 @@
     detailEl.className = 'detail paper';
     detailEl.innerHTML = `
       <div class="d-head">
-        <span class="seq">${seqLabel(d.seq)}</span><span>· criada há ${age(d.createdAt).text}</span>
+        <span class="seq">${seqLabel(d.seq)}</span>${d.epic ? `<span class="epic-badge">${icon('layers', 12)}Épico</span>` : ''}<span>· criada há ${age(d.createdAt).text}</span>
         <span class="spacer"></span><span class="saved" id="saved" aria-live="polite"></span>
         <button type="button" class="icon-btn danger" data-dact="delete" title="Excluir (Delete)" aria-label="Excluir demanda">${icon('trash-2')}</button>
         <button type="button" class="icon-btn" data-dact="close" title="Fechar (Esc)" aria-label="Fechar painel">${icon('x')}</button>
@@ -1306,6 +1317,7 @@
           <div class="field has-suggest"><label class="field-label" for="d-req">Quem pediu</label><input class="input" id="d-req" type="text" maxlength="80" value="${esc(d.requester)}" placeholder="Nome" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="suggest-d-req"><div class="suggest" id="suggest-d-req" role="listbox" hidden></div></div>
         </div>
         <div class="field has-suggest"><label class="field-label" for="d-proj">Projeto ou cliente</label><input class="input" id="d-proj" type="text" maxlength="80" value="${esc(d.project)}" placeholder="ex.: portal, infra, cliente X" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="suggest-d-proj"><div class="suggest" id="suggest-d-proj" role="listbox" hidden></div></div>
+        <div id="epic-slot">${epicHtml(d)}</div>
         <div class="field">
           <div class="notes-head"><label class="field-label" for="d-notes">Anotações</label>${ai.available ? `<button type="button" class="ai-btn" data-dact="ai" title="Revisar ortografia, gramática e clareza com IA">${icon('sparkles', 14)}Melhorar escrita</button>` : ''}</div>
           <textarea class="d-notes" id="d-notes" placeholder="Contexto, links, passos, o que foi combinado…">${esc(d.notes)}</textarea>
@@ -1324,6 +1336,60 @@
         </div>
       </div>`;
     autosize($('#d-title'));
+    paintEpic(false);
+  }
+
+  /* ---------- épico: tarefas dentro da demanda ---------- */
+
+  function epicHtml(d) {
+    if (!d.epic) {
+      return `<button type="button" class="epic-make" data-dact="epic-on">${icon('layers', 16)}<span><b>Transformar em épico</b><small>Agrupe várias tarefas desta mesma demanda</small></span></button>`;
+    }
+    const c = epicCounts(d);
+    return `
+      <div class="field epic">
+        <div class="notes-head"><span class="field-label epic-label">${icon('layers', 14)}Tarefas do épico</span><span class="epic-count num">${c.total ? `${c.done} de ${c.total}` : 'nenhuma ainda'}</span></div>
+        ${c.total ? '<div class="epic-bar" aria-hidden="true"><span></span></div>' : ''}
+        <div class="epic-list" role="list">
+          ${(d.tasks || []).map((t) => `
+            <div class="epic-task ${t.done ? 'done' : ''}" role="listitem" data-task="${esc(t.id)}">
+              <button type="button" class="tick" role="checkbox" aria-checked="${t.done}" data-tact="toggle" aria-label="${t.done ? 'Reabrir' : 'Concluir'} tarefa">${icon('check', 12)}</button>
+              <input class="epic-title" value="${esc(t.title)}" maxlength="300" aria-label="Tarefa" autocomplete="off">
+              <button type="button" class="icon-btn epic-del" data-tact="remove" title="Remover tarefa" aria-label="Remover tarefa">${icon('x', 14)}</button>
+            </div>`).join('')}
+        </div>
+        <form class="epic-add" id="epic-add" novalidate>
+          <span class="epic-plus" aria-hidden="true">${icon('plus', 15)}</span>
+          <label class="visually-hidden" for="epic-new">Nova tarefa do épico</label>
+          <input id="epic-new" maxlength="300" autocomplete="off" placeholder="Adicionar tarefa e apertar Enter">
+        </form>
+        ${c.total ? '' : '<button type="button" class="link epic-off" data-dact="epic-off">Deixar de ser épico</button>'}
+      </div>`;
+  }
+
+  function paintEpic(focusNew) {
+    const d = byId(state.selectedId);
+    const slot = $('#epic-slot');
+    if (!d || !slot) return;
+    slot.innerHTML = epicHtml(d);
+    const bar = slot.querySelector('.epic-bar span');
+    if (bar) { const c = epicCounts(d); bar.style.width = `${Math.round((c.done / c.total) * 100)}%`; }
+    if (focusNew) { const f = $('#epic-new'); if (f) f.focus(); }
+  }
+
+  async function saveTasks(tasks, focusNew) {
+    const d = byId(state.selectedId);
+    if (!d) return;
+    const updated = await setField(d.id, { epic: true, tasks });
+    if (updated) { paintEpic(focusNew); flashSaved(); }
+  }
+
+  function taskAction(taskId, action) {
+    const d = byId(state.selectedId);
+    if (!d) return;
+    const tasks = d.tasks || [];
+    if (action === 'toggle') saveTasks(tasks.map((t) => (t.id === taskId ? { ...t, done: !t.done, doneAt: t.done ? null : new Date().toISOString() } : t)));
+    if (action === 'remove') saveTasks(tasks.filter((t) => t.id !== taskId));
   }
 
   function autosize(t) { if (!t) return; t.style.height = 'auto'; t.style.height = `${t.scrollHeight}px`; }
@@ -1335,6 +1401,8 @@
 
   detailEl.addEventListener('click', (e) => {
     const id = state.selectedId;
+    const tact = e.target.closest('[data-tact]');
+    if (tact) { taskAction(tact.closest('[data-task]').dataset.task, tact.dataset.tact); return; }
     const seg = e.target.closest('[data-field]');
     if (seg) {
       const field = seg.dataset.field;
@@ -1348,9 +1416,34 @@
     if (act.dataset.dact === 'delete') removeDemand(id);
     if (act.dataset.dact === 'toggle') toggleDone(id);
     if (act.dataset.dact === 'ai') improveNotes('button');
+    if (act.dataset.dact === 'epic-on') setField(id, { epic: true }).then(() => { renderDetail(); const f = $('#epic-new'); if (f) f.focus(); });
+    if (act.dataset.dact === 'epic-off') setField(id, { epic: false, tasks: [] }).then(renderDetail);
     if (act.dataset.dact === 'ai-stop' && ai.state && ai.state.ctl) ai.state.ctl.abort();
     if (act.dataset.dact === 'ai-dismiss') { ai.state = null; paintAi(); }
     if (act.dataset.dact === 'ai-apply') applySuggestion();
+  });
+
+  detailEl.addEventListener('submit', (e) => {
+    if (e.target.id !== 'epic-add') return;
+    e.preventDefault();
+    const input = $('#epic-new');
+    const title = input.value.trim();
+    if (!title) return;
+    const d = byId(state.selectedId);
+    if (!d) return;
+    input.value = '';
+    saveTasks([...(d.tasks || []), { id: `t${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`, title, done: false }], true);
+  });
+  detailEl.addEventListener('change', (e) => {
+    const row = e.target.closest && e.target.closest('[data-task]');
+    if (!row || !e.target.classList.contains('epic-title')) return;
+    const d = byId(state.selectedId);
+    if (!d) return;
+    const title = e.target.value.trim();
+    const t = (d.tasks || []).find((x) => x.id === row.dataset.task);
+    if (!t) return;
+    if (!title) { e.target.value = t.title; return; }
+    if (title !== t.title) saveTasks(d.tasks.map((x) => (x.id === t.id ? { ...x, title } : x)));
   });
 
   detailEl.addEventListener('input', (e) => {
@@ -1380,6 +1473,7 @@
   detailEl.addEventListener('keydown', (e) => {
     if (SUGGEST_FIELDS[e.target.id] && suggestKeydown(e)) return;
     if (e.target.id === 'd-title' && e.key === 'Enter') { e.preventDefault(); e.target.blur(); }
+    if (e.target.classList && e.target.classList.contains('epic-title') && e.key === 'Enter') { e.preventDefault(); e.target.blur(); }
   });
 
   async function saveDetailText() {
@@ -1668,7 +1762,8 @@ ${text.slice(0, 12000)}
       renderSidebar();
       renderBoard();
       renderDetail();
-      const label = finishing ? 'concluída' : 'reaberta';
+      const pending = finishing && updated.epic ? (updated.tasks || []).filter((t) => !t.done).length : 0;
+      const label = finishing ? (pending ? `concluída · ${pending} ${pending === 1 ? 'tarefa do épico ficou aberta' : 'tarefas do épico ficaram abertas'}` : 'concluída') : 'reaberta';
       pushUndo(label, () => call(api.demands.update(id, snapshot)).then(replaceLocal));
       toast(`<span class="num">${seqLabel(updated.seq)}</span> ${label}`, { undo: true, html: true });
     } catch (err) {
