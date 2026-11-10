@@ -184,3 +184,14 @@ test('tarefas do épico como demandas filhas (parentId)', async () => {
   const self = v.updateDemand(epic.id, { parentId: epic.id });
   assert.equal(self.parentId, null, 'uma demanda não pode ser filha dela mesma');
 });
+
+test('data de criação pode ser mudada, mas não para o futuro', async () => {
+  const v = new Vault(tmpDir());
+  await v.register('ana', 'senha-boa-1');
+  const d = v.createDemand({ title: 'Demanda antiga' });
+  const u = v.updateDemand(d.id, { createdAt: '2026-10-01T09:30:00.000Z' });
+  assert.equal(u.createdAt, '2026-10-01T09:30:00.000Z');
+  assert.throws(() => v.updateDemand(d.id, { createdAt: '2099-01-01T00:00:00Z' }), { code: 'bad_date' });
+  assert.throws(() => v.updateDemand(d.id, { createdAt: 'ontem' }), { code: 'bad_date' });
+  assert.equal(v.updateDemand(d.id, { title: 'Outro título' }).createdAt, '2026-10-01T09:30:00.000Z');
+});

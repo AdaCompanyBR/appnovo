@@ -10,9 +10,9 @@ const dataUri = (p) => `data:image/svg+xml;base64,${Buffer.from(R(p)).toString('
 
 let css = R('src/renderer/vendor/quill.snow.css') + '\n' + R('src/renderer/styles.css');
 css = css.replace(/@font-face\s*{[^}]*}\s*/g, '');
-css = css.replace('url("assets/mark.svg")', `url("${dataUri('src/renderer/assets/mark.svg')}")`);
-css = css.replace('url("assets/plus.svg")', `url("${dataUri('src/renderer/assets/plus.svg')}")`);
-css = css.replace('url("assets/calendar.svg")', `url("${dataUri('src/renderer/assets/calendar.svg')}")`);
+css = css.replaceAll('url("assets/mark.svg")', `url("${dataUri('src/renderer/assets/mark.svg')}")`);
+css = css.replaceAll('url("assets/plus.svg")', `url("${dataUri('src/renderer/assets/plus.svg')}")`);
+css = css.replaceAll('url("assets/calendar.svg")', `url("${dataUri('src/renderer/assets/calendar.svg')}")`);
 css = css.replace('--titlebar-controls: 150px;', '--titlebar-controls: 20px;');
 css += `
 /* ---------- versão web: telas estreitas ---------- */

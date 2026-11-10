@@ -1169,3 +1169,17 @@ body.img-dragging, body.img-dragging * { cursor: grabbing !important; }
 .d-back:hover { background: color-mix(in srgb, var(--accent) 18%, var(--accent-soft)); }
 .d-back .icon { color: currentColor; }
 #epic-slot:empty { display: none; }
+
+/* Data de criação editável no rodapé do painel */
+.d-meta .d-created { align-items: center; }
+.d-meta .d-created label { color: var(--text-3); }
+.d-meta .d-created .input {
+  width: auto; height: 28px; padding: 0 6px; font-size: 12.5px; color: var(--text-2);
+  border-color: transparent; background: transparent;
+}
+.d-meta .d-created .input:hover { border-color: var(--line-strong); background: var(--surface); }
+.d-meta .d-created .input:focus { border-color: var(--accent); background: var(--surface); color: var(--text); }
+.d-body input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  cursor: pointer; width: 14px; height: 14px; padding: 2px; border-radius: 4px;
+  background: var(--text-3); -webkit-mask: url("assets/calendar.svg") center / 14px no-repeat;
+}

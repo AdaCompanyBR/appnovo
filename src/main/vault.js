@@ -359,7 +359,7 @@ class Vault {
     const i = data.demands.findIndex((d) => d.id === id);
     if (i < 0) throw new VaultError('not_found', 'Demanda não encontrada.');
     const before = data.demands[i];
-    const next = sanitizeDemand({ ...before, ...patch, id: before.id, seq: before.seq, createdAt: before.createdAt });
+    const next = sanitizeDemand({ ...before, ...patch, id: before.id, seq: before.seq, createdAt: validCreatedAt(patch.createdAt, before.createdAt) });
     if (!next.title) throw new VaultError('empty_title', 'O título não pode ficar vazio.');
     next.updatedAt = new Date().toISOString();
     if (next.status === 'done' && before.status !== 'done') next.doneAt = next.updatedAt;
@@ -570,6 +570,16 @@ function sanitizeTasks(list) {
     done: Boolean(t.done),
     doneAt: t.done ? (t.doneAt || new Date().toISOString()) : null,
   }));
+}
+
+// Data de criação editável: precisa ser uma data válida, a partir de 2000 e não no futuro.
+function validCreatedAt(value, fallback) {
+  if (value === undefined) return fallback;
+  const t = Date.parse(value);
+  if (!Number.isFinite(t) || t < Date.parse('2000-01-01') || t > Date.now() + 60000) {
+    throw new VaultError('bad_date', 'Escolha uma data de criação válida, que não esteja no futuro.');
+  }
+  return new Date(t).toISOString();
 }
 
 function sanitizeDemand(d) {

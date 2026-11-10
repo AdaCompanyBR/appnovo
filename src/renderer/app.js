@@ -54,6 +54,13 @@
     return { text: `${Math.floor(days / 7)}sem`, mins };
   }
 
+  // Data ISO para o campo datetime-local (no fuso do computador).
+  function localInput(isoString) {
+    const d = new Date(isoString);
+    const p = (n) => String(n).padStart(2, '0');
+    return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`;
+  }
+
   function fullDate(isoString) {
     const d = new Date(isoString);
     return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
@@ -1348,7 +1355,7 @@
             : `<button type="button" class="btn btn-primary" data-dact="toggle">${icon('check-check', 15)}Concluir</button>`}
         </div>
         <div class="d-meta">
-          <div><span>Criada</span><span class="num">${fullDate(d.createdAt)}</span></div>
+          <div class="d-created"><label for="d-created">Criada em</label><input class="input num" id="d-created" type="datetime-local" max="${localInput(new Date().toISOString())}" value="${localInput(d.createdAt)}" title="Mudar a data de criação"></div>
           <div><span>Atualizada</span><span class="num">${fullDate(d.updatedAt)}</span></div>
           ${d.doneAt ? `<div><span>Concluída</span><span class="num">${fullDate(d.doneAt)}</span></div>` : ''}
         </div>
@@ -1513,6 +1520,13 @@
   detailEl.addEventListener('change', (e) => {
     if (e.target.id === 'ai-auto') { try { localStorage.setItem(AI_AUTO_KEY, e.target.checked ? '1' : '0'); } catch { /* só nesta visita */ } ai.autoSession = e.target.checked; return; }
     if (e.target.id === 'd-due') setField(state.selectedId, { due: e.target.value || null }).then(flashSaved);
+    if (e.target.id === 'd-created') {
+      const d = byId(state.selectedId);
+      if (!d || !e.target.value) { if (d) e.target.value = localInput(d.createdAt); return; }
+      const when = new Date(e.target.value);
+      if (when.getTime() > Date.now() + 60000) { toast('A data de criação não pode ficar no futuro.', { error: true }); e.target.value = localInput(d.createdAt); return; }
+      setField(d.id, { createdAt: when.toISOString() }).then((u) => { if (u) { renderDetail(); flashSaved(); } else e.target.value = localInput(d.createdAt); });
+    }
   });
   detailEl.addEventListener('focusout', (e) => {
     if (SUGGEST_FIELDS[e.target.id]) hideSuggestions(e.target);
