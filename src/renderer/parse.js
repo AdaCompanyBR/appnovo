@@ -5,7 +5,7 @@
  *   !u !urgente !!!   !a !alta !!   !n !normal   !b !baixa
  *   @pessoa           quem pediu
  *   #projeto          projeto ou cliente
- *   hoje, amanhã, seg…dom, 15/11, 15/11/2026   prazo
+ *   hoje, amanhã, ontem, seg…dom, 15/11, 15/11/2026   prazo
  *   ~fazendo ~aguardando                      status
  */
 (function (root) {
@@ -41,6 +41,7 @@
     const w = strip(word);
     if (w === 'hoje') return iso(today);
     if (w === 'amanha') return iso(addDays(today, 1));
+    if (w === 'ontem') return iso(addDays(today, -1));
     if (w in WEEKDAYS) {
       const diff = (WEEKDAYS[w] - today.getDay() + 7) % 7;
       return iso(addDays(today, diff));

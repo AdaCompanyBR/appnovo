@@ -1065,9 +1065,10 @@
         .sort((a, b) => new Date(b.doneAt || b.updatedAt) - new Date(a.doneAt || a.updatedAt));
       return {
         title: 'Hoje',
-        rail,
+        rail: null,
         rest: todo.length - next.length,
         groups: [
+          { id: 'doing', title: 'Em andamento', tone: 'doing', items: rail, hint: 'o que você está fazendo agora' },
           { id: 'late', title: 'Atrasadas', tone: 'fire', items: late },
           { id: 'today', title: 'Vencem hoje', tone: 'heat', items: today },
           { id: 'urgent', title: 'Urgentes', tone: 'fire', items: urgent },
@@ -1163,13 +1164,13 @@
     return `<span class="r-age num ${cls}" title="Chegou em ${fullDate(d.createdAt)}">${a.text}</span>`;
   }
 
-  function rowHtml(d) {
+  function rowHtml(d, group) {
     const done = d.status === 'done';
     return `
       <div class="row paper ${done ? 'is-done' : ''} ${state.justCreated === d.id ? 'printing' : ''}" role="option" data-id="${d.id}" data-p="${d.priority}" aria-selected="${state.selectedId === d.id}">
         <button type="button" class="tick" role="checkbox" aria-checked="${done}" data-act="toggle" aria-label="${done ? 'Reabrir' : 'Concluir'} demanda ${seqLabel(d.seq)}">${icon('check', 12)}</button>
         <span class="r-seq"><span class="pri" data-p="${d.priority}" title="Prioridade ${PRIORITY_LABEL[d.priority]}"></span>${seqLabel(d.seq)}</span>
-        <span class="r-main"><span class="r-title">${esc(d.title)}</span>${epicTag(d)}${state.view !== 'aguardando' && (d.status === 'doing' || d.status === 'waiting') ? statusTag(d) : ''}</span>
+        <span class="r-main"><span class="r-title">${esc(d.title)}</span>${epicTag(d)}${state.view !== 'aguardando' && group !== 'doing' && (d.status === 'doing' || d.status === 'waiting') ? statusTag(d) : ''}</span>
         <span class="r-tags">${tagsHtml(d, { status: false })}</span>
         <span class="r-due">${dueHtml(d)}</span>
         ${ageHtml(d)}
@@ -1234,7 +1235,7 @@
     }
 
     for (const g of model.groups) {
-      html += `<section class="group" aria-label="${esc(g.title)}"><h2 class="group-title ${g.tone || ''}">${esc(g.title)} <span class="count">${g.items.length}</span>${g.hint ? `<span class="hint">${esc(g.hint)}</span>` : ''}</h2><div class="rows" role="listbox" aria-label="${esc(g.title)}">${rowsHeadHtml(g)}${g.items.map(rowHtml).join('')}</div></section>`;
+      html += `<section class="group" aria-label="${esc(g.title)}"><h2 class="group-title ${g.tone || ''}">${esc(g.title)} <span class="count">${g.items.length}</span>${g.hint ? `<span class="hint">${esc(g.hint)}</span>` : ''}</h2><div class="rows" role="listbox" aria-label="${esc(g.title)}">${rowsHeadHtml(g)}${g.items.map((d) => rowHtml(d, g.id)).join('')}</div></section>`;
       if (g.more) html = html.replace(/<\/section>$/, `<p class="more"><button type="button" class="link" data-goto="fila">Ver mais ${g.more} na Fila</button></p></section>`);
       g.items.forEach((d) => order.push(d.id));
     }

@@ -25,6 +25,7 @@ test('só o título já é uma demanda', () => {
 
 test('datas', () => {
   assert.equal(parseCapture('x hoje', TODAY).due, '2026-11-06');
+  assert.equal(parseCapture('x ontem', TODAY).due, '2026-11-05');
   assert.equal(parseCapture('x sex', TODAY).due, '2026-11-06');
   assert.equal(parseCapture('x segunda', TODAY).due, '2026-11-09');
   assert.equal(parseCapture('x 15/11', TODAY).due, '2026-11-15');

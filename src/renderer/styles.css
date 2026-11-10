@@ -1123,3 +1123,9 @@ body.img-dragging, body.img-dragging * { cursor: grabbing !important; }
 .epic-add input:focus { outline: none; }
 .epic-off { justify-self: start; font-size: 12.5px; }
 .field.epic { gap: 8px; }
+
+/* Em andamento como lista: marca discreta no título do grupo */
+.group-title.doing { color: var(--accent-strong); }
+.group-title.doing .count { background: var(--accent-soft); color: var(--accent-strong); }
+.r-main .r-title { flex: 0 1 auto; min-width: 0; }
+.r-main .tag { flex: none; }
